@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { RDSClient, DescribeDBSnapshotsCommand, DescribeDBClustersCommand, DescribeDBInstancesCommand } from "@aws-sdk/client-rds";
+import { RDSClient, DescribeDBSnapshotsCommand, DescribeDBClustersCommand, DescribeDBInstancesCommand, DescribeDBClusterSnapshotsCommand, DescribeDBClusterAutomatedBackupsCommand } from "@aws-sdk/client-rds";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
 import { fromIni } from '@aws-sdk/credential-provider-ini';
 import { ProfileProvider } from '../providers/ProfileProvider';
@@ -50,16 +50,18 @@ export class RDSExplorer implements RegionObserver {
 
     const chartData = await Promise.all(this.selectedRegions.map(async (region) => {
       const rdsClient = new RDSClient({ region, credentials });
-      const dbInstanceData = await this.getDBInstanceData(rdsClient);
       const dbClusterData = await this.getDBClusterData(rdsClient);
+      const dbInstanceData = await this.getDBInstanceData(rdsClient);
       const snapshotData = await this.getSnapshotData(rdsClient);
       
       return [
         region,
         dbClusterData.totalDBClusters,
         dbInstanceData.totalDBInstances,
-        snapshotData.totalSnapshots,
-        snapshotData.automatedSnapshots
+        snapshotData.totalSnapshotsAndBackups,
+        snapshotData.DBClusterSnapshots,
+        snapshotData.DBClusterAutomatedBackups,
+        snapshotData.DBSnapshots,
       ];
     }));
 
@@ -97,18 +99,33 @@ export class RDSExplorer implements RegionObserver {
   private async getSnapshotData(rdsClient: RDSClient): Promise<any> {
     try {
       const command = new DescribeDBSnapshotsCommand({});
+      const command2 = new DescribeDBClusterSnapshotsCommand({});
+      const command3 = new DescribeDBClusterAutomatedBackupsCommand({});
+      
       const response = await rdsClient.send(command);
-      const snapshots = response.DBSnapshots ?? [];
-      console.log('snapshots',snapshots);
+      const response2 = await rdsClient.send(command2);
+      const response3 = await rdsClient.send(command3);
+      const DBSnapshots = response.DBSnapshots ?? [];
+      const DBClusterSnapshots = response2.DBClusterSnapshots ?? [];
+      const DBClusterAutomatedBackups = response3.DBClusterAutomatedBackups ?? [];
+
+      console.log('snapshots1',response);
+      console.log('snapshots2',response2);
+      console.log('snapshots3',response3);
       return {
-        totalSnapshots: snapshots.length,
-        automatedSnapshots: snapshots.filter(snapshot => snapshot.SnapshotType === 'automated').length,
+        totalSnapshotsAndBackups: DBSnapshots.length + DBClusterSnapshots.length + DBClusterAutomatedBackups.length ,
+        DBClusterSnapshots:DBClusterSnapshots.length,
+        DBClusterAutomatedBackups:DBClusterAutomatedBackups.length,
+        DBSnapshots:DBSnapshots.length,
+
       };
     } catch (error) {
       console.error(`Failed to get snapshot data: ${error}`);
       return {
-        totalSnapshots: 0,
-        automatedSnapshots: 0,
+        totalSnapshotsAndBackups: 0,
+        DBClusterSnapshots: 0,
+        DBClusterAutomatedBackups: 0,
+        DBSnapshots: 0,
       };
     }
   }

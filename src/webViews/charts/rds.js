@@ -8,12 +8,12 @@ let rdsObj = {
   updateOnFly : false,
 };
 
-const t1 = 'Cluster';
+const t1 = 'DB Clusters';
 const t2 = 'DB Instances';
-const t3 = 'Snapshots';
-const t4 = 'Auto Snapshots';
-const t5 = '';
-const t6 = '';
+const t3 = 'Backups + Snapshots';
+const t4 = 'Automated Backups';
+const t5 = 'DB Cluster Snapshots';
+const t6 = 'DB Snapshots';
 
 
 const dataGridColumns = {
@@ -49,7 +49,7 @@ let data = null;
 async function initializeDashboardChart() {
 
   data = [
-    ['us-east-1', 0, 0, 0, 0],
+    ['us-east-1', 0, 0, 0, 0, 0, 0],
   ];
  
 
@@ -71,7 +71,7 @@ async function initializeDashboardChart() {
             id: 'datagridConnector',
             type: 'JSON',
             options: {
-              columnNames: ['Region', t1, t2, t3, t4],
+              columnNames: ['Region', t1, t2, t3, t4, t5, t6],
               firstRowAsNames: false,
               data,
             },
