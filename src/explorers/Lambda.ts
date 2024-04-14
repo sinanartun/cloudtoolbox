@@ -57,7 +57,7 @@ export class LambdaExplorer {
             const applications = await this.getServerlessApplicationCount(region);
 
             
-            data.push([region, functionCount, layers, applications, codeStorage]);
+            data.push([region, functionCount, applications, layers, codeStorage]);
         }
 
         return data;
@@ -79,7 +79,7 @@ export class LambdaExplorer {
                     totalSize += functionResponse.Configuration?.CodeSize || 0;
                 }
             }
-            const codeStorage = parseFloat((totalSize / 1024).toFixed(3));
+            const codeStorage = parseFloat((totalSize / 1024).toFixed(2));
     
             return { functionCount, codeStorage };
         } catch (error) {

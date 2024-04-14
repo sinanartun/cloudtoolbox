@@ -84,6 +84,6 @@ export async function setLambdaHtml(
     </html>`;
   } catch (error) {
     console.error("Failed to set EC2 HTML content:", error);
-    vscode.window.showErrorMessage("An error occurred while setting up the EC2 dashboard.");
+    vscode.window.showErrorMessage("An error occurred while setting up the Lambda dashboard.");
   }
 }

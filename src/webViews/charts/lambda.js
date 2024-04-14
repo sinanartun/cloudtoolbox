@@ -20,11 +20,7 @@ let data = null;
 async function initializeDashboardChart() {
 
   data = [
-    ['eu-central-1', 0, 0, 0, 0],
-    ['eu-north-1', 0, 0, 0, 0],
-    ['eu-west-1', 0, 0, 0, 0],
-    ['eu-west-2', 0, 0, 0, 0],
-    ['eu-west-3', 0, 0, 0, 0],
+    ['us-east-1', 0, 0, 0, 0],
   ];
  
 
@@ -37,7 +33,7 @@ async function initializeDashboardChart() {
             id: 'Region',
             type: 'JSON',
             options: {
-              columnNames: ['Region', t1, t2, t3, t4],
+              columnNames: ['Region', t1, t2, t3],
               firstRowAsNames: false,
               data,
             },
@@ -434,7 +430,7 @@ const init = () => {
   initializeDashboardChart();
   document.getElementById('interval').addEventListener('change', function () {
      lObj.intervalValue = parseInt(this.value, 10);
-     if (lObj.intervalValue < 1) {
+     if (lObj.intervalValue < 500) {
       stopDashboardChartInterval();
      }else {
       startDashboardChartInterval();
