@@ -1,0 +1,123 @@
+
+
+.highcharts-background-color {
+    fill: #f0f0f0;
+}
+
+#dashboard-col-2 .highcharts-line-series path {
+    stroke-width: 0;
+}
+
+.highcharts-datagrid-column-header {
+    font-size: 14px;
+    font-weight: 200;
+}
+
+#dashboard-col-1 .highcharts-point {
+    stroke-width: 2px;
+}
+
+.highcharts-subtitle {
+    fill: var(--highcharts-neutral-color-60);
+    font-size: 0.9em;
+    font-weight: normal;
+}
+
+.highcharts-legend-item text {
+    cursor: default;
+}
+
+.highcharts-legend-point-active .highcharts-point:not(.highcharts-point-hover) {
+    opacity: 1;
+}
+
+.highcharts-a11y-proxy-element {
+    cursor: default;
+}
+
+/* Adjust #dashboard-col-3 height to be 100% of the viewport height */
+#dashboard-col-3 {
+    height: 90vh !important;
+  }
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    #dashboard-col-3 {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 992px) {
+    #dashboard-col-3 {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    #dashboard-col-3 {
+        flex: 1 1 100%;
+    }
+}
+.highcharts-datagrid-cell {
+    font-size: 0.75em !important;
+}
+.highcharts-datagrid-column-header {
+    font-size: 0.75em !important;
+
+}
+
+
+
+#dashboard-col-0 .highcharts-datagrid-row > div:nth-child(6) {
+    white-space: break-spaces;
+}
+/* user name */
+#dashboard-col-0 .highcharts-datagrid-column-header:nth-child(1),
+#dashboard-col-0 .highcharts-datagrid-row > div:nth-child(1) {
+    flex: 10;
+}
+/* created */
+#dashboard-col-0 .highcharts-datagrid-column-header:nth-child(2),
+#dashboard-col-0 .highcharts-datagrid-row > div:nth-child(2) {
+    flex: 15;
+}
+/* groups */
+#dashboard-col-0 .highcharts-datagrid-column-header:nth-child(3),
+#dashboard-col-0 .highcharts-datagrid-row > div:nth-child(3) {
+    flex: 10;
+}
+/* policies */
+#dashboard-col-0 .highcharts-datagrid-column-header:nth-child(4),
+#dashboard-col-0 .highcharts-datagrid-row > div:nth-child(4) {
+    flex: 15;
+}
+/* password last used */
+#dashboard-col-0 .highcharts-datagrid-column-header:nth-child(5),
+#dashboard-col-0 .highcharts-datagrid-row > div:nth-child(5) {
+    flex: 15;
+}
+/* last action */
+#dashboard-col-0 .highcharts-datagrid-column-header:nth-child(6),
+#dashboard-col-0 .highcharts-datagrid-row > div:nth-child(6) {
+    flex: 25;
+}
+/* role name */
+#dashboard-col-1 .highcharts-datagrid-column-header:nth-child(1),
+#dashboard-col-1 .highcharts-datagrid-row > div:nth-child(1) {
+    flex: 25;
+}
+/* created */
+#dashboard-col-1 .highcharts-datagrid-column-header:nth-child(2),
+#dashboard-col-1 .highcharts-datagrid-row > div:nth-child(2) {
+    flex: 15;
+}
+/* max session duration */
+#dashboard-col-1 .highcharts-datagrid-column-header:nth-child(3),
+#dashboard-col-1 .highcharts-datagrid-row > div:nth-child(3) {
+    flex: 10;
+}
+/* description */
+#dashboard-col-1 .highcharts-datagrid-column-header:nth-child(4),
+#dashboard-col-1 .highcharts-datagrid-row > div:nth-child(4) {
+    flex: 50;
+}

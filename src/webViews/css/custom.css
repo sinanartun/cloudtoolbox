@@ -1,0 +1,63 @@
+body {
+    display: flex;
+    flex-direction: column;
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ii {
+  font-size: 15px;
+}
+.iii {
+  cursor: pointer;
+  font-size: 15px;
+}
+.rotating {
+    animation: rotate 1s linear infinite;
+    color: rgba(238, 123, 7, 0.9);
+    cursor: wait;
+}
+#control-panel {
+    top: 0;
+    z-index: 1000;
+    padding-left: 10px;
+}
+
+.icon-with-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.ctb-bar-white{
+  z-index: 10000;
+  font-weight: 100;
+  color: #FFFFFF;
+  -webkit-text-stroke: 1px #000000;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  letter-spacing: 0.5px;
+}
+
+.ctb-bar-black{
+  z-index: 10000;
+  font-weight: 100;
+  color: #000000;
+  fill: #000000;
+  -webkit-text-stroke: 1px #ffffff;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.6px;
+}
+
+.ctb-label-sm{
+  font-size: 11px;
+}
+
+.im{
+  font-weight: 400;
+  font-style: oblique;
+}

@@ -1,0 +1,133 @@
+{
+  "name": "cloudtoolbox",
+  "displayName": "cloudtoolbox",
+  "description": "Cloud Resource Visualization",
+  "version": "1.0.19",
+  "publisher": "cloudtoolbox",
+  "pricing": "Free",
+  "license": "MIT",
+  "homepage": "https://cloudtoolbox.tech",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sinanartun/cloudtoolbox"
+  },
+  "engines": {
+    "vscode": "^1.88.0"
+  },
+  "categories": [
+    "Linters",
+    "Visualization",
+    "Azure",
+    "Debuggers"
+  ],
+  "tags": [
+    "cloud",
+    "aws",
+    "azure",
+    "gcp",
+    "cloudformation",
+    "cloudwatch",
+    "s3",
+    "ec2",
+    "lambda",
+    "rds",
+    "dynamodb",
+    "sqs",
+    "sns",
+    "cloudtrail",
+    "iam",
+    "ecs",
+    "ecr",
+    "redshift",
+    "serverless",
+    "serverlessapplicationrepository",
+    "cloudtoolbox"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "icon": "./dist/images/logo.png",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "cloudtoolbox",
+          "title": "Cloud Toolbox",
+          "icon": "./dist/images/logo.svg"
+        }
+      ]
+    },
+    "views": {
+      "cloudtoolbox": [
+        {
+          "id": "awsServiceSelector",
+          "name": "AWS Service List"
+        },
+        {
+          "id": "awsRegionSelector",
+          "name": "Region"
+        },
+        {
+          "id": "awsProfileSelector",
+          "name": "AWS Profile"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map  --stats-error-details",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test",
+    "build": "webpack --mode production --devtool hidden-source-map --progress --color"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^6.5.2",
+    "@types/highcharts": "^7.0.0",
+    "@types/ini": "^4.1.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "20.12.7",
+    "@types/vscode": "^1.88.0",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.3.9",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^7.1.1",
+    "css-minimizer-webpack-plugin": "^6.0.0",
+    "eslint": "^8.57.0",
+    "mini-css-extract-plugin": "^2.8.1",
+    "node-polyfill-webpack-plugin": "^3.0.0",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.4.5",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "dependencies": {
+    "@aws-sdk/client-auto-scaling": "^3.554.0",
+    "@aws-sdk/client-cloudtrail": "^3.554.0",
+    "@aws-sdk/client-dynamodb": "^3.554.0",
+    "@aws-sdk/client-ec2": "^3.554.0",
+    "@aws-sdk/client-ecr": "^3.554.0",
+    "@aws-sdk/client-ecs": "^3.554.0",
+    "@aws-sdk/client-iam": "^3.554.0",
+    "@aws-sdk/client-lambda": "^3.554.0",
+    "@aws-sdk/client-rds": "^3.554.0",
+    "@aws-sdk/client-redshift": "^3.555.0",
+    "@aws-sdk/client-redshift-serverless": "^3.554.0",
+    "@aws-sdk/client-s3": "^3.554.0",
+    "@aws-sdk/client-serverlessapplicationrepository": "^3.554.0",
+    "@aws-sdk/client-sns": "^3.554.0",
+    "@highcharts/dashboards": "^2.0.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "highcharts": "^11.4.1",
+    "ini": "4.1.2",
+    "process": "^0.11.10",
+    "util": "^0.12.5"
+  }
+}
