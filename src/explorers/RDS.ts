@@ -53,7 +53,7 @@ export class RDSExplorer implements RegionObserver {
       const dbInstanceData = await this.getDBInstanceData(rdsClient);
       const dbClusterData = await this.getDBClusterData(rdsClient);
       const snapshotData = await this.getSnapshotData(rdsClient);
-      // Adjust the structure to match the specified format
+      
       return [
         region,
         dbClusterData.totalDBClusters,

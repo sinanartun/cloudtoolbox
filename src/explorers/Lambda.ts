@@ -23,7 +23,7 @@ export class LambdaExplorer {
             regionProvider.registerObserver(this);
             this.selectedRegions = await regionProvider.getSelectedRegions();
             const profileProvider = await ProfileProvider.getInstance(this.context);
-            profileProvider.registerObserver(this); // Register as observer for profile changes
+            profileProvider.registerObserver(this); 
             this.selectedProfile = profileProvider.getSelectedProfile();
         } catch (error) {
             console.error(`Failed to initialize regions: ${error}`);
@@ -31,10 +31,10 @@ export class LambdaExplorer {
     }
 
     public onRegionSelectionChanged(selectedRegions: Set<string>): void {
-        // Update selectedRegions based on the notification
+        
         this.selectedRegions = Array.from(selectedRegions);
         console.log('Updated selected regions in Lambda Explorer: ', this.selectedRegions);
-        // Potentially trigger any update or refresh logic here
+        
         
     }
 
@@ -56,7 +56,7 @@ export class LambdaExplorer {
             const layers = await this.getLayerCount(lambda);
             const applications = await this.getServerlessApplicationCount(region);
 
-            // Add the region data to the main data array
+            
             data.push([region, functionCount, layers, applications, codeStorage]);
         }
 
@@ -117,7 +117,7 @@ export class LambdaExplorer {
 
     public async refreshData(): Promise<void> {
         console.log('Refreshing data based on new context...');
-        // Assuming getChartData is the method that fetches all necessary data
+        
        
     }
     

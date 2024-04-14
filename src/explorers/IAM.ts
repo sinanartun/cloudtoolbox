@@ -26,7 +26,7 @@ export class IAMExplorer implements RegionObserver {
       profileProvider.registerObserver(this);
       this.selectedProfile = profileProvider.getSelectedProfile();
      
-      // You now have a CloudTrailClient ready for use
+      
     } catch (error) {
       console.error(`Failed to initialize CloudTrailClient: ${error}`);
     }
@@ -38,18 +38,18 @@ export class IAMExplorer implements RegionObserver {
     }
     
     const date = new Date(createdDate);
-    const now = new Date().getTime(); // Convert to number
-    const diffTime = Math.abs(now - date.getTime()); // Convert to number
+    const now = new Date().getTime(); 
+    const diffTime = Math.abs(now - date.getTime()); 
     
-    // Calculate difference in each time unit
+    
     const diffMinutes = Math.ceil(diffTime / (1000 * 60));
     const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   
-    // Format the date as 'YYYY-MM-DD HH:MM:SS'
+    
     const formattedDate = date.toISOString().replace('T', ' ').slice(0, 19);
   
-    // Determine the most appropriate time unit
+    
     let timeAgo = '';
     if (diffDays > 1) {
       timeAgo = `${diffDays}\ndays ago`;
@@ -127,12 +127,12 @@ export class IAMExplorer implements RegionObserver {
 
   private async getIAMUserDetails(iamClient: IAMClient, userName: string): Promise<{groups: string, attachedPolicies: string, lastUsed: string, lastAction:string}> {
     try {
-      // Fetch groups
+      
       const groupsCommand = new ListGroupsForUserCommand({ UserName: userName });
       const groupsResponse = await iamClient.send(groupsCommand);
       const groups = groupsResponse.Groups?.map(group => group.GroupName).join(',\n') || 'No group';
       
-      // Fetch attached policies
+      
       const policiesCommand = new ListAttachedUserPoliciesCommand({ UserName: userName });
       const policiesResponse = await iamClient.send(policiesCommand);
         const attachedPolicies = policiesResponse.AttachedPolicies?.map(policy => policy.PolicyName).join(',\n') || 'No attached policies';
@@ -166,7 +166,7 @@ export class IAMExplorer implements RegionObserver {
         return [['No users found', 'N/A', 'N/A', 'N/A', 'N/A']];
       }
   
-      // Fetch additional details for each user
+      
       const usersWithDetails = await Promise.all(response.Users.map(async user => {
         const { groups, attachedPolicies, lastUsed, lastAction } = await this.getIAMUserDetails(iamClient, user.UserName || '');
         return [

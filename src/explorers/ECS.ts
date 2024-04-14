@@ -69,7 +69,7 @@ export class ECSExplorer implements RegionObserver {
     }
   }
 
-  // Adding a method to count services across all clusters as an example
+  
   private async getServiceCounts(ecsClient: ECSClient): Promise<number> {
     const command = new ListClustersCommand({});
     const clusterResponse = await ecsClient.send(command);

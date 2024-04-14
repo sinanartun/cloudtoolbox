@@ -52,13 +52,13 @@ export class ECRExplorer implements RegionObserver {
     try {
       const command = new DescribeRepositoriesCommand({});
       const { repositories } = await ecrClient.send(command);
-      // Ensure repositories are defined and filter out any potential undefined repository names
+      
       return Promise.all((repositories || []).map(async repo => {
         if (repo.repositoryName) {
           const mData = await this.getMetaDataRepository(ecrClient, repo.repositoryName);
           return { name: repo.repositoryName, imageCount:mData.imageCount, totalSize: mData.totalSize };
         }
-        // Return a default structure if repositoryName is undefined
+        
         return { name: 'Unknown', imageCount: 0, totalSize: 0 };
       }));
     } catch (error) {
@@ -72,7 +72,7 @@ export class ECRExplorer implements RegionObserver {
       const command = new DescribeImagesCommand({ repositoryName });
       const response = await ecrClient.send(command);
   
-      // console.log('DescribeImagesCommand Response:', response);
+      
   
       let totalSize = 0;
       const imageCount = response.imageDetails?.length ?? 0;
@@ -85,7 +85,7 @@ export class ECRExplorer implements RegionObserver {
   
       return {
         imageCount,
-        totalSize // total size in bytes
+        totalSize 
       };
     } catch (error) {
       console.error(`Failed to get metadata for repository '${repositoryName}': ${error}`);

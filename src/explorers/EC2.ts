@@ -27,10 +27,10 @@ export class Ec2Explorer implements RegionObserver{
   }
 
   public onRegionSelectionChanged(selectedRegions: Set<string>): void {
-    // Update selectedRegions based on the notification
+    
     this.selectedRegions = Array.from(selectedRegions);
     console.log('Updated selected regions in Lambda Explorer: ', this.selectedRegions);
-    // Potentially trigger any update or refresh logic here
+    
     
 }
 
@@ -57,7 +57,7 @@ public onProfileChanged(newProfile: string): void {
         this.getAutoScalingGroupCount(region),
       ]);
 
-      // Structure the data as per the specified format
+      
       return [region, instanceCounts.total, instanceCounts.running, instanceCounts.stopped, instanceCounts.terminated, elasticIpCount, autoScalingGroupCount];
     }));
 
