@@ -18,30 +18,11 @@
     "Linters",
     "Visualization",
     "Azure",
-    "Debuggers"
+    "Debuggers",
+    "Other"
   ],
   "tags": [
-    "cloud",
-    "aws",
-    "azure",
-    "gcp",
-    "cloudformation",
-    "cloudwatch",
-    "s3",
-    "ec2",
-    "lambda",
-    "rds",
-    "dynamodb",
-    "sqs",
-    "sns",
-    "cloudtrail",
-    "iam",
-    "ecs",
-    "ecr",
-    "redshift",
-    "serverless",
-    "serverlessapplicationrepository",
-    "cloudtoolbox"
+    "cloud", "AWS", "Azure", "GCP", "cloud management", "cloud services"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
