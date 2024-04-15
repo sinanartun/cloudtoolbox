@@ -12,7 +12,7 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
         'ECS',
         'ECR',
         'RDS',
-        // 'DynamoDB',
+        'DynamoDB',
         // 'Redshift',
         // 'SNS',
         // 'IAM'

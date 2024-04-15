@@ -401,7 +401,7 @@ async function initializeDashboardChart() {
                 point: {
                   events: {
                     click: function () {
-                      console.log('Point clicked:', this);
+                      
                     },
                   },
                 },
@@ -547,7 +547,7 @@ const requestChartData = () => {
 
 window.addEventListener('message', (event) => {
   const message = event.data;
-  console.log('Message received:', message.data);
+  
   switch (message.command) {
     case 'updateData':
       updateDashboardData(message.data);

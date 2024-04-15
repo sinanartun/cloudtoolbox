@@ -34,7 +34,7 @@ export class RDSExplorer implements RegionObserver {
   public onProfileChanged(newProfile: string): void {
     if (this.selectedProfile !== newProfile) {
         this.selectedProfile = newProfile;
-        console.log(`Updated AWS profile in RDSExplorer: ${newProfile}`);
+        
 
     }
   }
@@ -72,7 +72,7 @@ export class RDSExplorer implements RegionObserver {
     try {
       const command = new DescribeDBInstancesCommand({});
       const response = await rdsClient.send(command);
-      console.log('getDBInstanceData', response);
+      
       return {
         totalDBInstances: response.DBInstances ? response.DBInstances.length : 0,
       };
@@ -86,7 +86,7 @@ export class RDSExplorer implements RegionObserver {
     try {
       const command = new DescribeDBClustersCommand({});
       const response = await rdsClient.send(command);
-      console.log('getDBClusterData',response);
+      
       return {
         totalDBClusters: response.DBClusters ? response.DBClusters.length : 0,
       };
@@ -109,9 +109,9 @@ export class RDSExplorer implements RegionObserver {
       const DBClusterSnapshots = response2.DBClusterSnapshots ?? [];
       const DBClusterAutomatedBackups = response3.DBClusterAutomatedBackups ?? [];
 
-      console.log('snapshots1',response);
-      console.log('snapshots2',response2);
-      console.log('snapshots3',response3);
+      
+      
+      
       return {
         totalSnapshotsAndBackups: DBSnapshots.length + DBClusterSnapshots.length + DBClusterAutomatedBackups.length ,
         DBClusterSnapshots:DBClusterSnapshots.length,

@@ -72,7 +72,7 @@ export class IAMExplorer implements RegionObserver {
   public onProfileChanged(newProfile: string): void {
     if (this.selectedProfile !== newProfile) {
         this.selectedProfile = newProfile;
-        console.log(`Updated AWS profile in ${this.constructor.name}: ${newProfile}`);
+        
 
     }
   }
@@ -111,7 +111,7 @@ export class IAMExplorer implements RegionObserver {
   
       const command = new LookupEventsCommand(params);
       const response = await this.cloudTrailClient.send(command);
-      console.log('last action',response);
+      
       if (!response.Events || response.Events.length === 0) {
         return ['No action found', 'N/A'];
       }

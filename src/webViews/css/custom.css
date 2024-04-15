@@ -35,7 +35,7 @@ body {
 }
 
 .ctb-bar-white{
-  z-index: 10000;
+
   font-weight: 100;
   color: #FFFFFF;
   -webkit-text-stroke: 1px #000000;
@@ -44,7 +44,7 @@ body {
 }
 
 .ctb-bar-black{
-  z-index: 10000;
+
   font-weight: 100;
   color: #000000;
   fill: #000000;
@@ -60,4 +60,36 @@ body {
 .im{
   font-weight: 400;
   font-style: oblique;
+}
+
+
+/* Additional CSS for note styling */
+.important-note {
+    margin-top: 5px;
+    border-left: 6px solid rgba(238, 123, 7, 0.9);
+    padding: 15px;
+    position: relative;
+    font-size: 0.9em;
+    line-height: 1.4;
+}
+
+.important-note:before {
+    content: 'Note:';
+    font-weight: bold;
+}
+
+.highcharts-dashboards-wrapper{
+  padding-bottom: 0%;
+  padding-top: 0%;
+  font-size: 0.9rem;
+}
+
+.highcharts-datagrid-column-header
+{
+    font-size: 13px;
+    font-weight: 200;
+}
+
+.highcharts-datagrid-scroll-container{
+  min-height: 450px !important;
 }

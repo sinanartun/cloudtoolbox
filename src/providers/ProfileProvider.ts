@@ -84,13 +84,9 @@ export class ProfileProvider implements vscode.TreeDataProvider<Profile> {
         const credentialsPath = vscode.Uri.joinPath(vscode.Uri.file(os.homedir()), '.aws', 'credentials');
     
         try {
-            // Read the file using VS Code's filesystem API
             const credentialsFileUint8Array = await vscode.workspace.fs.readFile(credentialsPath);
-            // Convert Uint8Array to string
             const credentialsFile = Buffer.from(credentialsFileUint8Array).toString('utf-8');
-            // Parse the credentials file
             const credentials = ini.parse(credentialsFile);
-            console.log(`Loaded AWS profiles: ${Object.keys(credentials).join(', ')}`);
             return Object.keys(credentials);
         } catch (error) {
             console.error(`Error loading AWS profiles: ${error instanceof Error ? error.message : String(error)}`);
@@ -104,7 +100,7 @@ export class ProfileProvider implements vscode.TreeDataProvider<Profile> {
 
     async selectDefaultProfile(): Promise<void> {
         const storedProfile = this.context.globalState.get<string>('selectedProfile');
-        console.log(`Stored profile: ${storedProfile}`);
+        
         const profiles = await this.loadAwsProfiles();
         this.selectedProfile = storedProfile && profiles.includes(storedProfile) ? storedProfile : (profiles.length > 0 ? profiles[0] : undefined);
         if (this.selectedProfile) {
@@ -142,7 +138,7 @@ export class ProfileProvider implements vscode.TreeDataProvider<Profile> {
                 out(`Error updating AWS credentials: ${error instanceof Error ? error.message : String(error)}`);
             }
         } else {
-            console.log('RegionProvider not set in ProfileProvider. Unable to propagate profile change.');
+            
         }
         this.notifyObservers();
         this.refresh(); 

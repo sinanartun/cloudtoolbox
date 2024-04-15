@@ -115,10 +115,10 @@ export class WebViewProvider {
     public updateWebview(service: string, data: any) {
         const panel = this.panels.get(service);
         if (panel) {
-            console.log('Updating webview for service:', data);
+            
             panel.webview.postMessage({ command: 'updateData', data: data });
         }else{
-            console.log('No panel found for service:', service);
+            
         }
     }
 

@@ -37,7 +37,7 @@ export class RedshiftExplorer implements RegionObserver {
   public onProfileChanged(newProfile: string): void {
     if (this.selectedProfile !== newProfile) {
         this.selectedProfile = newProfile;
-        console.log(`Updated AWS profile in ${this.constructor.name}: ${newProfile}`);
+        
 
     }
   }

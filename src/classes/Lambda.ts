@@ -22,7 +22,7 @@ class LambdaEventSourceMapping {
         const command = new DeleteEventSourceMappingCommand(params);
         try {
             const data = await this.client.send(command);
-            console.log("Event Source Mapping deleted successfully", data);
+            
         } catch (error) {
             console.error("Error deleting Event Source Mapping", error);
         }

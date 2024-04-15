@@ -130,7 +130,7 @@ function formatLastAction(jsonString) {
 }
 
 async function updateDashboardData(newData) {
-  console.log('updateDashboardData', newData);
+  
   if (!dashboardChart) {
     console.error('Dashboard is not initialized.');
     return;
@@ -142,10 +142,10 @@ async function updateDashboardData(newData) {
     const usersConnector = await dashboardChart.dataPool.getConnector('usersConnector');
     const rolesConnector = await dashboardChart.dataPool.getConnector('rolesConnector');
 
-    console.log('usersConnector', usersConnector);
-    console.log('rolesConnector', rolesConnector);
+    
+    
     const dashboardComponents = await dashboardChart.mountedComponents;
-    console.log('dashboardComponents', dashboardComponents);
+    
 
     if (usersConnector && usersConnector.options && usersConnector.options.data && rolesConnector && rolesConnector.options && rolesConnector.options.data) {
       const transformedData = newData[0].map((row) => {
@@ -154,7 +154,7 @@ async function updateDashboardData(newData) {
         // Replace the total size in bytes with formatted size
         return [...row.slice(0, 5), formattedSize];
       });
-      console.log('inside if' );
+      
       
       usersConnector.options.data = newData[0];
       dashboardComponents[0].component.dataGrid.dataTable.deleteRows();
@@ -191,7 +191,7 @@ const requestChartData = () => {
 
 window.addEventListener('message', (event) => {
   const message = event.data;
-  console.log('Message received:', message.data);
+  
   switch (message.command) {
     case 'updateData':
       updateDashboardData(message.data);

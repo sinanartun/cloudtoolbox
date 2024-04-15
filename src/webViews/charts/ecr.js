@@ -389,7 +389,7 @@ async function initializeDashboardChart() {
                 point: {
                   events: {
                     click: function () {
-                      console.log('Point clicked:', this);
+                      
                     },
                   },
                 },
@@ -464,7 +464,7 @@ async function updateDashboardData(newData) {
     console.error('Dashboard is not initialized.');
     return;
   }
-  console.log('newData', newData );
+  
   stopLoading();
 
   try {
@@ -474,7 +474,7 @@ async function updateDashboardData(newData) {
 
     if (regionConnector && regionConnector.options) {
       const transformedData = newData.map((row) => {
-        console.log('row',row);
+        
         // Assume row format is ['Region', bucketCount, totalObjectCount, totalSizeInBytes]
         const repoTotalSize = row.repositories.reduce((sum, repository) => {
           return sum + repository.totalSize;
@@ -487,7 +487,7 @@ async function updateDashboardData(newData) {
         
         // Replace the total size in bytes with formatted size
         const lastRow = [row.region, row.repositories.length, regionTotalImage, repoTotalSize];
-        console.log('lastRow', lastRow);
+        
         return lastRow;
       });
 
@@ -527,7 +527,7 @@ async function updateDashboardData(newData) {
           comp.component.dataGrid.dataTable.deleteRows();
 
           
-          console.log('tableData', tableData);
+          
           comp.component.dataGrid.dataTable.setRows(tableData);
         }
       });

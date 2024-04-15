@@ -6,11 +6,6 @@
     stroke-width: 0;
 }
 
-.highcharts-datagrid-column-header
-{
-    font-size: 14px;
-    font-weight: 200;
-}
 
 #dashboard-col-1 .highcharts-point {
     stroke-width: 2px;

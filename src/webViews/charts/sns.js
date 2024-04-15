@@ -413,7 +413,7 @@ const requestChartData = () => {
 
 window.addEventListener('message', (event) => {
   const message = event.data;
-  console.log('Message received:', message.data);
+  
   switch (message.command) {
     case 'updateData':
       updateDashboardData(message.data);

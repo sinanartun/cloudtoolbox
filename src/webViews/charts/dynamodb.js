@@ -1,10 +1,12 @@
-const vscode = acquireVsCodeApi();
 let dashboardChart = null;
 let mapChart = null;
 let dashboardType = 'dashboard';
-let intervalValue = 60;
-let dynamodbtimerInterval = null;
-let dynamodbUpdateOnFly = false;
+
+let dynamodbObj = {
+  intervalValue : 60,
+  timerInterval : null,
+  updateOnFly : false,
+};
 
 const t1 = 'Tables';
 const t2 = 'Size (6 Hours Delay)';
@@ -12,87 +14,12 @@ const t3 = 'Items (6 Hours Delay)';
 const t4 = 'Backups';
 const t5 = 'Backup Size';
 
-const dataGridColumns = {
-  Region: {
-    headerFormat: '{text} name',
-  },
-  [t1]: {
-    headerFormat: '{text}',
-  },
-  [t2]: {
-    headerFormat: '{text}',
-  },
-  [t3]: {
-    headerFormat: '{text}',
-  },
-  [t4]: {
-    headerFormat: '{text}',
-  },
-  [t5]: {
-    headerFormat: '{text}',
-  },
-  metaData: {
-    show: false,
-  },
-};
+
 let data = null;
 
-function isColorLight(color) {
-  let r, g, b;
 
-  // Check if color is in hexadecimal format
-  if (color.indexOf('#') === 0) {
-    // Convert hex to RGB
-    const hex = color.replace('#', '');
-    if (hex.length === 3) {
-      // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-      r = parseInt(hex.charAt(0) + hex.charAt(0), 16);
-      g = parseInt(hex.charAt(1) + hex.charAt(1), 16);
-      b = parseInt(hex.charAt(2) + hex.charAt(2), 16);
-    } else if (hex.length === 6) {
-      r = parseInt(hex.substring(0, 2), 16);
-      g = parseInt(hex.substring(2, 4), 16);
-      b = parseInt(hex.substring(4, 6), 16);
-    }
-  }
-  // Check if color is in 'rgb' or 'rgba' format
-  else if (color.indexOf('rgb') === 0) {
-    // Find numbers in the rgb(a) string, split them, convert to integer
-    const match = color.match(/\d+/g).map(Number);
-    r = match[0];
-    g = match[1];
-    b = match[2];
-    // Ignore alpha channel if present
-  } else {
-    // Unsupported color format, default to light color
-    console.warn('Unsupported color format:', color);
-    return true;
-  }
 
-  // Calculate the luminance of the color
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  
 
-  // Return true if light, false if dark
-  return luminance > 0.5;
-}
-
-function renderBarDataLabels(colors, colorIndex, value) {
-  if (value === 0) {
-    return `<span class="cbt-bar-white">0 Bytes</span>`;
-  }
-
-  let lightColor = false;
-
-  if (colors && colors[colorIndex]) {
-    const color = colors[colorIndex];
-    lightColor = isColorLight(color);
-  }
-
-  const cl = lightColor ? 'ctb-bar-black' : 'cbt-bar-white';
-  const formated = formatBytes(value, 2);
-  return `<span class="${cl}">${formated[0]} ${formated[1]}</span>`;
-}
 
 function formatBytes(bytes, decimals = 2) {
   if (bytes === 0) {
@@ -177,10 +104,7 @@ async function initializeDashboardChart() {
           },
           
           sync: {
-            extremes: true,
-            data: true,
-            dataGrid: true,
-            dataGridColumns: true,
+
           },
           connector: {
             id: 'Region',
@@ -204,7 +128,10 @@ async function initializeDashboardChart() {
               title: {
                 text: '',
               },
-              tickInterval: 1,
+              width: '80%',
+              showLastLabel: false,
+              tickAmount: 5,
+              type: 'linear',
             },
             credits: {
               enabled: false,
@@ -230,7 +157,7 @@ async function initializeDashboardChart() {
                   inside: false,
                   horizontalAlign: 'middle',
                   crop: false,
-                  overflow: 'none',
+                  showLastLabel: false,
                   formatter: function () {
                     return this.y === 0 ? '' : this.y;
                   },
@@ -256,8 +183,8 @@ async function initializeDashboardChart() {
               description: t1,
             },
             sync: {
-              extremes: true,
-              data: true,
+              highlight: true
+
             },
           },
         },
@@ -296,6 +223,10 @@ async function initializeDashboardChart() {
               title: {
                 text: '',
               },
+              width: '80%',
+              showLastLabel: false,
+              tickAmount: 5,
+              type: 'linear',
               labels: {
                 enabled: true,
                   align: 'middle',
@@ -303,24 +234,11 @@ async function initializeDashboardChart() {
                   verticalAlign: 'middle',
                   crop: false,
                   overflow: 'justify',
+                  showLastLabel: false,
                 formatter: function () {
                   const formattedValue = formatBytes(this.value, 0);
                   return `<span class="ctb-label-sm">${formattedValue[0]} ${formattedValue[1]}</span>`;
                 },
-              },
-              tickPositioner: function () {
-                const max = this.dataMax;
-                const end = this.dataMax * 1.1;
-                const min = this.dataMin;
-                const tickCount = 7;
-                const interval = (end - min) / (tickCount - 1);
-                let positions = [];
-
-                for (let i = 0; i < tickCount; i++) {
-                  positions.push(min + interval * i);
-                }
-
-                return positions;
               },
             },
             credits: {
@@ -337,7 +255,7 @@ async function initializeDashboardChart() {
                 point: {
                   events: {
                     click: function () {
-                      console.log('Point clicked:', this);
+                      
                     },
                   },
                 },
@@ -355,7 +273,9 @@ async function initializeDashboardChart() {
                   crop: false,
                   overflow: 'justify',
                   formatter: function () {
-                    return renderBarDataLabels(this.series.chart.options.colors, this.colorIndex, this.y);
+                    const formattedValue = formatBytes(this.y, 0);
+                  return `<span>${formattedValue[0]} ${formattedValue[1]}</span>`;
+                    
                   },
                 },
               },
@@ -368,6 +288,7 @@ async function initializeDashboardChart() {
               },
               pointFormat: '<b>{point.y}</b>',
               stickOnContact: true,
+
             },
             title: {
               text: '',
@@ -395,7 +316,7 @@ async function initializeDashboardChart() {
             },
           },
           sync: {
-            extremes: true,
+            highlight: true
           },
           connector: {
             id: 'Region',
@@ -418,7 +339,11 @@ async function initializeDashboardChart() {
               title: {
                 text: '',
               },
-              tickInterval: 1,
+              width: '80%',
+              showLastLabel: false,
+              tickAmount: 5,
+              type: 'linear',
+              
             },
             credits: {
               enabled: false,
@@ -441,7 +366,6 @@ async function initializeDashboardChart() {
                   inside: false,
                   horizontalAlign: 'middle',
                   crop: false,
-                  overflow: 'none',
                   formatter: function () {
                     return this.y === 0 ? '' : this.y;
                   },
@@ -460,18 +384,14 @@ async function initializeDashboardChart() {
             },
             lang: {
               accessibility: {
-                chartContainerLabel: t2,
+                chartContainerLabel: t3,
               },
             },
             accessibility: {
-              description: t2,
+              description: t3,
             },
             sync: {
-              extremes: true,
-              data: true,
-              dataGrid: true,
-              dataGridColumns: true,
-              updatedData: true,
+              highlight: true
             },
           },
         },
@@ -482,12 +402,14 @@ async function initializeDashboardChart() {
             id: 'datagridConnector',
           },
           type: 'DataGrid',
-          sync: {
-            extremes: true,
-          },
+         
+          
           dataGridOptions: {
             editable: false,
             cellHeight: 15,
+            sync: {
+              highlight: true
+            },
           },
         },
       ],
@@ -496,7 +418,7 @@ async function initializeDashboardChart() {
   );
   requestChartData();
 }
-
+let transformedData = null;
 async function updateDashboardData(newData) {
   if (!dashboardChart) {
     console.error('Dashboard is not initialized.');
@@ -511,7 +433,7 @@ async function updateDashboardData(newData) {
     const dashboardComponents = await dashboardChart.mountedComponents;
 
     if (regionConnector && regionConnector.options) {
-      const transformedData = newData.map((row) => {
+       transformedData = newData.map((row) => {
         // Assume row format is ['Region', bucketCount, totalObjectCount, totalSizeInBytes]
         const tableSize = formatBytes(row[2], 2); // Assuming row[3] is totalSizeInBytes
         const BackupSize = formatBytes(row[5], 2); // Assuming row[3] is totalSizeInBytes
@@ -531,12 +453,7 @@ async function updateDashboardData(newData) {
         ) {
           const datapart = newData.map((data) => [data[0], data[i + 1]]);
 
-          comp.component.chart.series[0].setData(datapart, {
-            animation: {
-              duration: 1000,
-              easing: 'easeInOutQuint',
-            },
-          });
+          comp.component.chart.series[0].setData(datapart);
         } else if (
           comp.component &&
           comp.component.type &&
@@ -544,7 +461,12 @@ async function updateDashboardData(newData) {
           comp.component.dataGrid
         ) {
           comp.component.dataGrid.dataTable.deleteRows();
+
           comp.component.dataGrid.dataTable.setRows(transformedData);
+          comp.component.dataGrid.update({});
+
+
+
         }
       });
     } else {
@@ -555,6 +477,9 @@ async function updateDashboardData(newData) {
   }
 }
 
+
+
+
 function handleIncomingData(message) {
   if (message.command === 'updateData') {
     updateDashboardData(message.data);
@@ -562,7 +487,7 @@ function handleIncomingData(message) {
 }
 
 const requestChartData = () => {
-  if (dynamodbUpdateOnFly) {
+  if (dynamodbObj.updateOnFly) {
     return;
   } else {
     startLoading();
@@ -573,21 +498,12 @@ const requestChartData = () => {
   }
 };
 
-window.addEventListener('message', (event) => {
-  const message = event.data;
-  console.log('Message received:', message.data);
-  switch (message.command) {
-    case 'updateData':
-      updateDashboardData(message.data);
-      break;
-  }
-});
 
 const init = () => {
   initializeDashboardChart();
   document.getElementById('interval').addEventListener('change', function () {
-    intervalValue = parseInt(this.value, 10);
-    if (intervalValue < 1) {
+    dynamodbObj.dynamodbObj = parseInt(this.value, 10);
+    if (dynamodbObj.dynamodbObj < 1000) {
       stopDashboardChartInterval();
     } else {
       startDashboardChartInterval();
@@ -602,24 +518,24 @@ const init = () => {
 };
 
 const startDashboardChartInterval = () => {
-  if (window.dashboardChartUpdateInterval) {
-    clearInterval(window.dashboardChartUpdateInterval);
+  if (dynamodbObj.timerInterval) {
+    clearInterval(dynamodbObj.timerInterval);
   }
-  if (intervalValue > 0) {
-    window.dashboardChartUpdateInterval = setInterval(() => {
+  if (dynamodbObj.dynamodbObj > 0) {
+    dynamodbObj.timerInterval = setInterval(() => {
       requestChartData();
-    }, intervalValue * 1000);
+    }, dynamodbObj.dynamodbObj * 1000);
   }
 };
 
 const stopDashboardChartInterval = () => {
-  if (window.dashboardChartUpdateInterval) {
-    clearInterval(window.dashboardChartUpdateInterval);
+  if (dynamodbObj.timerInterval) {
+    clearInterval(dynamodbObj.timerInterval);
   }
 };
 
 function startLoading() {
-  dynamodbUpdateOnFly = true;
+  dynamodbObj.updateOnFly = true;
 
   const refreshButton = document.getElementById('refresh-button');
   if (refreshButton && refreshButton.classList && !refreshButton.classList.contains('rotating')) {
@@ -643,7 +559,7 @@ function startLoading() {
 }
 
 function stopLoading() {
-  dynamodbUpdateOnFly = false;
+  dynamodbObj.updateOnFly = false;
 
   const refreshButton = document.getElementById('refresh-button');
   if (refreshButton && refreshButton.classList && refreshButton.classList.contains('rotating')) {
@@ -668,5 +584,3 @@ const destroyDashboardChart = async () => {
   dashboardChart = null;
 };
 
-window.addEventListener('load', init);
-window.addEventListener('message', (event) => handleIncomingData(event.data));

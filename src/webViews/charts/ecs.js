@@ -389,7 +389,7 @@ async function initializeDashboardChart() {
                 point: {
                   events: {
                     click: function () {
-                      console.log('Point clicked:', this);
+                      
                     },
                   },
                 },

@@ -92,7 +92,7 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
     
 
     this.context.globalState.update(profileKey, Array.from(this.selectedRegions));
-    console.log(`Saved regions for profile ${this.profileProvider.getSelectedProfile()}:`, Array.from(this.selectedRegions));
+    
   }
 
   private async restoreSelectedRegions(): Promise<void> {
@@ -109,10 +109,10 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
 
     const profileKey = `selectedRegions_${selectedProfile}`;
     const storedRegions = this.context.globalState.get<string[]>(profileKey) || [];
-    console.log(`Restoring regions for profile ${selectedProfile}:`, storedRegions);
+    
 
     this.selectedRegions = new Set(storedRegions.filter((region) => this.regions.includes(region)));
-    console.log(`Active selected regions:`, Array.from(this.selectedRegions));
+    
   }
 
   public async fetchRegions(): Promise<void> {
@@ -232,7 +232,7 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
     } else {
       this.selectedRegions.add(region);
     }
-    console.log('toggle region', region, this.selectedRegions);
+    
     this.saveSelectedRegions();
 
     this._onDidChangeTreeData.fire(undefined);
@@ -241,7 +241,7 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
   }
 
   public async onProfileChanged(): Promise<void> {
-    console.log('Profile changed detected in RegionProvider');
+    
 
     this.selectedRegions.clear();
     await this.fetchRegions();

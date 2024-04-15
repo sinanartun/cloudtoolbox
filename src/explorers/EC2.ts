@@ -29,7 +29,7 @@ export class Ec2Explorer implements RegionObserver{
   public onRegionSelectionChanged(selectedRegions: Set<string>): void {
     
     this.selectedRegions = Array.from(selectedRegions);
-    console.log('Updated selected regions in Lambda Explorer: ', this.selectedRegions);
+    
     
     
 }
@@ -37,7 +37,7 @@ export class Ec2Explorer implements RegionObserver{
 public onProfileChanged(newProfile: string): void {
     if (this.selectedProfile !== newProfile) {
         this.selectedProfile = newProfile;
-        console.log(`Updated AWS profile in ${this.constructor.name}: ${newProfile}`);
+        
 
     }
 }

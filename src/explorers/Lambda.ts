@@ -33,7 +33,7 @@ export class LambdaExplorer {
     public onRegionSelectionChanged(selectedRegions: Set<string>): void {
         
         this.selectedRegions = Array.from(selectedRegions);
-        console.log('Updated selected regions in Lambda Explorer: ', this.selectedRegions);
+        
         
         
     }
@@ -41,7 +41,7 @@ export class LambdaExplorer {
     public onProfileChanged(newProfile: string): void {
         if (this.selectedProfile !== newProfile) {
             this.selectedProfile = newProfile;
-            console.log(`Updated AWS profile in Lambda Explorer: ${newProfile}`);
+            
             this.refreshData();
         }
     }
@@ -92,7 +92,7 @@ export class LambdaExplorer {
         try {
             const command = new ListLayersCommand({});
             const response = await lambda.send(command);
-            console.log('lambda:',response);
+            
             return response.Layers ? response.Layers.length : 0;
         } catch (error) {
             console.error(`Failed to get Lambda layer count: ${error}`);
@@ -116,7 +116,7 @@ export class LambdaExplorer {
     }
 
     public async refreshData(): Promise<void> {
-        console.log('Refreshing data based on new context...');
+        
         
        
     }

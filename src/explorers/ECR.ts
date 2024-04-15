@@ -28,7 +28,7 @@ export class ECRExplorer implements RegionObserver {
 
   public onProfileChanged(newProfile: string): void {
     this.selectedProfile = newProfile;
-    console.log(`Updated AWS profile in ${this.constructor.name}: ${newProfile}`);
+    
   }
 
   public async getChartData(): Promise<any[]> {
@@ -44,7 +44,7 @@ export class ECRExplorer implements RegionObserver {
       const repositories = await this.getECRRepositoryData(ecrClient);
       return { region, repositories };
     }));
-    console.log('ecr',chartData);
+    
     return chartData;
   }
 
