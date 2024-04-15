@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { ECRClient, DescribeRepositoriesCommand, DescribeImagesCommand, ImageDetail } from "@aws-sdk/client-ecr";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from '@aws-sdk/credential-provider-ini';
+import { fromIni } from "@aws-sdk/credential-providers";
 import { ProfileProvider } from '../providers/ProfileProvider';
 
 export class ECRExplorer implements RegionObserver {

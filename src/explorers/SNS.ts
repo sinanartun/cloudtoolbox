@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { SNSClient, ListTopicsCommand, ListSubscriptionsCommand } from "@aws-sdk/client-sns";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from '@aws-sdk/credential-provider-ini';
+import { fromIni } from "@aws-sdk/credential-providers";
 import { ProfileProvider } from '../providers/ProfileProvider';
 
 export class SNSExplorer implements RegionObserver {
@@ -82,7 +82,7 @@ export class SNSExplorer implements RegionObserver {
         try {
             const command = new ListSubscriptionsCommand({});
             const response = await snsClient.send(command);
-            // Filter subscriptions to count only those that are confirmed
+            
             const confirmedSubscriptions = response.Subscriptions?.filter(sub => sub.SubscriptionArn !== "PendingConfirmation");
             return confirmedSubscriptions ? confirmedSubscriptions.length : 0;
         } catch (error) {

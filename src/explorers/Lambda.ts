@@ -4,7 +4,7 @@ import { ServerlessApplicationRepositoryClient, ListApplicationsCommand } from "
 import { noservice } from './noservice';
 import { RegionProvider, RegionObserver } from '../providers/RegionProvider';
 import { ProfileProvider, ProfileObserver } from '../providers/ProfileProvider';
-import { fromIni } from "@aws-sdk/credential-provider-ini";
+import { fromIni } from "@aws-sdk/credential-providers";
 
 
 export class LambdaExplorer {

@@ -9,7 +9,7 @@ import {
   DescribeVpcPeeringConnectionsCommand 
 } from "@aws-sdk/client-ec2";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from '@aws-sdk/credential-provider-ini';
+import { fromIni } from "@aws-sdk/credential-providers";
 import { ProfileProvider } from '../providers/ProfileProvider';
 
 export class VpcExplorer implements RegionObserver{
@@ -74,7 +74,7 @@ export class VpcExplorer implements RegionObserver{
     peeringConnection: number;
   }> {
     try {
-      // Initialize all the required describe commands
+      
       const vpcsPromise = ec2.send(new DescribeVpcsCommand({}));
       const subnetsPromise = ec2.send(new DescribeSubnetsCommand({}));
       const routeTablesPromise = ec2.send(new DescribeRouteTablesCommand({}));
@@ -82,7 +82,7 @@ export class VpcExplorer implements RegionObserver{
       const natGatewaysPromise = ec2.send(new DescribeNatGatewaysCommand({}));
       const peeringConnectionsPromise = ec2.send(new DescribeVpcPeeringConnectionsCommand({}));
   
-      // Await all promises to resolve
+      
       const [
         vpcsResponse, 
         subnetsResponse, 
@@ -99,7 +99,7 @@ export class VpcExplorer implements RegionObserver{
         peeringConnectionsPromise
       ]);
   
-      // Extract and count the resources from the responses
+      
       const vpc = vpcsResponse.Vpcs?.length ?? 0;
       const subnet = subnetsResponse.Subnets?.length ?? 0;
       const routeTable = routeTablesResponse.RouteTables?.length ?? 0;
@@ -113,9 +113,5 @@ export class VpcExplorer implements RegionObserver{
       return { vpc: 0, subnet: 0, routeTable: 0, internetGateway: 0, natGateway: 0, peeringConnection: 0 };
     }
   }
-
-
-
-
   
 }

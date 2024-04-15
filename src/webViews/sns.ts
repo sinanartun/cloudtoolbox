@@ -23,7 +23,7 @@ export async function setSNSHtml(context: vscode.ExtensionContext, webview: vsco
     const mapsUri = webview.asWebviewUri(
       vscode.Uri.file(path.join(context.extensionPath, 'node_modules', 'highcharts', 'modules', 'map.js')),
     );
-    //node_modules/highcharts/highmaps.js
+    
     const layoutUri = webview.asWebviewUri(
       vscode.Uri.file(
         path.join(context.extensionPath, 'node_modules', '@highcharts', 'dashboards', 'modules', 'layout.js'),

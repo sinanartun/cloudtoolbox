@@ -1,10 +1,12 @@
-const vscode = acquireVsCodeApi();
 let dashboardChart = null;
 let mapChart = null;
 let dashboardType = 'dashboard';
-let intervalValue = 60;
-let redshifttimerInterval = null;
-let redshiftUpdateOnFly = false;
+
+let redshiftObj = {
+  intervalValue : 60,
+  timerInterval : null,
+  updateOnFly : false,
+};
 
 const t1 = 'Clusters';
 const t2 = 'Serverless Clusters';
@@ -14,62 +16,6 @@ const t4 = 'Backups Size';
 
 let data = null;
 
-function isColorLight(color) {
-  let r, g, b;
-
-  // Check if color is in hexadecimal format
-  if (color.indexOf('#') === 0) {
-    // Convert hex to RGB
-    const hex = color.replace('#', '');
-    if (hex.length === 3) {
-      // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-      r = parseInt(hex.charAt(0) + hex.charAt(0), 16);
-      g = parseInt(hex.charAt(1) + hex.charAt(1), 16);
-      b = parseInt(hex.charAt(2) + hex.charAt(2), 16);
-    } else if (hex.length === 6) {
-      r = parseInt(hex.substring(0, 2), 16);
-      g = parseInt(hex.substring(2, 4), 16);
-      b = parseInt(hex.substring(4, 6), 16);
-    }
-  }
-  // Check if color is in 'rgb' or 'rgba' format
-  else if (color.indexOf('rgb') === 0) {
-    // Find numbers in the rgb(a) string, split them, convert to integer
-    const match = color.match(/\d+/g).map(Number);
-    r = match[0];
-    g = match[1];
-    b = match[2];
-    // Ignore alpha channel if present
-  } else {
-    // Unsupported color format, default to light color
-    console.warn('Unsupported color format:', color);
-    return true;
-  }
-
-  // Calculate the luminance of the color
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  
-
-  // Return true if light, false if dark
-  return luminance > 0.5;
-}
-
-function renderBarDataLabels(colors, colorIndex, value) {
-  if (value === 0) {
-    return `<span class="cbt-bar-white">0 Bytes</span>`;
-  }
-
-  let lightColor = false;
-
-  if (colors && colors[colorIndex]) {
-    const color = colors[colorIndex];
-    lightColor = isColorLight(color);
-  }
-
-  const cl = lightColor ? 'ctb-bar-black' : 'cbt-bar-white';
-  const formated = formatBytes(value, 2);
-  return `<span class="${cl}">${formated[0]} ${formated[1]}</span>`;
-}
 
 function formatBytes(bytes, decimals = 2) {
   if (bytes === 0) {
@@ -419,7 +365,9 @@ async function initializeDashboardChart() {
                   crop: false,
                   overflow: 'justify',
                   formatter: function () {
-                    return renderBarDataLabels(this.series.chart.options.colors, this.colorIndex, this.y);
+                    const formated = formatBytes(this.y, 2);
+
+                return `<b>${formated[0]}</b> ${formated[1]}`;
                   },
                 },
               },
@@ -534,7 +482,7 @@ function handleIncomingData(message) {
 }
 
 const requestChartData = () => {
-  if (redshiftUpdateOnFly) {
+  if (redshiftObj.updateOnFly) {
     return;
   } else {
     startLoading();
@@ -545,20 +493,11 @@ const requestChartData = () => {
   }
 };
 
-window.addEventListener('message', (event) => {
-  const message = event.data;
-  
-  switch (message.command) {
-    case 'updateData':
-      updateDashboardData(message.data);
-      break;
-  }
-});
 
 const init = () => {
   initializeDashboardChart();
   document.getElementById('interval').addEventListener('change', function () {
-    intervalValue = parseInt(this.value, 10);
+    redshiftObj.intervalValue = parseInt(this.value, 10);
     if (intervalValue < 1) {
       stopDashboardChartInterval();
     } else {
@@ -574,24 +513,24 @@ const init = () => {
 };
 
 const startDashboardChartInterval = () => {
-  if (window.dashboardChartUpdateInterval) {
-    clearInterval(window.dashboardChartUpdateInterval);
+  if (redshiftObj.timerInterval) {
+    clearInterval(redshiftObj.timerInterval);
   }
-  if (intervalValue > 0) {
-    window.dashboardChartUpdateInterval = setInterval(() => {
+  if (redshiftObj.intervalValue > 0) {
+    redshiftObj.timerInterval = setInterval(() => {
       requestChartData();
-    }, intervalValue * 1000);
+    }, redshiftObj.intervalValue * 1000);
   }
 };
 
 const stopDashboardChartInterval = () => {
-  if (window.dashboardChartUpdateInterval) {
-    clearInterval(window.dashboardChartUpdateInterval);
+  if (redshiftObj.timerInterval) {
+    clearInterval(redshiftObj.timerInterval);
   }
 };
 
 function startLoading() {
-  redshiftUpdateOnFly = true;
+  redshiftObj.updateOnFly = true;
 
   const refreshButton = document.getElementById('refresh-button');
   if (refreshButton && refreshButton.classList && !refreshButton.classList.contains('rotating')) {
@@ -603,7 +542,7 @@ function startLoading() {
   timerSpan.textContent = '00:00:00';
   loadingDiv.style.display = 'block';
 
-  redshifttimerInterval = setInterval(() => {
+  redshiftObj.timerInterval = setInterval(() => {
     let timeElapsed = Date.now() - startTime;
     let minutes = Math.floor(timeElapsed / 60000);
     let seconds = Math.floor((timeElapsed % 60000) / 1000);
@@ -615,7 +554,7 @@ function startLoading() {
 }
 
 function stopLoading() {
-  redshiftUpdateOnFly = false;
+  redshiftObj.updateOnFly = false;
 
   const refreshButton = document.getElementById('refresh-button');
   if (refreshButton && refreshButton.classList && refreshButton.classList.contains('rotating')) {
@@ -625,9 +564,9 @@ function stopLoading() {
   if (loadingDiv && loadingDiv.style) {
     loadingDiv.style.display = 'none';
   }
-  if (redshifttimerInterval) {
-    clearInterval(redshifttimerInterval);
-    redshifttimerInterval = null;
+  if (redshiftObj.timerInterval) {
+    clearInterval(redshiftObj.timerInterval);
+    redshiftObj.timerInterval = null;
   }
 }
 
@@ -639,6 +578,3 @@ const destroyDashboardChart = async () => {
   await dashboardChart.destroy();
   dashboardChart = null;
 };
-
-window.addEventListener('load', init);
-window.addEventListener('message', (event) => handleIncomingData(event.data));

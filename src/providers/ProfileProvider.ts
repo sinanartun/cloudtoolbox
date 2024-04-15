@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as ini from 'ini';
 import * as os from 'os';
 import * as path from 'path';
-import { RegionProvider } from './RegionProvider'; // Ensure path is correct
+import { RegionProvider } from './RegionProvider'; 
 import { out } from './log';
 
 export class Profile extends vscode.TreeItem {

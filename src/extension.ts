@@ -11,21 +11,21 @@ const globalStorageKey = 'cloudtoolbox';
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
 
 
-    // Initialize the providers
+    
     const profileProvider = await ProfileProvider.getInstance(context);
     const regionProvider = await RegionProvider.getInstance(context);
 
-    // Set RegionProvider to ProfileProvider
+    
     profileProvider.setRegionProvider(regionProvider);
 
-    // Additional providers
+    
     const serviceProvider = new ServiceProvider();
     const webViewProvider = new WebViewProvider(context);
 
-    // Register Tree Data Providers
+    
     registerTreeDataProviders(profileProvider, regionProvider, serviceProvider);
 
-    // Register Commands
+    
     registerCommands(context, profileProvider, regionProvider, webViewProvider);
 }
 

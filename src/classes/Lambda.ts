@@ -50,7 +50,7 @@ class Lambda {
 
     constructor(region: string, regionProvider: RegionProvider) {
         this.client = new LambdaClient({ region: region });
-        this.regionProvider = regionProvider; // A
+        this.regionProvider = regionProvider; 
     }
 
     async listEventSourceMappings(): Promise<LambdaEventSourceMapping[]> {

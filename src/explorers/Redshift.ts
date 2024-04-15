@@ -6,9 +6,9 @@ import {
 } from "@aws-sdk/client-redshift";
 import { RedshiftServerlessClient, ListWorkgroupsCommand } from "@aws-sdk/client-redshift-serverless";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from '@aws-sdk/credential-provider-ini';
+import { fromIni } from "@aws-sdk/credential-providers";
 import { ProfileProvider } from '../providers/ProfileProvider';
-
+import { noservice } from './noservice';
 export class RedshiftExplorer implements RegionObserver {
   private selectedRegions: string[] = [];
   private selectedProfile: string | undefined;
@@ -55,7 +55,7 @@ export class RedshiftExplorer implements RegionObserver {
       const redshiftClient = new RedshiftClient({ region, credentials });
       const serverlessClient = new RedshiftServerlessClient({ region, credentials });
       const clusterCount = await this.getRedshiftClusterCount(redshiftClient);
-      const serverlessCount = await this.getServerlessCount(serverlessClient);
+      const serverlessCount = await this.getServerlessCount(serverlessClient, region);
       const backupData = await this.getBackupData(redshiftClient);
       
       return [ region, clusterCount, serverlessCount, backupData.backupCount, backupData.totalBackupSize ];
@@ -88,13 +88,16 @@ export class RedshiftExplorer implements RegionObserver {
     }
   }
 
-  private async getServerlessCount(serverlessClient: RedshiftServerlessClient): Promise<number> {
+  private async getServerlessCount(serverlessClient: RedshiftServerlessClient, region:string): Promise<number> {
     try {
+      if (noservice[region]?.includes('redshift-serverless')) {
+        return 0;
+    }
       const command = new ListWorkgroupsCommand({});
       const response = await serverlessClient.send(command);
       return response.workgroups?.length || 0;
     } catch (error) {
-      console.error(`Failed to get Redshift Serverless workgroup count: ${error}`);
+      console.error(`Failed to get Redshift Serverless workgroup count in ${region}: ${error}`);
       return 0;
     }
   }

@@ -57,7 +57,7 @@ class EC2Instance {
     }
 
     static async listInstances() {
-        const client = new EC2Client({ region: "us-west-2" }); // replace with your region
+        const client = new EC2Client({ region: "us-west-2" }); 
         const command = new DescribeInstancesCommand({});
         const instances: EC2Instance[] = [];
 

@@ -6,6 +6,8 @@ let intervalValue = 60;
 let snstimerInterval = null;
 let snsUpdateOnFly = false;
 
+
+
 const t1 = 'SNS Topic';
 const t2 = 'Subscriptions';
 const t3 = 'Confirmed Subscriptions';
@@ -411,15 +413,6 @@ const requestChartData = () => {
   }
 };
 
-window.addEventListener('message', (event) => {
-  const message = event.data;
-  
-  switch (message.command) {
-    case 'updateData':
-      updateDashboardData(message.data);
-      break;
-  }
-});
 
 const init = () => {
   initializeDashboardChart();

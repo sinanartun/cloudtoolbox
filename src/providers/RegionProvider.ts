@@ -162,10 +162,10 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
 
   getTreeItem(element: RegionCategory): vscode.TreeItem {
     if (element.region === '') {
-      // element is a region group
+      
       let treeItem = new vscode.TreeItem(
         element.category,
-        vscode.TreeItemCollapsibleState.Expanded, // Always expanded
+        vscode.TreeItemCollapsibleState.Expanded, 
       );
       treeItem.command = {
         command: 'cloudtoolbox.toggleGroup',
@@ -174,7 +174,7 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
       };
       return treeItem;
     } else {
-      // element is a region
+      
       let treeItem = new vscode.TreeItem(element.region, vscode.TreeItemCollapsibleState.None);
       if (this.selectedRegions.has(element.region)) {
         treeItem.iconPath = new vscode.ThemeIcon('check');
@@ -190,10 +190,10 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
 
   getChildren(element?: RegionCategory): vscode.ProviderResult<RegionCategory[]> {
     if (element) {
-      // element is a region group, return regions in this group
+      
       return this.regions.filter((region) => this.regionCategoryMapping.get(region) === element.category).map((region) => ({ category: element.category, region }));
     } else {
-      // no element, return region groups
+      
       const regionGroups = new Set(this.regionCategoryMapping.values());
       return Array.from(regionGroups)
         .filter((regionGroup) => this.regions.some((region) => this.regionCategoryMapping.get(region) === regionGroup))
@@ -207,10 +207,10 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
     const allSelected = regionsInGroup.every((region) => this.selectedRegions.has(region));
 
     if (allSelected) {
-      // If all regions in the group are selected, deselect them
+      
       regionsInGroup.forEach((region) => this.selectedRegions.delete(region));
     } else {
-      // If not all regions in the group are selected, select them
+      
       regionsInGroup.forEach((region) => this.selectedRegions.add(region));
     }
 
@@ -249,7 +249,7 @@ export class RegionProvider implements vscode.TreeDataProvider<RegionCategory> {
 
 
     this.refresh();
-    // Make sure to notify observers about the update
+    
   }
 
   public async getSelectedRegions(): Promise<string[]> {

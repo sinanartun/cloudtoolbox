@@ -5,10 +5,8 @@ export async function setEc2Html(
   webview: vscode.Webview
 ): Promise<void> {
   try {
-    // Use the context.extensionUri to create URIs for local content
+    
     const baseUri = context.extensionUri;
-
-    // Generate all necessary URIs using vscode.Uri.joinPath
     const highchartsCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "highcharts", "css", "highcharts.css"));
     const highchartsUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "highcharts", "highcharts.js"));
     const datagridUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@highcharts", "dashboards", "datagrid.js"));
@@ -21,13 +19,11 @@ export async function setEc2Html(
     const highchartsCustomCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "webViews", "css", "highchartsGrid3.css"));
     const customCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "webViews", "css", "custom.css"));
     const fontAwesomeUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@fortawesome", "fontawesome-free", "css", "all.min.css"));
-
-    // Use vscode.workspace.fs.readFile to read local files
     const runJsPath = vscode.Uri.joinPath(baseUri, "dist", "webViews", "charts", "ec2.js");
     const runJsData = await vscode.workspace.fs.readFile(runJsPath);
     const runJs = runJsData.toString();
 
-    // Set the webview's HTML content
+    
     webview.html = `<!DOCTYPE html>
     <html lang="en">
     <head>

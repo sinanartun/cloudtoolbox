@@ -189,15 +189,7 @@ const requestChartData = () => {
   }
 };
 
-window.addEventListener('message', (event) => {
-  const message = event.data;
-  
-  switch (message.command) {
-    case 'updateData':
-      updateDashboardData(message.data);
-      break;
-  }
-});
+
 
 const init = () => {
   initializeDashboardChart();

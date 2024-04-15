@@ -22,7 +22,12 @@
     "Other"
   ],
   "tags": [
-    "cloud", "AWS", "Azure", "GCP", "cloud management", "cloud services"
+    "cloud",
+    "AWS",
+    "Azure",
+    "GCP",
+    "cloud management",
+    "cloud services"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
@@ -68,6 +73,7 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.5.2",
+    "@types/aws-sdk": "^2.7.0",
     "@types/highcharts": "^7.0.0",
     "@types/ini": "^4.1.0",
     "@types/mocha": "^10.0.6",
@@ -104,6 +110,7 @@
     "@aws-sdk/client-s3": "^3.554.0",
     "@aws-sdk/client-serverlessapplicationrepository": "^3.554.0",
     "@aws-sdk/client-sns": "^3.554.0",
+    "@aws-sdk/credential-providers": "^3.554.0",
     "@highcharts/dashboards": "^2.0.0",
     "copy-webpack-plugin": "^12.0.2",
     "highcharts": "^11.4.1",

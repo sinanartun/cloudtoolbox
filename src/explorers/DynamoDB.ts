@@ -1,7 +1,7 @@
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 import { DynamoDBClient, ListTablesCommand, DescribeTableCommand, ListBackupsCommand } from "@aws-sdk/client-dynamodb";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from '@aws-sdk/credential-provider-ini';
+import { fromIni } from "@aws-sdk/credential-providers";
 import { ProfileProvider } from '../providers/ProfileProvider';
 
 export class DynamoDBExplorer implements RegionObserver {
