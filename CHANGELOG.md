@@ -6,6 +6,19 @@ All notable changes to the "cloudtoolbox" extension will be documented in this f
 
 ## [Unreleased]
 
+## [1.0.21] - 2024-04-15
+### Added
+ - DynamoDB
+   - Tables
+   - Size (6 Hours Delay)
+   - Items (6 Hours Delay)
+   - Backups
+   - Backup Size
+ 
+### Fixed
+
+- Highchart Grid table now visible for last rows
+
 ## [1.0.20] - 2024-04-14
 ### Added
  - RDS Service with below metadata
