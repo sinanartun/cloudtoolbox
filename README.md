@@ -185,7 +185,10 @@ Now you can see your profile with default profile name.
 
 ## Special Thanks
  - [Ezgi Akdag](https://www.linkedin.com/in/ezgi-akdag-3564ab15/) @amazon.com
+ - [Dr. Ertugrul Akbas](https://www.linkedin.com/in/drertugrulakbas/)
  - [Yusuf Ulaş Yıldız](https://www.linkedin.com/in/ulas-yildiz-7561a688/)
+ - [Highcharts.com](https://www.highcharts.com/)
+
 
 ## Documentation & Resources
 
