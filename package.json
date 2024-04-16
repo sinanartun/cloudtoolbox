@@ -74,7 +74,6 @@
   },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.5.2",
-    "@types/aws-sdk": "^2.7.0",
     "@types/highcharts": "^7.0.0",
     "@types/ini": "^4.1.0",
     "@types/mocha": "^10.0.6",

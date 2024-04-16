@@ -190,7 +190,7 @@ export async function getWelcomeHtml(context: vscode.ExtensionContext, webview: 
 
 <h2>2. Step</h2>
 <p> Copy Auto Generated IAM Read-only Policy </p>
-<p> This VS Extension is open source. It does not collect any info about your computer. Just for your safety Please use Fine tuned IAM Read-Only Policy below.</p>
+<p> This VS Extension is Open Source. It does not collect any info about your computer. Just for your safety Please use Fine tuned IAM Read-Only Policy below.</p>
 
     <h4>IAM READ-ONLY Policy</h2>
     <div class="code-container">

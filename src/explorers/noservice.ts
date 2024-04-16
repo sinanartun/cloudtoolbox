@@ -1,7 +1,7 @@
 type NoServiceType = { [region: string]: string[] | undefined };
 export const noservice : NoServiceType = {
-    'af-south-1': ['serverlessrepo'],
-    'me-south-1' : [''],
+    'af-south-1': ['serverlessrepo', 'redshift-serverless'],
+    'me-south-1' : ['redshift-serverless'],
     'me-north-1' : [''],
     'sa-east-1' : ['redshift-serverless'],
     'us-gov-east-1' : [''],
@@ -13,11 +13,11 @@ export const noservice : NoServiceType = {
     'ap-northeast-2' : [''],
     'ap-northeast-3' : ['serverlessrepo', 'redshift-serverless'],
     'ap-south-1' : [''],
-    'ap-south-2' : ['serverlessrepo'],
+    'ap-south-2' : ['serverlessrepo', 'redshift-serverless'],
     'ap-southeast-1' : [''],
     'ap-southeast-2' : [''],
-    'ap-southeast-3' : ['serverlessrepo'],
-    'ap-southeast-4' : ['serverlessrepo'],
+    'ap-southeast-3' : ['serverlessrepo', 'redshift-serverless'],
+    'ap-southeast-4' : ['serverlessrepo', 'redshift-serverless'],
     'ca-central-1' : [''],
     'ca-central-2' : [''],
     'eu-central-1' : [''],
@@ -28,11 +28,11 @@ export const noservice : NoServiceType = {
     'eu-west-2' : [''],
     'eu-west-3' : [''],
     'eu-west-4' : [''],
-    'eu-south-1' : ['serverlessrepo'],
-    'eu-south-2' : ['serverlessrepo'],
+    'eu-south-1' : ['serverlessrepo', 'redshift-serverless'],
+    'eu-south-2' : ['serverlessrepo', 'redshift-serverless'],
     'us-east-1' : [''],
     'us-east-2' : [''],
     'us-west-1' : [''],
     'us-west-2' : [''],
-    'il-central-1' : ['serverlessrepo']
+    'il-central-1' : ['serverlessrepo', 'redshift-serverless']
 };

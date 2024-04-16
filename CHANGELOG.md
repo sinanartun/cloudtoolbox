@@ -6,6 +6,15 @@ All notable changes to the "cloudtoolbox" extension will be documented in this f
 
 ## [Unreleased]
 
+## [1.0.22] - 2024-04-16
+### Added
+ - Redshift
+   - Clusters
+   - Serverless Clusters
+   - Backups
+ - Quick Start Page  
+ 
+
 ## [1.0.21] - 2024-04-15
 ### Added
  - DynamoDB
