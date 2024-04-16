@@ -127,7 +127,7 @@ export class WebViewProvider {
   }
 
   async showWelcomePage() {
-    const panel = vscode.window.createWebviewPanel('welcomePage', 'Welcome to Cloud Toolbox', vscode.ViewColumn.One, {
+    const panel = vscode.window.createWebviewPanel('Quick Start', 'Quick Start', vscode.ViewColumn.One, {
       enableScripts: true,
       localResourceRoots: [vscode.Uri.joinPath(this.context.extensionUri, 'dist')],
     });
