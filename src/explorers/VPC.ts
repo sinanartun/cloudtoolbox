@@ -9,7 +9,7 @@ import {
   DescribeVpcPeeringConnectionsCommand 
 } from "@aws-sdk/client-ec2";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from "@aws-sdk/credential-providers";
+import { fromIni } from '@aws-sdk/credential-provider-ini';
 import { ProfileProvider } from '../providers/ProfileProvider';
 
 export class VpcExplorer implements RegionObserver{

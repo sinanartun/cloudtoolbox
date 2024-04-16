@@ -6,7 +6,7 @@ import {
 } from "@aws-sdk/client-redshift";
 import { RedshiftServerlessClient, ListWorkgroupsCommand } from "@aws-sdk/client-redshift-serverless";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from "@aws-sdk/credential-providers";
+import { fromIni } from '@aws-sdk/credential-provider-ini';
 import { ProfileProvider } from '../providers/ProfileProvider';
 import { noservice } from './noservice';
 export class RedshiftExplorer implements RegionObserver {

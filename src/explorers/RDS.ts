@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { RDSClient, DescribeDBSnapshotsCommand, DescribeDBClustersCommand, DescribeDBInstancesCommand, DescribeDBClusterSnapshotsCommand, DescribeDBClusterAutomatedBackupsCommand } from "@aws-sdk/client-rds";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from "@aws-sdk/credential-providers";
+import { fromIni } from '@aws-sdk/credential-provider-ini';
 import { ProfileProvider } from '../providers/ProfileProvider';
 
 export class RDSExplorer implements RegionObserver {

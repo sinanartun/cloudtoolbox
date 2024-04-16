@@ -27,6 +27,8 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
     
     registerCommands(context, profileProvider, regionProvider, webViewProvider);
+
+    await webViewProvider.showWelcomePage();
 }
 
 function registerTreeDataProviders(

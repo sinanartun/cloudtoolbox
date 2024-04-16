@@ -3,17 +3,18 @@ import {
   S3Client,
   ListBucketsCommand,
   GetBucketLocationCommand,
-  ListObjectsV2Command,
-  ListObjectsV2Output
 } from "@aws-sdk/client-s3";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from "@aws-sdk/credential-providers";
+import { fromIni } from '@aws-sdk/credential-provider-ini';
 import { ProfileProvider } from '../providers/ProfileProvider';
 import { AwsCredentialIdentityProvider } from '@smithy/types';
-
+interface BucketCounts {
+  [key: string]: number; // This index signature states that any string key returns a number
+}
 export class S3Explorer implements RegionObserver {
   private selectedRegions: string[] = [];
   private selectedProfile: string | undefined;
+  
 
   constructor(private context: vscode.ExtensionContext) {
     this.initialize().catch(error => console.error(`Failed to initialize ${this.constructor.name}: ${error}`));
@@ -44,71 +45,45 @@ export class S3Explorer implements RegionObserver {
   }
   
 
-  public async getChartData(): Promise<any[]> {
+  public async getChartData(): Promise<(string | number)[][]> {
+    if (!this.selectedProfile) {
+        console.error("No AWS profile selected.");
+        return [['No Profile', 0]];
+    }
     const credentials = fromIni({ profile: this.selectedProfile });
-  
-    
-    return Promise.all(this.selectedRegions.map(async region => {
-      const s3ClientGlobal = new S3Client({ credentials, region: region });
-      
-      
-      const s3AllData = await this.getS3Data(s3ClientGlobal, credentials);
-  
-      
-      const bucketsInRegion = s3AllData.filter(data => data.region === region);
-      const bucketCount = bucketsInRegion.length;
-      const totalObjectCount = bucketsInRegion.reduce((acc, curr) => acc + curr.totalObjectCount, 0);
-      const totalSize = bucketsInRegion.reduce((acc, curr) => acc + curr.totalSize, 0);
-  
-      return [ region, bucketCount, totalObjectCount, totalSize ];
-    }));
-  }
-  
+    const s3ClientGlobal = new S3Client({ credentials, region: 'us-east-1' });
 
+    const allBuckets = await this.getS3Data(s3ClientGlobal);
 
-  private async getS3Data(s3Global: S3Client, credentials: AwsCredentialIdentityProvider): Promise<any[]> {
-    try {
-      const bucketResponse = await s3Global.send(new ListBucketsCommand({}));
-      let bucketData = [];
-  
-      for (const bucket of bucketResponse.Buckets ?? []) {
-        const locationResponse = await s3Global.send(new GetBucketLocationCommand({ Bucket: bucket.Name }));
-        let bucketRegion = locationResponse.LocationConstraint || 'us-east-1';
-        if (bucketRegion === '') {
-          bucketRegion = 'us-east-1';
-        }
-        const s3BucketSpecific = new S3Client({ region: bucketRegion, credentials: credentials});
-  
-        let totalObjectCount = 0;
-        let totalSize = 0;
-        let continuationToken: string | undefined = undefined;
-  
-        do {
-          
-          const objectsResponse: ListObjectsV2Output = await s3BucketSpecific.send(new ListObjectsV2Command({
-            Bucket: bucket.Name,
-            ContinuationToken: continuationToken,
-          }));
-  
-          
-          
-          
-        } while (continuationToken);
-  
-        bucketData.push({
-          bucketName: bucket.Name,
-          region: bucketRegion,
-          
-          
-        });
-      }
-  
+    // Initialize bucketCounts with an index signature
+    const bucketCounts: BucketCounts = this.selectedRegions.reduce((acc, region) => {
+        acc[region] = allBuckets.filter(bucket => bucket.region === region).length;
+        return acc;
+    }, {} as BucketCounts); // Casting as BucketCounts to satisfy TypeScript
+
+    const results = Object.keys(bucketCounts).map(region => [region, bucketCounts[region]]);
+    return results;
+}
+
+private async getS3Data(s3Client: S3Client): Promise<any[]> {
+  try {
+      const bucketResponse = await s3Client.send(new ListBucketsCommand({}));
+      const bucketData = await Promise.all(bucketResponse.Buckets?.map(async (bucket) => {
+          const locationResponse = await s3Client.send(new GetBucketLocationCommand({ Bucket: bucket.Name }));
+          const bucketRegion = locationResponse.LocationConstraint || 'us-east-1'; // Defaulting to 'us-east-1'
+          return {
+              bucketName: bucket.Name,
+              region: bucketRegion
+          };
+      }) || []);
+
       return bucketData;
-    } catch (error) {
+  } catch (error) {
       console.error(`Failed to get S3 data: ${error}`);
       return [];
-    }
   }
+}
+
 
 
 

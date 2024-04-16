@@ -1,11 +1,14 @@
 import * as vscode from "vscode";
 import { DynamoDBClient, ListTablesCommand, DescribeTableCommand, ListBackupsCommand } from "@aws-sdk/client-dynamodb";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from "@aws-sdk/credential-providers";
+import { fromIni } from '@aws-sdk/credential-provider-ini';
 import { ProfileProvider } from '../providers/ProfileProvider';
+
+
 
 export class DynamoDBExplorer implements RegionObserver {
   private selectedRegions: string[] = [];
+  private selectedProfile: string | undefined;
 
   constructor(private context: vscode.ExtensionContext) {
     this.initialize().catch(error => console.error(`Failed to initialize DynamoDBExplorer: ${error}`));
@@ -16,10 +19,20 @@ export class DynamoDBExplorer implements RegionObserver {
       const regionProvider = await RegionProvider.getInstance(this.context);
       regionProvider.registerObserver(this);
       this.selectedRegions = await regionProvider.getSelectedRegions();
+      const profileProvider = await ProfileProvider.getInstance(this.context);
+      profileProvider.registerObserver(this);
+      this.selectedProfile = profileProvider.getSelectedProfile();
     } catch (error) {
       console.error(`Failed to initialize regions: ${error}`);
     }
   }
+
+  public onProfileChanged(newProfile: string): void {
+    if (this.selectedProfile !== newProfile) {
+        this.selectedProfile = newProfile;
+    }
+}
+
 
   public onRegionSelectionChanged(selectedRegions: Set<string>): void {
     this.selectedRegions = Array.from(selectedRegions);
@@ -27,28 +40,65 @@ export class DynamoDBExplorer implements RegionObserver {
 
   public async getChartData(): Promise<any[]> {
     if (this.selectedRegions.length === 0) {
-      vscode.window.showWarningMessage('No region selected. Please select a region on Sidebar');
-      return [];
+        vscode.window.showWarningMessage('No region selected. Please select a region on Sidebar');
+        return [];
     }
 
-    const selectedProfile = (await ProfileProvider.getInstance(this.context)).selectedProfile;
-    const credentials = fromIni({ profile: selectedProfile });
+    try {
+        const selectedProfile = await this.getSelectedProfile();
+        if (!selectedProfile) {
+            vscode.window.showWarningMessage('No profile selected. Please select a profile.');
+            return [];
+        }
+        // const credentialsProvider = this.getCredentialsProvider(selectedProfile);
 
-    const chartData = await Promise.all(this.selectedRegions.map(async (region) => {
-      const dynamoDBClient = new DynamoDBClient({ region, credentials });
-      const tableData = await this.getTableData(dynamoDBClient);
-      return [
-        region, 
-        tableData.tableCount, 
-        tableData.totalSizeMB, 
-        tableData.totalItemCount,
-        tableData.backupCount, 
-        tableData.totalBackupSize,
-      ];
-    }));
-
-    return chartData;
+        return await this.fetchChartData(selectedProfile);
+    } catch (error) {
+        vscode.window.showErrorMessage(`Error fetching chart data: ${error}`);
+        return [];
+    }
   }
+
+
+private async getSelectedProfile(): Promise<string | undefined> {
+  const profileProvider = await ProfileProvider.getInstance(this.context);
+  return profileProvider.selectedProfile;
+}
+
+
+
+private async fetchChartData(selectedProfile:string): Promise<any[]> {
+  const chartDataPromises = this.selectedRegions.map(region => this.fetchRegionData(region,selectedProfile));
+  return Promise.all(chartDataPromises);
+}
+
+private async fetchRegionData(region: string,selectedProfile:string): Promise<any[]> {
+  try {
+
+    const dynamoDBClient = new DynamoDBClient({region, credentials: fromIni({profile: selectedProfile})});
+
+      // const dynamoDBClient = new DynamoDBClient({ credentials: fromIni({profile: selectedProfile, clientConfig: { region }})});
+      const tableData = await this.getTableData(dynamoDBClient);
+
+      return [
+          region, 
+          tableData.tableCount, 
+          tableData.totalSizeMB, 
+          tableData.totalItemCount,
+          tableData.backupCount, 
+          tableData.totalBackupSize,
+      ];
+  } catch (error) {
+      vscode.window.showErrorMessage(`Error fetching data for region ${region}: ${error}`);
+      return [region, 0, 0, 0, 0, 0]; 
+  }
+}
+
+
+
+
+
+
 
 
   private async getTableData(dynamoDBClient: DynamoDBClient): Promise<any> {

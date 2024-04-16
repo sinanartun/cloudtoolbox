@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { EC2Client, DescribeInstancesCommand, DescribeInstancesCommandOutput, DescribeAddressesCommand } from "@aws-sdk/client-ec2";
 import { AutoScalingClient, DescribeAutoScalingGroupsCommand } from "@aws-sdk/client-auto-scaling";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
-import { fromIni } from '@aws-sdk/credential-providers';
+import { fromIni } from '@aws-sdk/credential-provider-ini';
 import { ProfileProvider } from '../providers/ProfileProvider';
 
 export class Ec2Explorer implements RegionObserver{
