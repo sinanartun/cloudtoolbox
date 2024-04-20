@@ -1,12 +1,12 @@
 
-
-const vscode = acquireVsCodeApi();
 let dashboardChart = null;
 let mapChart = null;
 let dashboardType = 'dashboard';
-let intervalValue = 60;
-let iamtimerInterval = null;
-let iamUpdateOnFly = false;
+let iamObj ={
+  intervalValue : 60,
+  timerInterval : null,
+  updateOnFly : false,
+};
 
 const t1 = 'Users';
 const t2 = 'Roles';
@@ -178,7 +178,7 @@ function handleIncomingData(message) {
 }
 
 const requestChartData = () => {
-  if (iamUpdateOnFly) {
+  if (iamObj.updateOnFly) {
     return;
   } else {
     startLoading();
@@ -194,8 +194,8 @@ const requestChartData = () => {
 const init = () => {
   initializeDashboardChart();
   document.getElementById('interval').addEventListener('change', function () {
-    intervalValue = parseInt(this.value, 10);
-    if (intervalValue < 1) {
+    iamObj.intervalValue = parseInt(this.value, 10);
+    if (iamObj.intervalValue < 1) {
       stopDashboardChartInterval();
     } else {
       startDashboardChartInterval();
@@ -210,24 +210,24 @@ const init = () => {
 };
 
 const startDashboardChartInterval = () => {
-  if (window.dashboardChartUpdateInterval) {
-    clearInterval(window.dashboardChartUpdateInterval);
+  if (iamObj.timerInterval) {
+    clearInterval(iamObj.timerInterval);
   }
-  if (intervalValue > 0) {
-    window.dashboardChartUpdateInterval = setInterval(() => {
+  if (iamObj.intervalValue > 0) {
+    iamObj.timerInterval = setInterval(() => {
       requestChartData();
-    }, intervalValue * 1000);
+    }, iamObj.intervalValue * 1000);
   }
 };
 
 const stopDashboardChartInterval = () => {
-  if (window.dashboardChartUpdateInterval) {
-    clearInterval(window.dashboardChartUpdateInterval);
+  if (iamObj.timerInterval) {
+    clearInterval(iamObj.timerInterval);
   }
 };
 
 function startLoading() {
-  iamUpdateOnFly = true;
+  iamObj.updateOnFly = true;
 
   const refreshButton = document.getElementById('refresh-button');
   if (refreshButton && refreshButton.classList && !refreshButton.classList.contains('rotating')) {
@@ -239,7 +239,7 @@ function startLoading() {
   timerSpan.textContent = '00:00:00';
   loadingDiv.style.display = 'block';
 
-  iamtimerInterval = setInterval(() => {
+  iamObj.timerInterval = setInterval(() => {
     let timeElapsed = Date.now() - startTime;
     let minutes = Math.floor(timeElapsed / 60000);
     let seconds = Math.floor((timeElapsed % 60000) / 1000);
@@ -251,7 +251,7 @@ function startLoading() {
 }
 
 function stopLoading() {
-  iamUpdateOnFly = false;
+  iamObj.updateOnFly = false;
 
   const refreshButton = document.getElementById('refresh-button');
   if (refreshButton && refreshButton.classList && refreshButton.classList.contains('rotating')) {
@@ -261,9 +261,9 @@ function stopLoading() {
   if (loadingDiv && loadingDiv.style) {
     loadingDiv.style.display = 'none';
   }
-  if (iamtimerInterval) {
-    clearInterval(iamtimerInterval);
-    iamtimerInterval = null;
+  if (iamObj.timerInterval) {
+    clearInterval(iamObj.timerInterval);
+    iamObj.timerInterval = null;
   }
 }
 
@@ -276,5 +276,3 @@ const destroyDashboardChart = async () => {
   dashboardChart = null;
 };
 
-window.addEventListener('load', init);
-window.addEventListener('message', (event) => handleIncomingData(event.data));

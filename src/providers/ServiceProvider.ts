@@ -15,7 +15,8 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
         'DynamoDB',
         'Redshift',
         // 'SNS',
-        // 'IAM'
+        'IAM',
+        'EventBridge'
 
     ];
 
@@ -109,7 +110,14 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
                             light: path.join(__dirname, 'images',  'IAM.png'),
                             dark: path.join(__dirname, 'images',  'IAM.png'),
                         };
-                        break;        
+                        break;  
+                    case 'EventBridge':
+                        treeItem.command = { command: 'cloudtoolbox.showEventBridge', title: 'Show EventBridge', arguments: [] };
+                        treeItem.iconPath = {
+                            light: path.join(__dirname, 'images',  'EventBridge.png'),
+                            dark: path.join(__dirname, 'images',  'EventBridge.png'),
+                        };
+                        break;            
                     // add more cases here for other options
                 }
                 return treeItem;

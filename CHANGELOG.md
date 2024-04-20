@@ -6,6 +6,33 @@ All notable changes to the "cloudtoolbox" extension will be documented in this f
 
 ## [Unreleased]
 
+## [1.0.24] - 2024-04-20
+### Added
+ - IAM
+   - User
+      - User Name
+      - Created
+      - Groups
+      - Policies
+      - Password Last Used
+      - Last Action
+
+    - Role
+      - Role Name
+      - Created
+      - Max Session Duration
+      - Description
+
+ - EventBridge
+   - Rules
+   - Busses
+   - Pipes
+   - Schedules
+
+## [1.0.23] - 2024-04-16
+### Added
+ - Minor Changes
+
 ## [1.0.22] - 2024-04-16
 ### Added
  - Redshift

@@ -10,6 +10,7 @@ import { VpcExplorer } from '../explorers/VPC';
 import { RDSExplorer } from '../explorers/RDS';
 import { RedshiftExplorer } from '../explorers/Redshift';
 import { S3Explorer } from '../explorers/S3';
+import { EventBridgeExplorer } from '../explorers/EventBridge';
 
 import { setLambdaHtml } from '../webViews/lambda';
 import { setEc2Html } from '../webViews/ec2';
@@ -23,6 +24,7 @@ import { setRedshiftHtml } from '../webViews/redshift';
 import { setSNSHtml } from '../webViews/sns';
 import { setIAMHtml } from '../webViews/iam';
 import { getWelcomeHtml } from '../webViews/welcome';
+import { setEventBridgeHtml } from '../webViews/eventbridge';
 
 export class WebViewProvider {
   private context: vscode.ExtensionContext;
@@ -37,8 +39,8 @@ export class WebViewProvider {
     ECS: ECSExplorer,
     ECR: ECRExplorer,
     Redshift: RedshiftExplorer,
-    SNS: SNSExplorer,
     IAM: IAMExplorer,
+    EventBridge: EventBridgeExplorer
   };
 
   private webViewMapping: { [key: string]: any } = {
@@ -53,6 +55,7 @@ export class WebViewProvider {
     Redshift: setRedshiftHtml,
     SNS: setSNSHtml,
     IAM: setIAMHtml,
+    EventBridge: setEventBridgeHtml
   };
 
   constructor(context: vscode.ExtensionContext) {
@@ -108,6 +111,7 @@ export class WebViewProvider {
   public updateWebview(service: string, data: any) {
     const panel = this.panels.get(service);
     if (panel) {
+      console.log('update:',data );
       panel.webview.postMessage({ command: 'updateData', data: data });
     } else {
     }

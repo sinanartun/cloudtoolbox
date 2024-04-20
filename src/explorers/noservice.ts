@@ -17,7 +17,7 @@ export const noservice : NoServiceType = {
     'ap-southeast-1' : [''],
     'ap-southeast-2' : [''],
     'ap-southeast-3' : ['serverlessrepo', 'redshift-serverless'],
-    'ap-southeast-4' : ['serverlessrepo', 'redshift-serverless'],
+    'ap-southeast-4' : ['serverlessrepo', 'redshift-serverless', 'pipes'],
     'ca-central-1' : [''],
     'ca-central-2' : [''],
     'eu-central-1' : [''],
@@ -34,5 +34,5 @@ export const noservice : NoServiceType = {
     'us-east-2' : [''],
     'us-west-1' : [''],
     'us-west-2' : [''],
-    'il-central-1' : ['serverlessrepo', 'redshift-serverless']
+    'il-central-1' : ['serverlessrepo', 'redshift-serverless', 'pipes', 'scheduler']
 };

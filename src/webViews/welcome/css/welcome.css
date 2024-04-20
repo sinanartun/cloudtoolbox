@@ -1,0 +1,533 @@
+@charset "utf-8";
+/* Global Styles */
+
+body {
+    margin-left: auto;
+    margin-right: auto;
+    width: 92%;
+    max-width: 92%;
+    padding-right: 4%;
+    background-color: rgb(31, 31, 31);
+    color: antiquewhite;
+    min-width: 800px; /* Updated minimum width */
+}
+
+/* Header */
+header {
+	text-align: center;
+	display: block;
+}
+
+header .logo {
+    width: 180px;
+    height: 180px;
+    clear: both;
+}
+header .profileHeader h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 24px;
+    margin-right: -15px;
+}
+header .profileHeader h3 {
+    font-family: sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+}
+hr {
+    background-color: rgba(36,9,9,1.00);
+    height: 1px;
+    z-index: 1000;
+}
+header .profileHeader p {
+	font-family: sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.8;
+	overflow-y: auto;
+}
+header .socialNetworkNavBar {
+	text-align: center;
+	display: block;
+	margin-top: 60px;
+	clear: both;
+}
+header .socialNetworkNavBar .socialNetworkNav {
+	border-radius: 50%;
+	cursor: pointer;
+}
+header .socialNetworkNavBar .socialNetworkNav img:hover {
+	opacity: 0.5;
+}
+/* Main Content sections */
+.mainContent .section1 {
+	display: block;
+}
+.section1 .sectionTitle, .section2 .sectionTitle {
+	font-family: 'Montserrat', sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+.section1 .sectionTitleRule, .section2 .sectionTitleRule {
+	margin: 0 3% 0 0;
+	float: left;
+	clear: both;
+}
+.section1 .sectionTitleRule2, .section2 .sectionTitleRule2 {
+    height: 1px;
+    padding: 0px;
+}
+.mainContent .section1 .section1Content {
+	font-family: ProximaNova;
+	font-size: 14px;
+	font-weight: 100;
+}
+.mainContent .section1 .section1Content span {
+	font-family: sans-serif;
+}
+.section2 .sectionContentTitle {
+	font-family: sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+}
+.section2 .sectionContentSubTitle {
+	font-family: sans-serif;
+	color: rgba(68,67,67,1.00);
+	font-size: 14px;
+	font-weight: 400;
+}
+.section2 .sectionContent {
+	font-family: sans-serif;
+	color: rgba(146,146,146,1.00);
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.8;
+}
+.mainContent {
+	display: block;
+}
+.mainContent .externalResourcesNav .externalResources {
+    display: inline-block;
+    text-align: center;
+    margin-top: 0px;
+    padding-top: 3%;
+    cursor: pointer;
+}
+.mainContent .externalResourcesNav .externalResources:hover {
+    background-color: rgba(47,43,43,1.00);
+}
+.externalResourcesNav .externalResources a {
+	font-family: 'Montserrat', sans-serif;
+	color: rgba(255,255,255,1.00);
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 18px;
+	text-decoration: none;
+}
+.stretch {
+	content: '';
+	display: inline-block;
+	margin-left: 2%;
+	margin-right: 2%;
+}
+/* Footer */
+footer .footerDisclaimer {
+	font-family: sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	color: rgba(104,103,103,1.00);
+	font-weight: 700;
+}
+footer .footerDisclaimer span {
+	color: rgba(181,178,178,1.00);
+	font-weight: 400;
+}
+footer .footerNote {
+	font-family: sans-serif;
+	font-size: 14px;
+	line-height: 18px;
+	color: rgba(104,103,103,1.00);
+	font-weight: 700;
+}
+footer .footerNote span {
+	color: rgba(181,178,178,1.00);
+	font-weight: 400;
+}
+
+/* Media query for Mobile devices*/
+@media only screen and (min-width : 285px) and (max-width : 480px) {
+/* Header */
+header {
+	width: 100%;
+	float: none;
+}
+header .profileLogo .logoPlaceholder {
+	display: inline-block;
+}
+header .profilePhoto {
+	display: inline-block;
+}
+header .profileHeader {
+	text-align: center;
+	margin-top: 10%;
+}
+header .profileHeader p {
+	text-align: justify;
+}
+header .socialNetworkNavBar {
+	text-align: center;
+	display: block;
+	margin-top: 60px;
+	clear: both;
+	margin-bottom: 15%;
+}
+header .socialNetworkNavBar .socialNetworkNav {
+	width: 60px;
+	height: 60px;
+	display: inline-block;
+	margin-right: 23px;
+}
+/* Main content sections */
+.mainContent .section1 {
+	text-align: center;
+	margin-bottom: 10%;
+}
+.section1 .section1Title, .section2 .section1Title {
+	text-align: center;
+}
+.section1 .sectionTitleRule, .section2 .sectionTitleRule {
+	width: 100%;
+}
+.section1 .sectionTitleRule2, .section2 .sectionTitleRule2 {
+	display: none;
+}
+.mainContent .section1 .section1Content {
+	display: inline-block;
+	text-align: left;
+	font-family: sans-serif;
+	text-align: justify;
+}
+.mainContent .section2 {
+	display: block;
+	text-align: center;
+}
+.section2 .section2Content {
+	margin-top: 10%;
+	text-align: justify;
+	margin-bottom: 10%;
+}
+.mainContent .externalResourcesNav {
+	margin-bottom: 10%;
+}
+.mainContent .externalResourcesNav .externalResources {
+	width: 100%;
+	height: 35px;
+}
+/* Footer */
+footer {
+	display: block;
+	text-align: center;
+	font-family: sans-serif;
+}
+}
+
+/* Media Query for Tablets */
+@media only screen and (min-width : 481px) and (max-width : 1024px) {
+/* Header */
+header {
+	width: 100%;
+	float: none;
+}
+header .profileLogo .logoPlaceholder {
+	display: inline-block;
+	font-family: 'Montserrat', sans-serif;
+}
+header .profilePhoto {
+	float: left;
+	clear: both;
+	margin-right: 3%;
+	margin-top: 5%;
+}
+header .profileHeader {
+	text-align: left;
+	margin-top: 7%;
+}
+header .socialNetworkNavBar .socialNetworkNav {
+	width: 74px;
+	height: 74px;
+	display: inline-block;
+	margin-right: 23px;
+}
+/* Main content and sections */
+.section1 .section1Title, .section2 .section1Title {
+	text-align: center;
+}
+.section1 .sectionTitleRule, .section2 .sectionTitleRule {
+	width: 100%;
+}
+.section1 .sectionTitleRule2, .section2 .sectionTitleRule2 {
+	display: none;
+}
+.mainContent .section1 .section1Content {
+	display: block;
+	margin: 0% 0% 0% 20%;
+	font-family: sans-serif;
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+.mainContent .section2 {
+	clear: both;
+}
+.section2 .section2Content {
+	padding: 0px;
+	margin-left: 20%;
+	font-family: sans-serif;
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+.mainContent .externalResourcesNav {
+	margin-left: 20%;
+	margin-top: 40px;
+	margin-bottom: 40px;
+	text-align: center;
+	padding-top: 0px;
+	clear: both;
+}
+.mainContent .externalResourcesNav .externalResources {
+	width: 199px;
+	height: 48px;
+	margin-top: 5%;
+}
+/* Footer */
+footer .footerDisclaimer {
+	float: left;
+	margin-left: 3%;
+	font-family: sans-serif;
+}
+footer .footerNote {
+	float: right;
+	margin-right: 3%;
+	font-family: sans-serif;
+}
+}
+
+/* Desktops and laptops  */
+@media only screen and (min-width : 1130px ){
+/* Header */
+header .profileLogo .logoPlaceholder {
+	float: left;
+	margin-bottom: 50px;
+}
+header .logo {
+	width: 36px;
+	height: 36px;
+	clear: both;
+	position: absolute;
+	left: 0px;
+	top: 2px;
+	z-index: 10000;
+}
+
+header .profileHeader {
+    text-align: left;
+    padding-top: 10%;
+    right: 1px;
+}
+header .socialNetworkNavBar .socialNetworkNav {
+	width: 74px;
+	height: 74px;
+	display: inline-block;
+	margin-right: 23px;
+}
+/* Main content sections */
+.section1 .sectionTitleRule, .section2 .sectionTitleRule {
+	width: 22.5%;
+}
+.mainContent .section1 .section1Content {
+	display: block;
+	margin-top: 0%;
+	margin-right: 0%;
+	margin-left: 26%;
+	margin-bottom: 0%;
+	font-family: sans-serif;
+}
+.mainContent .section2 {
+	clear: both;
+}
+.section2 .section2Content {
+	padding: 0px;
+	margin-left: 26%;
+	font-family: sans-serif;
+}
+.mainContent .externalResourcesNav {
+	margin-top: 40px;
+	margin-bottom: 40px;
+	text-align: center;
+	padding-top: 0px;
+	clear: both;
+}
+.mainContent .externalResourcesNav .externalResources {
+	width: 199px;
+	height: 48px;
+}
+/* Footer */
+footer .footerDisclaimer {
+	float: left;
+	margin-left: 3%;
+	font-family: sans-serif;
+}
+footer .footerNote {
+	float: right;
+	margin-right: 3%;
+	font-family: sans-serif;
+}
+}
+
+	/* 
+Define this in your CSS 
+.easeAnimation = Replace it by the name you want to give your animation
+.easeAnimObj = Assign this class to elements to which you intend to apply the animation
+*/
+
+.cloud {
+    position: relative;
+    /* Chrome, Safari*/
+    -webkit-animation-name: easeAnimation;
+    -webkit-animation-duration: 5s;
+    -webkit-animation-timing-function: ease;
+    -webkit-animation-delay: 2s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-play-state: running;
+    /* Mozilla */
+    -moz-animation-name: easeAnimation;
+    -moz-animation-duration: 5s;
+    -moz-animation-timing-function: ease;
+    -moz-animation-delay: 2s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-direction: alternate;
+    -moz-animation-play-state: running;
+    /* Standard syntax */
+    animation-name: easeAnimation;
+    animation-duration: 5s;
+    animation-timing-function: ease;
+    animation-delay: 2s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    animation-play-state: running;
+    z-index: -100;
+    display: block;
+    float: right;
+    top: -50px;
+    margin-top: -75px;
+    margin-right: -56px;
+    overflow-x: hidden;
+}
+
+/* 
+Define the keyframe and changes
+*/
+
+/* Chrome, Safari */
+@-webkit-keyframes easeAnimation {
+	0% {
+		left: 0;
+		
+	}
+	100% {
+		left: -20px;
+	
+	}
+}
+
+/* Firefox */
+@-moz-keyframes easeAnimation {
+	0% {
+		left: 0;
+		
+	}
+	100% {
+		left: -20px;
+		
+	}
+}
+
+/* Standard syntax */
+@keyframes easeAnimation {
+	0% {
+		left: 0;
+		
+	}
+	100% {
+		left: -20px;
+		
+	}
+}
+
+
+@media (max-width: 1350px) {
+
+	header .logo {
+		width: 36px;
+		height: 36px;
+		clear: both;
+		position: absolute;
+		left: 0px;
+		top: 2px;
+		z-index: 10000;
+	}
+	
+}
+
+@media (max-width: 991px) {
+
+	header .logo {
+		width: 36px;
+		height: 36px;
+		clear: both;
+		position: absolute;
+		left: 0px;
+		top: 2px;
+		z-index: 10000;
+	}
+	
+	}
+@media (max-width: 768px) {
+	
+	header .logo {
+		width: 36px;
+		height: 36px;
+		clear: both;
+		position: absolute;
+		left: 0px;
+		top: 2px;
+		z-index: 10000;
+	}
+		
+}
+header .logo {
+	width: 36px;
+	height: 36px;
+	clear: both;
+	position: fixed;
+	left: 0px;
+	top: 2px;
+	z-index: 10000;
+}
+
+
+#background-video {
+	position: fixed; /* Or absolute, depending on your needs */
+	top: 0;
+	left: 0;
+	width: 100vw; /* Viewport width */
+	height: 100vh; /* Viewport height */
+	object-fit: cover; /* Cover the entire area of the container */
+	z-index: -1000; /* Ensure it stays in the background */
+	opacity: 0.5; /* Set the opacity to 50% */
+	filter: blur(8px); /* Apply a blur effect with a radius of 8px */
+  }
+  

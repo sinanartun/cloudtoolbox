@@ -1,62 +1,33 @@
-import * as vscode from 'vscode';
-import * as path from 'path';
-import * as fs from 'fs/promises';
+import * as vscode from "vscode";
 
 export async function setIAMHtml(
   context: vscode.ExtensionContext,
-  webview: vscode.Webview,
+  webview: vscode.Webview
 ): Promise<void> {
   try {
-    const highchartsUri = webview.asWebviewUri(
-      vscode.Uri.file(path.join(context.extensionPath, 'node_modules', 'highcharts', 'highcharts.js')),
-    );
-    const datagridUri = webview.asWebviewUri(
-      vscode.Uri.file(path.join(context.extensionPath, 'node_modules', '@highcharts', 'dashboards', 'datagrid.js')),
-    );
-    const accessibilityUri = webview.asWebviewUri(
-      vscode.Uri.file(path.join(context.extensionPath, 'node_modules', 'highcharts', 'modules', 'accessibility.js')),
-    );
-    const dashboardsUri = webview.asWebviewUri(
-      vscode.Uri.file(path.join(context.extensionPath, 'node_modules', '@highcharts', 'dashboards', 'dashboards.js')),
-    );
-    const layoutUri = webview.asWebviewUri(
-      vscode.Uri.file(
-        path.join(context.extensionPath, 'node_modules', '@highcharts', 'dashboards', 'modules', 'layout.js'),
-      ),
-    );
-    const highchartsCssUri = webview.asWebviewUri(
-      vscode.Uri.file(path.join(context.extensionPath, 'node_modules', 'highcharts', 'css', 'highcharts.css')),
-    );
-    const datagridCssUri = webview.asWebviewUri(
-      vscode.Uri.file(
-        path.join(context.extensionPath, 'node_modules', '@highcharts', 'dashboards', 'css', 'datagrid.css'),
-      ),
-    );
-    const dashboardsCssUri = webview.asWebviewUri(
-      vscode.Uri.file(
-        path.join(context.extensionPath, 'node_modules', '@highcharts', 'dashboards', 'css', 'dashboards.css'),
-      ),
-    );
+    
+    const baseUri = context.extensionUri;
 
-    const scriptPathOnDisk = vscode.Uri.file(path.join(context.extensionPath, 'src', 'webViews', 'charts', 'iam.js'));
-    const scriptContent = await fs.readFile(scriptPathOnDisk.fsPath, 'utf8');
+    
+    const highchartsCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "highcharts", "css", "highcharts.css"));
+    const highchartsUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "highcharts", "highcharts.js"));
+    const datagridUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@highcharts", "dashboards", "datagrid.js"));
+    const accessibilityUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "highcharts", "modules", "accessibility.js"));
+    const draggablepointsjsUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "highcharts", "modules", "draggable-points.js"));
+    const dashboardsUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@highcharts", "dashboards", "dashboards.js"));
+    const layoutUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@highcharts", "dashboards", "modules", "layout.js"));
+    const datagridCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@highcharts", "dashboards", "css", "datagrid.css"));
+    const dashboardsCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@highcharts", "dashboards", "css", "dashboards.css"));
+    const highchartsCustomCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "webViews", "css", "highchartsGrid3.css"));
+    const customCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "webViews", "css", "custom.css"));
+    const fontAwesomeUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@fortawesome", "fontawesome-free", "css", "all.min.css"));
 
-    const customCssPath = vscode.Uri.file(
-      path.join(context.extensionPath, 'src', 'webViews', 'components', 'custom.css'),
-    );
-    const customCss = await fs.readFile(customCssPath.fsPath, 'utf8');
+    
+    const runJsPath = vscode.Uri.joinPath(baseUri, "dist", "webViews", "charts", "iam.js");
+    const runJsData = await vscode.workspace.fs.readFile(runJsPath);
+    const runJs = runJsData.toString();
 
-    const iamTablePath = vscode.Uri.file(
-      path.join(context.extensionPath, 'src', 'webViews', 'components', 'iamTable.css'),
-    );
-    const iamTableCss = await fs.readFile(iamTablePath.fsPath, 'utf8');
-
-    const fontAwesomeUri = webview.asWebviewUri(
-      vscode.Uri.file(
-        path.join(context.extensionPath, 'node_modules', '@fortawesome', 'fontawesome-free', 'css', 'all.min.css'),
-      ),
-    );
-
+    
     webview.html = `<!DOCTYPE html>
     <html lang="en">
     <head>
@@ -72,17 +43,15 @@ export async function setIAMHtml(
         <link rel="stylesheet" type="text/css" href="${datagridCssUri}">
         <link rel="stylesheet" type="text/css" href="${dashboardsCssUri}">
         <link rel="stylesheet" type="text/css" href="${fontAwesomeUri}">
+        <link rel="stylesheet" type="text/css" href="${customCssUri}">
+        <link rel="stylesheet" type="text/css" href="${highchartsCustomCssUri}">
         <script src="${highchartsUri}"></script>
         <script src="${datagridUri}"></script>
         <script src="${accessibilityUri}"></script>
         <script src="${dashboardsUri}"></script>
         <script src="${layoutUri}"></script>
-        <script src="${iamTableCss}"></script>
-        <style>
-
-        ${customCss}
-        ${iamTableCss}
-        </style>
+        <script src="${draggablepointsjsUri}"></script>
+        <script>const vscode = acquireVsCodeApi();</script>
     </head>
     <body>
     <div id="control-panel" style="display: flex; gap: 10px; align-items: center;">
@@ -100,20 +69,21 @@ export async function setIAMHtml(
               <option value="180">3 m</option>
               <option value="300">5 m</option>
           </select>
-
       </div>
       <div id="loading" style="display: none;">
         <span id="timer">0</span>
       </div>
     </div>
-    <div id="container" style="height:90vh"></div>
+    <div id="container"></div>
+    <script>${runJs}</script>
     <script>
-        ${scriptContent}
+      window.addEventListener('load', init);
+      window.addEventListener('message', (event) => handleIncomingData(event.data));
     </script>
     </body>
     </html>`;
   } catch (error) {
-    console.error('Failed to set VPC HTML content:', error);
-    vscode.window.showErrorMessage('An error occurred while setting up the VPC dashboard.');
+    console.error("Failed to set EC2 HTML content:", error);
+    vscode.window.showErrorMessage("An error occurred while setting up the Lambda dashboard.");
   }
 }
