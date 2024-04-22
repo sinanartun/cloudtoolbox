@@ -5,6 +5,12 @@ All notable changes to the "cloudtoolbox" extension will be documented in this f
 <!-- Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file. -->
 
 ## [Unreleased]
+## [1.0.21] - 2024-04-23
+ 
+### Fixed
+
+- Wrong Icon path 
+
 
 ## [1.0.24] - 2024-04-20
 ### Added
