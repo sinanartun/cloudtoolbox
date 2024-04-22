@@ -16,8 +16,8 @@ export async function getWelcomeHtml(context: vscode.ExtensionContext, webview: 
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'webViews', 'js', 'welcome.js'));
     const fontAwesomeUri = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'node_modules', '@fortawesome', 'fontawesome-free', 'css', 'all.min.css'));
     const checkbox = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'check-mark.png'));
-    const ec2 = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'EC2.png'));
-    const lambda = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'Lambda.png'));
+    const ec2 = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'ec2.png'));
+    const lambda = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'lambda.png'));
     const vpc = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'vpc.png'));
     const s3 = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 's3.png'));
     const ecs = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'ecs.png'));

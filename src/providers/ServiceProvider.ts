@@ -37,57 +37,57 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
                     case 'VPC':
                         treeItem.command = { command: 'cloudtoolbox.showVPC', title: 'Show VPC', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname,  'images',  'VPC.png'),
-                            dark: path.join(__dirname,   'images',  'VPC.png'),
+                            light: path.join(__dirname,  'images',  'vpc.png'),
+                            dark: path.join(__dirname,   'images',  'vpc.png'),
                         };
                         break;
                     case 'EC2':
                         treeItem.iconPath = {
-                            light: path.join(__dirname,   'images',  'EC2.png'),
-                            dark: path.join(__dirname,   'images',  'EC2.png'),
+                            light: path.join(__dirname,   'images',  'ec2.png'),
+                            dark: path.join(__dirname,   'images',  'ec2.png'),
                         };
                         treeItem.command = { command: 'cloudtoolbox.showEC2', title: 'Show EC2', arguments: [] };
                         break;
                     case 'Lambda':
                         treeItem.iconPath = {
-                            light: path.join(__dirname,   'images',  'Lambda.png'),
-                            dark: path.join(__dirname,   'images',  'Lambda.png'),
+                            light: path.join(__dirname,   'images',  'lambda.png'),
+                            dark: path.join(__dirname,   'images',  'lambda.png'),
                         };
                         treeItem.command = { command: 'cloudtoolbox.showLambda', title: 'Show Lambda', arguments: [] };
                         break;
                     case 'S3':
                         treeItem.command = { command: 'cloudtoolbox.showS3', title: 'Show S3', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname,   'images',  'S3.png'),
-                            dark: path.join(__dirname,   'images',  'S3.png'),
+                            light: path.join(__dirname,   'images',  's3.png'),
+                            dark: path.join(__dirname,   'images',  's3.png'),
                         };
                         break;
                     case 'ECS':
                         treeItem.command = { command: 'cloudtoolbox.showECS', title: 'Show ECS', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname,   'images',  'ECS.png'),
-                            dark: path.join(__dirname,   'images',  'ECS.png'),
+                            light: path.join(__dirname,   'images',  'ecs.png'),
+                            dark: path.join(__dirname,   'images',  'ecs.png'),
                         };
                         break;    
                     case 'ECR':
                         treeItem.command = { command: 'cloudtoolbox.showECR', title: 'Show ECR', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname,   'images',  'ECR.png'),
-                            dark: path.join(__dirname,   'images',  'ECR.png'),
+                            light: path.join(__dirname,   'images',  'ecr.png'),
+                            dark: path.join(__dirname,   'images',  'ecr.png'),
                         };
                         break;        
                     case 'RDS':
                         treeItem.command = { command: 'cloudtoolbox.showRDS', title: 'Show RDS', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname,   'images',  'RDS.png'),
-                            dark: path.join(__dirname,   'images',  'RDS.png'),
+                            light: path.join(__dirname,   'images',  'rds.png'),
+                            dark: path.join(__dirname,   'images',  'rds.png'),
                         };
                         break;
                     case 'DynamoDB':
                         treeItem.command = { command: 'cloudtoolbox.showDynamoDB', title: 'Show DynamoDB', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname,   'images',  'DynamoDB.png'),
-                            dark: path.join(__dirname,   'images',  'DynamoDB.png'),
+                            light: path.join(__dirname,   'images',  'dynamodb.png'),
+                            dark: path.join(__dirname,   'images',  'dynamodb.png'),
                         };
                         break;
                     case 'Redshift':
@@ -100,22 +100,22 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
                     case 'SNS':
                         treeItem.command = { command: 'cloudtoolbox.showSNS', title: 'Show SNS', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname,   'images',  'SNS.png'),
-                            dark: path.join(__dirname,   'images',  'SNS.png'),
+                            light: path.join(__dirname,   'images',  'sns.png'),
+                            dark: path.join(__dirname,   'images',  'sns.png'),
                         };
                         break;  
                     case 'IAM':
                         treeItem.command = { command: 'cloudtoolbox.showIAM', title: 'Show IAM', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname, 'images',  'IAM.png'),
-                            dark: path.join(__dirname, 'images',  'IAM.png'),
+                            light: path.join(__dirname, 'images',  'iam.png'),
+                            dark: path.join(__dirname, 'images',  'iam.png'),
                         };
                         break;  
                     case 'EventBridge':
                         treeItem.command = { command: 'cloudtoolbox.showEventBridge', title: 'Show EventBridge', arguments: [] };
                         treeItem.iconPath = {
-                            light: path.join(__dirname, 'images',  'EventBridge.png'),
-                            dark: path.join(__dirname, 'images',  'EventBridge.png'),
+                            light: path.join(__dirname, 'images',  'eventbridge.png'),
+                            dark: path.join(__dirname, 'images',  'eventbridge.png'),
                         };
                         break;            
                     // add more cases here for other options
