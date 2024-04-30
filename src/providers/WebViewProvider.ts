@@ -11,6 +11,7 @@ import { RDSExplorer } from '../explorers/RDS';
 import { RedshiftExplorer } from '../explorers/Redshift';
 import { S3Explorer } from '../explorers/S3';
 import { EventBridgeExplorer } from '../explorers/EventBridge';
+import { CostExplorer } from '../explorers/CostExplorer';
 
 import { setLambdaHtml } from '../webViews/lambda';
 import { setEc2Html } from '../webViews/ec2';
@@ -25,6 +26,7 @@ import { setSNSHtml } from '../webViews/sns';
 import { setIAMHtml } from '../webViews/iam';
 import { getWelcomeHtml } from '../webViews/welcome';
 import { setEventBridgeHtml } from '../webViews/eventbridge';
+import { setCostExplorerHtml } from '../webViews/costexplorer';
 
 export class WebViewProvider {
   private context: vscode.ExtensionContext;
@@ -40,7 +42,8 @@ export class WebViewProvider {
     ECR: ECRExplorer,
     Redshift: RedshiftExplorer,
     IAM: IAMExplorer,
-    EventBridge: EventBridgeExplorer
+    EventBridge: EventBridgeExplorer,
+    CostExplorer: CostExplorer
   };
 
   private webViewMapping: { [key: string]: any } = {
@@ -55,7 +58,9 @@ export class WebViewProvider {
     Redshift: setRedshiftHtml,
     SNS: setSNSHtml,
     IAM: setIAMHtml,
-    EventBridge: setEventBridgeHtml
+    EventBridge: setEventBridgeHtml,
+    CostExplorer: setCostExplorerHtml
+
   };
 
   constructor(context: vscode.ExtensionContext) {
@@ -77,7 +82,7 @@ export class WebViewProvider {
       if (!ServiceClass) {
         throw new Error(`Unsupported service: ${service}`);
       }
-      const explorer = new ServiceClass();
+      const explorer = new ServiceClass(this.context);
 
       const setHtmlForWebview = this.webViewMapping[service];
       if (!setHtmlForWebview) {
@@ -137,5 +142,6 @@ export class WebViewProvider {
     });
 
     await getWelcomeHtml(this.context, panel.webview);
+    // await setCostExplorerHtml(this.context, panel.webview);
   }
 }

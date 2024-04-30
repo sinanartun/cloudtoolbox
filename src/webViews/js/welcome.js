@@ -72,6 +72,7 @@ function renderPolicy(selectedServices) {
     sns: ['sns:ListTopics'],
     vpc: ['ec2:DescribeVpcs', 'ec2:DescribeSubnets', 'ec2:DescribeRouteTables', 'ec2:DescribeInternetGateways', 'ec2:DescribeNatGateways', 'ec2:DescribeVpcPeeringConnections'],
     eventbridge: ['events:ListRules', 'events:ListEventBuses', 'scheduler:ListSchedules', 'pipes:ListPipes'],
+    costexplorer:["costexplorer:GetCostAndUsage","costexplorer:GetDimensionValues","sts:GetCallerIdentity"],
   };
 
   const statements = selectedServices

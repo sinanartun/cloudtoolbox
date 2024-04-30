@@ -62,8 +62,6 @@ export async function setECRHtml(
           <select id="interval" title="Auto Refresh" style="width: 49px; height: 19px; margin-left: 7px;">
               <option value="0" >stop</option>
               <option value="5">5 s</option>
-              <option value="10">10 s</option>
-              <option value="15">15 s</option>
               <option value="30">30 s</option>
               <option value="60" selected>1 m</option>
               <option value="180">3 m</option>

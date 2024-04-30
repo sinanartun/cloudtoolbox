@@ -155,7 +155,13 @@ function registerCommands(context: vscode.ExtensionContext, profileProvider: Pro
         callback: (): void => {
           viewProvider.showWebview('EventBridge');
         },
+    },
+    {
+      name: 'cloudtoolbox.showCostExplorer',
+      callback: (): void => {
+        viewProvider.showWebview('CostExplorer');
       },
+  },
   ];
 
   commands.forEach(({ name, callback }) => {

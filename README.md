@@ -2,9 +2,8 @@
 # ![ctb](https://i.imgur.com/LscjIlu.png)Cloud Toolbox: Real-time Cloud Resource Monitoring
 
 Cloud Toolbox is an innovative Visual Studio Code extension designed to enable developers and cloud engineers to manage and interact with cloud services directly within their editor. It offers a streamlined workflow for cloud resource management, making it an indispensable tool for enhancing cloud operations within VS Code.
-
+![screen shot](https://s3.eu-north-1.amazonaws.com/cloudtoolbox.tech/app/ss-2.png)
 ![screen shot](https://s3.eu-north-1.amazonaws.com/cloudtoolbox.tech/app/ss-1.png)
-
 ## Features
 
 - **Service List Navigation**: Easily navigate and access a wide array of cloud services such as AWS VPC, S3, Lambda, and more.
@@ -44,95 +43,7 @@ This VS Extension is Open Source. It does not collect any info about your comput
             ],
             "Resource": "*"
         },
-        {
-            "Sid": "s3",
-            "Effect": "Allow",
-            "Action": [
-                "s3:ListAllMyBuckets",
-                "s3:GetBucketLocation",
-                "ec2:DescribeRegions"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "ec2",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DescribeInstances",
-                "ec2:DescribeAddresses",
-                "autoscaling:DescribeAutoScalingGroups",
-                "ec2:DescribeRegions"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "lambda",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:ListFunctions",
-                "lambda:GetFunction",
-                "lambda:ListLayers",
-                "serverlessrepo:ListApplications",
-                "ec2:DescribeRegions"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "ecs",
-            "Effect": "Allow",
-            "Action": [
-                "ecs:ListClusters",
-                "ecs:ListServices",
-                "ecs:ListTasks",
-                "ec2:DescribeRegions"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "ecr",
-            "Effect": "Allow",
-            "Action": [
-                "ecr:DescribeRepositories",
-                "ecr:DescribeImages",
-                "ec2:DescribeRegions"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "rds",
-            "Effect": "Allow",
-            "Action": [
-                "rds:DescribeDBInstances",
-                "rds:DescribeDBClusters",
-                "rds:DescribeDBClusterSnapshots",
-                "rds:DescribeDBClusterAutomatedBackups",
-                "rds:DescribeDBSnapshots",
-                "ec2:DescribeRegions"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "dynamodb",
-            "Effect": "Allow",
-            "Action": [
-                "dynamodb:ListTables",
-                "dynamodb:DescribeTable",
-                "dynamodb:ListBackups",
-                "ec2:DescribeRegions"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "redshift",
-            "Effect": "Allow",
-            "Action": [
-                "redshift:DescribeClusters",
-                "redshift:DescribeClusterSnapshots",
-                "redshift-serverless:ListWorkgroups",
-                "ec2:DescribeRegions"
-            ],
-            "Resource": "*"
-        }
+      
     ]
 }
 ```

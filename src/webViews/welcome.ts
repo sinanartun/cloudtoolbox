@@ -27,8 +27,7 @@ export async function getWelcomeHtml(context: vscode.ExtensionContext, webview: 
     const redshift = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'redshift.png'));
     const iam = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'iam.png'));
     const eventbridge = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'eventbridge.png'));
-
-
+    const costexplorer = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'images', 'costexplorer.png'));
     const onePageCss = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'webViews', 'welcome', 'css', 'one-page-wonder.css'));
     const welcomeCss = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'webViews', 'welcome', 'css', 'welcome.css'));
     const bootstrapCss = webview.asWebviewUri(vscode.Uri.joinPath(context.extensionUri, 'dist', 'webViews', 'welcome', 'css', 'bootstrap.css'));
@@ -189,6 +188,12 @@ export async function getWelcomeHtml(context: vscode.ExtensionContext, webview: 
     <h2 class="sectionContentTitle">Select AWS services to monitor</h2>
     <button class="copy-button" id="selectAll"> <i class="fa-solid fa-check-double"></i> Select All</button>
     <div class="grid-container">
+    <div class="card" data-service="costexplorer">
+      <a class="sbutton" href="#">
+        <img src="${costexplorer}" alt="CostExplorer" />
+        <span class="service-name">CostExplorer</span>
+      </a>
+    </div>
     <div class="card" data-service="vpc">
       <a class="sbutton" href="#">
         <img src="${vpc}" alt="vpc" />

@@ -1,0 +1,239 @@
+/* Root CSS Variables */
+
+/* General Dashboard Styles */
+#container {
+  container: dashboard / inline-size;
+  min-width: 1200px;
+}
+
+.highcharts-dashboards-component-title {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--highcharts-neutral-color-100);
+}
+
+.highcharts-dashboards-component-subtitle {
+  font-weight: 100;
+  color: var(--highcharts-neutral-color-60);
+  text-align: left;
+  margin-inline: calc(5% + 10px);
+}
+
+.highcharts-dashboards-component-kpi-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* Category Class Styles */
+.danger,
+.success,
+.bw {
+  font-weight: 600;
+  color: #fff; /* Default color, overridden individually */
+}
+
+.danger {
+  color: var(--highcharts-color-8);
+}
+.success {
+  color: var(--highcharts-dashboards-edit-row-color);
+}
+.bw {
+  color: #fff;
+}
+
+/* Flexbox Layouts */
+#SA1,
+#SA2,
+#SA3,
+#SB1,
+#SB2,
+#SB3,
+#SC1,
+#SC2,
+#SC3 {
+  display: block;
+  height: 155px;
+  min-width: 180px;
+  flex-basis: 25%;
+  flex-wrap: nowrap;
+}
+.highcharts-dashboards-component-subtitle {
+  font-size: small;
+}
+.highcharts-dashboards-component-title {
+  margin-bottom: 0px !important;
+}
+@media (max-width: 1650px) {
+  .highcharts-dashboards-component-subtitle {
+    font-size: small;
+  }
+  #cost-timeline {
+    flex: 1 1 100%;
+  }
+  #SA1,
+  #SA2,
+  #SA3,
+  #SB1,
+  #SB2,
+  #SB3,
+  #SC1,
+  #SC2,
+  #SC3 {
+    flex-basis: 25%;
+    background-color: #8383e5;
+  }
+  #cost-categories-cell,
+  #kpi-layout-cell {
+    flex: 1 1 60%;
+  }
+}
+@media (max-width: 1495px) {
+  #SA1,
+  #SA2,
+  #SA3,
+  #SB1,
+  #SB2,
+  #SB3,
+  #SC1,
+  #SC2,
+  #SC3 {
+    flex-basis: 1 1 33%;
+    background-color:#a2efbb
+  }
+
+  .highcharts-dashboards-component-subtitle {
+    font-size: smaller;
+  }
+}
+@media (max-width: 1200px) {
+  #container {
+    padding: 0 10px;
+  }
+  .highcharts-dashboards-component-title {
+    font-size: 0.8rem;
+  }
+  .highcharts-dashboards-component-subtitle {
+    font-size: smaller;
+  }
+}
+
+@media (max-width: 992px) {
+  #cost-categories,
+  #cost-timeline {
+    flex-basis: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  #rev-chart-kpi,
+  #SB1,
+  #SC1 {
+    flex-basis: 100%;
+  }
+  .highcharts-dashboards-component-subtitle {
+    font-size: smaller;
+  }
+}
+
+/* Highcharts Specific Styles */
+.highcharts-gauge-chart {
+  max-height: 185px;
+  .highcharts-grid-line {
+    stroke-width: 0;
+  }
+  .highcharts-title {
+    font-size: 0.8rem;
+  }
+}
+
+.highcharts-plot-band,
+.highcharts-plot-line-label {
+  fill-opacity: 1;
+  fill: var(--highcharts-neutral-color-60); /* Default fill, overridden individually */
+}
+
+.highcharts-plot-band.null-band {
+  fill: var(--highcharts-neutral-color-20);
+}
+.highcharts-plot-band.warn-band {
+  fill: #ffa92e;
+}
+.highcharts-plot-band.opt-band {
+  fill: #a2efbb;
+}
+.highcharts-plot-band.cool-band {
+  fill: var(--highcharts-color-0);
+}
+.highcharts-plot-band.increase-band {
+  fill: var(--highcharts-color-7);
+}
+.highcharts-plot-band.high-band {
+  fill: #8383e5;
+}
+
+.highcharts-data-label-box {
+  display: none;
+}
+
+.highcharts-column-chart .highcharts-point,
+.highcharts-stock-chart .highcharts-color-1,
+.highcharts-stock-chart .highcharts-color-2 {
+  cursor: pointer;
+  fill: var(--demo-prediction-color);
+  stroke: var(--demo-prediction-color);
+  stroke-dasharray: 1px 6px;
+}
+
+/* Popup Styles */
+#popup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  .container {
+    position: relative;
+    height: 60%;
+    width: 90%;
+    max-height: 800px;
+    max-width: 900px;
+    min-height: 100px;
+    min-width: 100px;
+    background: #555;
+  }
+  .close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: transparent;
+    border: none;
+    color: var(--highcharts-neutral-color-100);
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    padding: 4px;
+    &:hover {
+      color: #d33;
+    }
+  }
+}
+
+/* Custom Highcharts Adjustments */
+.year-plotline {
+  stroke-dasharray: 5px 3px;
+  stroke: #a0a0a080;
+}
+
+.highcharts-description {
+  padding: 0 20px;
+}
+
+#csv {
+  display: none;
+}

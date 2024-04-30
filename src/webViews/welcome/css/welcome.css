@@ -82,11 +82,14 @@ header .socialNetworkNavBar .socialNetworkNav img:hover {
 }
 .mainContent .section1 .section1Content {
 	font-family: ProximaNova;
-	font-size: 14px;
+	font-size: 13px;
 	font-weight: 100;
+
 }
 .mainContent .section1 .section1Content span {
 	font-family: sans-serif;
+	padding-top: 5px !important;
+	display: block;
 }
 .section2 .sectionContentTitle {
 	font-family: sans-serif;

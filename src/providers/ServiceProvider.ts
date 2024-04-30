@@ -16,7 +16,8 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
         'Redshift',
         // 'SNS',
         'IAM',
-        'EventBridge'
+        'EventBridge',
+        'CostExplorer'
 
     ];
 
@@ -118,7 +119,13 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
                             dark: path.join(__dirname, 'images',  'eventbridge.png'),
                         };
                         break;            
-                    // add more cases here for other options
+                    case 'CostExplorer':
+                        treeItem.command = { command: 'cloudtoolbox.showCostExplorer', title: 'Show CostExplorer', arguments: [] };
+                        treeItem.iconPath = {
+                            light: path.join(__dirname, 'images',  'costexplorer.png'),
+                            dark: path.join(__dirname, 'images',  'costexplorer.png'),
+                        };
+                        break;    
                 }
                 return treeItem;
             }));

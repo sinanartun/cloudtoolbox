@@ -5,7 +5,19 @@ All notable changes to the "cloudtoolbox" extension will be documented in this f
 <!-- Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file. -->
 
 ## [Unreleased]
-## [1.0.21] - 2024-04-23
+
+## [1.0.26] - 2024-04-30
+ 
+### Added
+
+- Cost Explorer
+  - Time Series Cost Chart
+  - Cost Category Chart
+  - Basic Cost Chart for Last 3 months
+  - Estimated Cost for Current Month
+  - 12 hours of Cache for Cost API
+
+## [1.0.25] - 2024-04-23
  
 ### Fixed
 

@@ -2,7 +2,7 @@
   "name": "cloudtoolbox",
   "displayName": "cloudtoolbox",
   "description": "Cloud Resource Visualization",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "publisher": "cloudtoolbox",
   "pricing": "Free",
   "license": "MIT",
@@ -100,6 +100,7 @@
   "dependencies": {
     "@aws-sdk/client-auto-scaling": "^3.554.0",
     "@aws-sdk/client-cloudtrail": "^3.554.0",
+    "@aws-sdk/client-cost-explorer": "^3.556.0",
     "@aws-sdk/client-dynamodb": "^3.554.0",
     "@aws-sdk/client-ec2": "^3.554.0",
     "@aws-sdk/client-ecr": "^3.554.0",
