@@ -2,7 +2,10 @@
 # ![ctb](https://i.imgur.com/LscjIlu.png)Cloud Toolbox: Real-time Cloud Resource Monitoring
 
 Cloud Toolbox is an innovative Visual Studio Code extension designed to enable developers and cloud engineers to manage and interact with cloud services directly within their editor. It offers a streamlined workflow for cloud resource management, making it an indispensable tool for enhancing cloud operations within VS Code.
+
+
 ![screen shot](https://s3.eu-north-1.amazonaws.com/cloudtoolbox.tech/app/ss-2.png)
+
 ![screen shot](https://s3.eu-north-1.amazonaws.com/cloudtoolbox.tech/app/ss-1.png)
 ## Features
 
