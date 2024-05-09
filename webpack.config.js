@@ -35,7 +35,9 @@ const config = {
   plugins: [
     new nodePolyfillWebpackPlugin(), // This plugin polyfills Node.js core modules in Webpack
     new webpack.ProvidePlugin({
-      process: 'process/browser', // Polyfill for the process module
+      process: 'process/browser',
+      $: 'jquery',
+      jQuery: 'jquery'
     }),
     new CopyPlugin({
             patterns: [
@@ -48,8 +50,15 @@ const config = {
               { from: './node_modules/@highcharts', to: 'node_modules/@highcharts' },
               { from: './node_modules/@fortawesome/fontawesome-free', to: 'node_modules/@fortawesome/fontawesome-free' },
               { from: './node_modules/prismjs', to: 'node_modules/prismjs' },
+              { from: './node_modules/datatables.net/', to: 'node_modules/datatables.net/' },
+              { from: './node_modules/datatables.net-dt/', to: 'node_modules/datatables.net-dt/' },
+              { from: './node_modules/datatables.net-responsive/', to: 'node_modules/datatables.net-responsive/' },
+              { from: './node_modules/datatables.net-responsive-dt/', to: 'node_modules/datatables.net-responsive-dt/' },
+              { from: './node_modules/jquery/', to: 'node_modules/jquery/' },
             ],
           }),
+   
+
   ],
   module: {
     rules: [
@@ -60,7 +69,7 @@ const config = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'] // Assuming you might need to handle CSS files
+        use: ['style-loader', 'css-loader']
       }
     ]
   }

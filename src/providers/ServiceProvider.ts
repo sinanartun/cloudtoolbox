@@ -5,6 +5,7 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
     private _onDidChangeTreeData: vscode.EventEmitter<vscode.TreeItem | undefined> = new vscode.EventEmitter<vscode.TreeItem | undefined>();
     readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | undefined> = this._onDidChangeTreeData.event;
     private options: string[] = [
+        'CostExplorer',
         'VPC',
         'S3',
         'Lambda',
@@ -17,7 +18,9 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
         // 'SNS',
         'IAM',
         'EventBridge',
-        'CostExplorer'
+        'CloudWatch',
+
+        
 
     ];
 
@@ -125,7 +128,14 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
                             light: path.join(__dirname, 'images',  'costexplorer.png'),
                             dark: path.join(__dirname, 'images',  'costexplorer.png'),
                         };
-                        break;    
+                        break;
+                    case 'CloudWatch':
+                        treeItem.command = { command: 'cloudtoolbox.showCloudWatch', title: 'Show CloudWatch', arguments: [] };
+                        treeItem.iconPath = {
+                            light: path.join(__dirname, 'images',  'cloudwatch.png'),
+                            dark: path.join(__dirname, 'images',  'cloudwatch.png'),
+                        };
+                        break;      
                 }
                 return treeItem;
             }));

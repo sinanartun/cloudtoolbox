@@ -64,6 +64,35 @@ export class VpcExplorer implements RegionObserver{
     return chartData;
   }
 
+  public async drillDown(args: {region: string, type: string}): Promise<any> {
+    const regionName = args.region;
+    const credentials = fromIni({ profile: this.selectedProfile });
+    const ec2Client = new EC2Client({ region: regionName, credentials });
+    if (args.type === 'vpc') {
+      const vpcsPromise = ec2Client.send(new DescribeVpcsCommand({}));
+      const [vpcs] = await Promise.all([vpcsPromise]);
+      const data = vpcs.Vpcs?.map(vpc => vpc);
+      return {data, args};
+
+    }else if (args.type ==='subnet') {
+      const subnetsPromise = ec2Client.send(new DescribeSubnetsCommand({}));
+    
+      const [subnets] = await Promise.all([subnetsPromise]);
+      const data = subnets.Subnets?.map(subnet => subnet);
+      return {data, args};
+    }
+
+    // const vpcsPromise = ec2Client.send(new DescribeVpcsCommand({}));
+    // const subnetsPromise = ec2Client.send(new DescribeSubnetsCommand({}));
+    
+    // const [vpcs, subnets] = await Promise.all([vpcsPromise, subnetsPromise]);
+
+    // return {
+    //   vpcs: vpcs.Vpcs?.map(vpc => ({  vpc})),
+    //   subnets: subnets.Subnets?.map(subnet => ({  subnet })),
+    // };
+  }
+
 
   private async getVpcData(ec2: EC2Client): Promise<{
     vpc: number;

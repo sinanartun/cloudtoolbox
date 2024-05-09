@@ -128,6 +128,11 @@ export class WebViewProvider {
         if (message.command === 'requestData') {
           const data = await explorer.getChartData();
           panel.webview.postMessage({ command: 'updateData', data });
+        }else if (message.command ==='drillDown') {
+          console.log('drillDown',message);
+          const data = await explorer.drillDown(message.args);
+          console.log('drillDownData',data);
+          panel.webview.postMessage({ command: 'drillDown', data });
         }
       },
       undefined,
