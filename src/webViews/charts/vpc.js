@@ -17,7 +17,7 @@ const t5 = 'NAT Gateways';
 const t6 = 'VPC Peering';
 
 let data = null;
-
+let currentlySelectedPoint = null;
 async function initializeDashboardChart() {
   data = [
     ['eu-central-1', 0, 0, 0, 0, 0, 0],
@@ -41,15 +41,7 @@ async function initializeDashboardChart() {
               data,
             },
           },
-          {
-            id: 'datagridConnector',
-            type: 'JSON',
-            options: {
-              columnNames: ['Region', t1, t2, t3, t4, t5, t6],
-              firstRowAsNames: false,
-              data,
-            },
-          },
+
         ],
       },
       gui: {
@@ -67,13 +59,6 @@ async function initializeDashboardChart() {
                   {
                     id: 'dashboard-col-2',
                   },
-                ],
-              },
-              {
-                cells: [
-                  // {
-                  //   id: 'dashboard-col-3',
-                  // },
                 ],
               },
             ],
@@ -229,13 +214,28 @@ async function initializeDashboardChart() {
             chart: {
               type: 'bar',
               zoomType: null,
+              
             },
             plotOptions: {
               series: {
                 colorByPoint: true,
                 events: {
                   click: function (event) {
-                    console.log(event.point.name);
+
+
+
+
+            
+                    
+                    if (event.point.dataLabel) {
+                      console.log('event.point.dataLabel===============');
+                      event.point.dataLabel.css({
+                        border: '5px solid red',
+                        padding: '5px',
+                      });
+                      
+                    }
+                    
                     const region = event.point.name;
                     const type = 'subnet';
                     const args = {
@@ -244,6 +244,10 @@ async function initializeDashboardChart() {
                     };
 
                     drillDown(args);
+                    console.log('event',event);
+                    
+                   
+                  
                   },
                 },
               },
@@ -262,6 +266,7 @@ async function initializeDashboardChart() {
                   formatter: function () {
                     return this.y === 0 ? '' : this.y;
                   },
+                  
                 },
               },
             },
@@ -337,6 +342,18 @@ async function initializeDashboardChart() {
             plotOptions: {
               series: {
                 colorByPoint: true,
+                events: {
+                  click: function (event) {
+                    const region = event.point.name;
+                    const type = 'routeTable';
+                    const args = {
+                      region,
+                      type,
+                    };
+
+                    drillDown(args);
+                  },
+                },
               },
               bar: {
                 pointPadding: 0.2,
@@ -375,20 +392,6 @@ async function initializeDashboardChart() {
             },
           },
         },
-        {
-          renderTo: 'dashboard-col-3',
-          connector: {
-            id: 'datagridConnector',
-          },
-          type: 'DataGrid',
-          sync: {
-            extremes: true,
-          },
-          dataGridOptions: {
-            editable: false,
-            cellHeight: 15,
-          },
-        },
       ],
     },
     true,
@@ -397,7 +400,7 @@ async function initializeDashboardChart() {
 }
 
 async function updateDashboardData(newData) {
-  console.log('updateDashboardData', newData);
+  
 
   if (!dashboardChart) {
     console.error('Dashboard is not initialized.');
@@ -408,22 +411,22 @@ async function updateDashboardData(newData) {
 
   try {
     const regionConnector = await dashboardChart.dataPool.getConnector('Region');
-    const dataGridConnector = await dashboardChart.dataPool.getConnector('datagridConnector');
+
     const dashboardComponents = await dashboardChart.mountedComponents;
 
-    if (!regionConnector || !regionConnector.options || !dataGridConnector) {
+    if (!regionConnector || !regionConnector.options) {
       console.error('Required connectors not found or cannot be updated.');
       return;
     }
 
-    // Update connectors with new data
+    
     regionConnector.options.data = newData;
 
-    // Update components
+    
     dashboardComponents.forEach((comp, i) => {
       if (comp.component) {
         if (comp.component.type === 'Highcharts' && comp.component.chart && comp.component.chart.series[0]) {
-          // Update Highcharts components
+          
           const datapart = newData.map((data) => [data[0], data[i + 1]]);
           comp.component.chart.series[0].setData(datapart, {
             animation: {
@@ -435,7 +438,6 @@ async function updateDashboardData(newData) {
       }
     });
 
-
     renderDataTable(newData);
   } catch (error) {
     console.error('Failed to update dashboard data:', error);
@@ -443,7 +445,7 @@ async function updateDashboardData(newData) {
 }
 
 async function renderDrillDown(newData) {
-  console.log('renderDrillDown', newData);
+  
 
   if (!dashboardChart) {
     console.error('Dashboard is not initialized.');
@@ -458,13 +460,15 @@ async function renderDrillDown(newData) {
   stopLoading();
   let transformedData = '';
   try {
-    if(newData.args.type === 'vpc') {
+    if (newData.args.type === 'vpc') {
       transformedData = await transformVPCData(newData);
-    }else if(newData.args.type ==='subnet') {
+    } else if (newData.args.type === 'subnet') {
       transformedData = await transformSubnetData(newData);
+    } else if (newData.args.type === 'routeTable') {
+      transformedData = await transformRouteTableData(newData);
     }
+
     
-    console.log('transformedData:', transformedData);
 
     renderDataTable(transformedData.rows, transformedData.columns);
   } catch (error) {
@@ -472,91 +476,98 @@ async function renderDrillDown(newData) {
   }
 }
 
-
-
 async function transformVPCData(vpcList) {
-  // Prepare the array to hold each row's data for DataTables
-  const dataTableRows = vpcList.data.map(vpc => {
-      // Extract the first CidrBlockAssociation if it exists
-      const firstCidrBlockAssoc = vpc.CidrBlockAssociationSet?.[0];
-      const assocData = firstCidrBlockAssoc ? {
+  
+  const dataTableRows = vpcList.data.map((vpc) => {
+    
+    const firstCidrBlockAssoc = vpc.CidrBlockAssociationSet?.[0];
+    const assocData = firstCidrBlockAssoc
+      ? {
           AssociationId: firstCidrBlockAssoc.AssociationId,
           AssociatedCidrBlock: firstCidrBlockAssoc.CidrBlock,
-          CidrBlockState: firstCidrBlockAssoc.CidrBlockState.State
-      } : {};
+          CidrBlockState: firstCidrBlockAssoc.CidrBlockState.State,
+        }
+      : {};
 
-      // Find the 'Name' tag and compile other tags into a single string
-      const nameTag = vpc.Tags?.find(tag => tag.Key === "Name")?.Value || '';
-      const Tags = vpc.Tags?.filter(tag => tag.Key !== "Name")
-                                 .map(tag => `${tag.Key}: ${tag.Value}`)
-                                 .join(', ');
+    
+    const nameTag = vpc.Tags?.find((tag) => tag.Key === 'Name')?.Value || '';
+    const Tags = vpc.Tags?.filter((tag) => tag.Key !== 'Name')
+      .map((tag) => `${tag.Key}: ${tag.Value}`)
+      .join(', ');
 
-      // Flatten the structure into a single object for each row
-      return {
-          Name: nameTag,
-          CidrBlock: vpc.CidrBlock,
-          DhcpOptionsId: vpc.DhcpOptionsId,
-          State: vpc.State,
-          VpcId: vpc.VpcId,
-          OwnerId: vpc.OwnerId,
-          InstanceTenancy: vpc.InstanceTenancy,
-          IsDefault: vpc.IsDefault ? "Yes" : "No",
-          ...assocData,
-          Tags: Tags
-      };
+    
+    return {
+      Region: vpcList.args.region,
+      Name: nameTag,
+      CidrBlock: vpc.CidrBlock,
+      DhcpOptionsId: vpc.DhcpOptionsId,
+      State: vpc.State,
+      VpcId: vpc.VpcId,
+      OwnerId: vpc.OwnerId,
+      InstanceTenancy: vpc.InstanceTenancy,
+      IsDefault: vpc.IsDefault ? 'Yes' : 'No',
+      ...assocData,
+      Tags: Tags,
+    };
   });
 
-  // Define the columns for DataTables
+  
   const columns = [
-      { title: "Name", data: "Name" , visible: true},
-      { title: "CIDR", data: "CidrBlock" , visible: true},
-      { title: "DhcpOptionsId", data: "DhcpOptionsId" , visible: true},
-      { title: "State", data: "State" , visible: true},
-      { title: "VPC ID", data: "VpcId" , visible: true},
-      { title: "OwnerId", data: "OwnerId" , visible: true},
-      { title: "InstanceTenancy", data: "InstanceTenancy", visible: true },
-      { title: "IsDefault", data: "IsDefault", visible: true },
-      { title: "AssociationId", data: "AssociationId" , visible: true},
-      { title: "AssociatedCidrBlock", data: "AssociatedCidrBlock", visible: true },
-      { title: "CidrBlockState", data: "CidrBlockState" , visible: true},
-      { title: "Tags", data: "Tags" , visible: true}
+    {
+      className: 'dt-control ctb',
+      orderable: false,
+      data: null,
+      defaultContent: '',
+    },
+    { title: 'Region', data: 'Region', visible: true },
+    { title: 'Name', data: 'Name', visible: true },
+    { title: 'CIDR', data: 'CidrBlock', visible: true },
+    { title: 'DhcpOptionsId', data: 'DhcpOptionsId', visible: false },
+    { title: 'State', data: 'State', visible: false },
+    { title: 'VPC ID', data: 'VpcId', visible: true },
+    { title: 'OwnerId', data: 'OwnerId', visible: false },
+    { title: 'InstanceTenancy', data: 'InstanceTenancy', visible: false },
+    { title: 'IsDefault', data: 'IsDefault', visible: true },
+    { title: 'AssociationId', data: 'AssociationId', visible: false },
+    { title: 'AssociatedCidrBlock', data: 'AssociatedCidrBlock', visible: false },
+    { title: 'CidrBlockState', data: 'CidrBlockState', visible: false },
+    { title: 'Tags', data: 'Tags', visible: true },
   ];
 
   return { columns, rows: dataTableRows };
 }
 
-
-
 async function transformSubnetData(subnetList) {
-  const dataTableRows = subnetList.data.map(subnet => {
-      const dnsOptions = subnet.PrivateDnsNameOptionsOnLaunch;
-      const nameTag = subnet.Tags?.find(tag => tag.Key === "Name")?.Value || '';
-      const Tags = subnet.Tags?.filter(tag => tag.Key !== "Name")
-                                 .map(tag => `${tag.Key}: ${tag.Value}`)
-                                 .join(', ');
+  const dataTableRows = subnetList.data.map((subnet) => {
+    const dnsOptions = subnet.PrivateDnsNameOptionsOnLaunch;
+    const nameTag = subnet.Tags?.find((tag) => tag.Key === 'Name')?.Value || '';
+    const Tags = subnet.Tags?.filter((tag) => tag.Key !== 'Name')
+      .map((tag) => `${tag.Key}: ${tag.Value}`)
+      .join(', ');
 
-      return {
-          Name: nameTag,
-          AvailabilityZone: subnet.AvailabilityZone,
-          AvailabilityZoneId: subnet.AvailabilityZoneId,
-          AvailableIpAddressCount: subnet.AvailableIpAddressCount,
-          CidrBlock: subnet.CidrBlock,
-          DefaultForAz: subnet.DefaultForAz ? "Yes" : "No",
-          MapPublicIpOnLaunch: subnet.MapPublicIpOnLaunch ? "Yes" : "No",
-          MapCustomerOwnedIpOnLaunch: subnet.MapCustomerOwnedIpOnLaunch ? "Yes" : "No",
-          State: subnet.State,
-          SubnetId: subnet.SubnetId,
-          VpcId: subnet.VpcId,
-          OwnerId: subnet.OwnerId,
-          AssignIpv6AddressOnCreation: subnet.AssignIpv6AddressOnCreation ? "Yes" : "No",
-          SubnetArn: subnet.SubnetArn,
-          EnableDns64: subnet.EnableDns64 ? "Yes" : "No",
-          Ipv6Native: subnet.Ipv6Native ? "Yes" : "No",
-          HostnameType: dnsOptions ? dnsOptions.HostnameType : "",
-          EnableResourceNameDnsARecord: dnsOptions ? (dnsOptions.EnableResourceNameDnsARecord ? "Yes" : "No") : "No",
-          EnableResourceNameDnsAAAARecord: dnsOptions ? (dnsOptions.EnableResourceNameDnsAAAARecord ? "Yes" : "No") : "No",
-          Tags: Tags ?? "",
-      };
+    return {
+      Region: subnetList.args.region,
+      Name: nameTag,
+      AvailabilityZone: subnet.AvailabilityZone,
+      AvailabilityZoneId: subnet.AvailabilityZoneId,
+      AvailableIpAddressCount: subnet.AvailableIpAddressCount,
+      CidrBlock: subnet.CidrBlock,
+      DefaultForAz: subnet.DefaultForAz ? 'Yes' : 'No',
+      MapPublicIpOnLaunch: subnet.MapPublicIpOnLaunch ? 'Yes' : 'No',
+      MapCustomerOwnedIpOnLaunch: subnet.MapCustomerOwnedIpOnLaunch ? 'Yes' : 'No',
+      State: subnet.State,
+      SubnetId: subnet.SubnetId,
+      VpcId: subnet.VpcId,
+      OwnerId: subnet.OwnerId,
+      AssignIpv6AddressOnCreation: subnet.AssignIpv6AddressOnCreation ? 'Yes' : 'No',
+      SubnetArn: subnet.SubnetArn,
+      EnableDns64: subnet.EnableDns64 ? 'Yes' : 'No',
+      Ipv6Native: subnet.Ipv6Native ? 'Yes' : 'No',
+      HostnameType: dnsOptions ? dnsOptions.HostnameType : '',
+      EnableResourceNameDnsARecord: dnsOptions ? (dnsOptions.EnableResourceNameDnsARecord ? 'Yes' : 'No') : 'No',
+      EnableResourceNameDnsAAAARecord: dnsOptions ? (dnsOptions.EnableResourceNameDnsAAAARecord ? 'Yes' : 'No') : 'No',
+      Tags: Tags ?? '',
+    };
   });
 
   const columns = [
@@ -565,35 +576,80 @@ async function transformSubnetData(subnetList) {
       orderable: false,
       data: null,
       defaultContent: '',
-  },
-      { title: "Name", data: "Name", visible: true },
-      { title: "VpcId", data: "VpcId", visible: true },
-      { title: "SubnetId", data: "SubnetId", visible: true  },
-      { title: "CidrBlock", data: "CidrBlock", visible: true  },
-      { title: "AvailabilityZone", data: "AvailabilityZone" , visible: true },
-      { title: "AvailabilityZoneId", data: "AvailabilityZoneId" , visible: true },
-      { title: "AvailableIp", sTitle:"AvailableIpAddressCount", data: "AvailableIpAddressCount", visible: true  },
-      { title: "DefaultForAz", data: "DefaultForAz" , visible: true },
-      { title: "MapPublicIpOnLaunch", data: "MapPublicIpOnLaunch", visible: true  },
-      { title: "MapCustomerOwnedIpOnLaunch", data: "MapCustomerOwnedIpOnLaunch", visible: false  },
-      { title: "State", data: "State" , visible: false },
-      { title: "OwnerId", data: "OwnerId" , visible: false },
-      { title: "AssignIpv6AddressOnCreation", data: "AssignIpv6AddressOnCreation", visible: false  },
-      { title: "SubnetArn", data: "SubnetArn", visible: false  },
-      { title: "EnableDns64", data: "EnableDns64", visible: false  },
-      { title: "Ipv6Native", data: "Ipv6Native" , visible: false },
-      { title: "HostnameType", data: "HostnameType", visible: false  },
-      { title: "EnableResourceNameDnsARecord", data: "EnableResourceNameDnsARecord", visible: false  },
-      { title: "EnableResourceNameDnsAAAARecord", data: "EnableResourceNameDnsAAAARecord" , visible: false },
-      { title: "Tags", data: "Tags" , visible: false }
+    },
+    { title: 'Region', data: 'Region', className: 'no-wrap', visible: true },
+    { title: 'Name', data: 'Name', className: 'no-wrap', visible: true },
+    { title: 'SubnetId', data: 'SubnetId', className: 'no-wrap', visible: true },
+    { title: 'VpcId', data: 'VpcId', className: 'no-wrap', visible: true },
+    { title: 'CidrBlock', data: 'CidrBlock', className: 'no-wrap', visible: true },
+    { title: 'AvailabilityZone', data: 'AvailabilityZone', className: 'no-wrap', visible: true },
+    { title: 'AvailabilityZoneId', data: 'AvailabilityZoneId', className: 'no-wrap', visible: false },
+    { title: 'AvailableIp', sTitle: 'AvailableIpAddressCount', className: 'no-wrap', data: 'AvailableIpAddressCount', visible: true },
+    { title: 'DefaultForAz', data: 'DefaultForAz', className: 'no-wrap', visible: true },
+    { title: 'MapPublicIpOnLaunch', data: 'MapPublicIpOnLaunch', className: 'no-wrap', visible: true },
+    { title: 'MapCustomerOwnedIpOnLaunch', data: 'MapCustomerOwnedIpOnLaunch', className: 'no-wrap', visible: false },
+    { title: 'State', data: 'State', className: 'no-wrap', visible: false },
+    { title: 'OwnerId', data: 'OwnerId', className: 'no-wrap', visible: false },
+    { title: 'AssignIpv6AddressOnCreation', className: 'no-wrap', data: 'AssignIpv6AddressOnCreation', visible: false },
+    { title: 'SubnetArn', data: 'SubnetArn', className: 'no-wrap', visible: false },
+    { title: 'EnableDns64', data: 'EnableDns64', className: 'no-wrap', visible: false },
+    { title: 'Ipv6Native', data: 'Ipv6Native', className: 'no-wrap', visible: false },
+    { title: 'HostnameType', data: 'HostnameType', className: 'no-wrap', visible: false },
+    { title: 'EnableResourceNameDnsARecord', className: 'no-wrap', data: 'EnableResourceNameDnsARecord', visible: false },
+    { title: 'EnableResourceNameDnsAAAARecord', className: 'no-wrap', data: 'EnableResourceNameDnsAAAARecord', visible: false },
+    { title: 'Tags', data: 'Tags', className: 'no-wrap', visible: false },
   ];
 
   return { columns, rows: dataTableRows };
 }
 
+async function transformRouteTableData(routeTableList) {
+  const dataTableRows = routeTableList.data.map((routeTable) => {
+    const nameTag = routeTable.Tags?.find((tag) => tag.Key === 'Name')?.Value || '';
+    const Tags = routeTable.Tags?.filter((tag) => tag.Key !== 'Name')
+      .map((tag) => `${tag.Key}: ${tag.Value}`)
+      .join('<br/>');
 
+    const routes = routeTable.Routes.map((route) => {
+      return `Destination: ${route.DestinationCidrBlock || route.DestinationPrefixListId}, Gateway: ${route.GatewayId}, State: ${route.State}`;
+    }).join('<br/>');
+    const associations = routeTable.Associations.map((association) => {
+      return `AssociationState: ${association.AssociationState.State || '-'}, Main: ${association.Main}, RouteTableAssociationId: ${
+        association.RouteTableAssociationId
+      }, RouteTableId: ${association.RouteTableId}, SubnetId: ${association.SubnetId}`;
+    }).join('<br/>');
 
+    return {
+      Region: routeTableList.args.region,
+      Name: nameTag,
+      RouteTableId: routeTable.RouteTableId,
+      VpcId: routeTable.VpcId,
+      OwnerId: routeTable.OwnerId,
+      Associations: associations,
+      Routes: routes,
+      Tags: Tags ?? '',
+    };
+  });
 
+  const columns = [
+    {
+      className: 'dt-control ctb no-wrap', 
+      orderable: false,
+      data: null,
+      defaultContent: '',
+    },
+    { title: 'Region', data: 'Region', className: 'no-wrap', visible: false },
+    { title: 'Name', data: 'Name', className: 'no-wrap', visible: true },
+    { title: 'RouteTableId', data: 'RouteTableId', className: 'no-wrap', visible: true },
+    { title: 'VpcId', data: 'VpcId', className: 'no-wrap', visible: true },
+    { title: 'OwnerId', data: 'OwnerId', className: 'no-wrap', visible: false },
+    { title: 'Routes', data: 'Routes', className: 'no-wrap', visible: true },
+    { title: 'Associations', data: 'Associations', className: 'no-wrap', visible: false },
+    { title: 'Tags', data: 'Tags', className: 'no-wrap', visible: false },
+  ];
+
+  return { columns, rows: dataTableRows };
+}
 
 function drillDown(args) {
   if (vpcObj.updateOnFly) {
@@ -612,7 +668,7 @@ async function handleIncomingData(message) {
   if (message.command === 'updateData') {
     updateDashboardData(message.data);
   } else if (message.command === 'drillDown') {
-    console.log('drillDown comes back');
+    
 
     stopLoading();
     await renderDrillDown(message.data);
@@ -671,58 +727,99 @@ const renderDataTable = (rows = null, iColumns = null) => {
   const newDtTable = document.createElement('table');
   newDtTable.id = 'dt';
   newDtTable.classList.add('display');
-  newDtTable.classList.add('compact');
   newDtTable.classList.add('hover');
-  newDtTable.style = 'width: 100%;';
+  newDtTable.style.width = '100vw';
+
 
   dtWrapper.appendChild(newDtTable);
-  console.log('renderDataTable');
-  console.log(rows);
-  console.log(iColumns);
+
   let defColumns = [{ title: t0 }, { title: t1 }, { title: t2 }, { title: t3 }, { title: t4 }, { title: t5 }, { title: t6 }];
 
   let defRows = [];
 
-    dt = new DataTable('#dt', {
-      responsive: true,
-      columns: iColumns ?? defColumns,
-      data: rows ?? defRows,
-      scrollY: 'auto',
-      scrollCollapse: true,
-      
-    });
-
-    dt.on('click', 'td.dt-control', function (e) {
-      let tr = e.target.closest('tr');
-      let row = dt.row(tr);
-   
-      if (row.child.isShown()) {
-          // This row is already open - close it
-          row.child.hide();
-      }
-      else {
-          // Open this row
-          row.child(reFormatRow(row.data())).show();
-      }
+  dt = new DataTable('#dt', {
+    responsive: true,
+    columns: iColumns ?? defColumns,
+    data: rows ?? defRows,
+    scrollY: 'auto',
+    scrollCollapse: true,
   });
- 
-};
 
-function reFormatRow(d) {
-  // `d` is the original data object for the row
-  let html = '<dl>'; // Start the definition list
-  for (const key in d) {
-    if (d.hasOwnProperty(key)) { // Ensure the key is a direct property of `d`
-      html += '<dt>' + capitalizeFirstLetter(key) + ': <span style="color:yellow;">'+ d[key] +'</span></dt>'; // Add the term with a capitalized first letter
-    
+  dt.on('click', 'td.dt-control', function (e) {
+    let tr = e.target.closest('tr');
+    let row = dt.row(tr);
+
+    if (row.child.isShown()) {
+      
+      row.child.hide();
+    } else {
+      
+      row.child(reFormatRow(row.data())).show();
     }
+  });
+};
+function multiFormatCell(val) {
+  if (typeof val === 'string') {
+    return val.split('<br/>');
   }
-  html += '</dl>'; // Close the definition list
-  return html;
+  return [val]; // Ensuring this always returns an array
 }
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function reFormatRow(data) {
+  const table = document.createElement('table');
+  table.style.borderCollapse = 'collapse';
+
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const row = table.insertRow();
+      const cellKey = row.insertCell();
+      const cellValue = row.insertCell();
+
+      cellKey.style.border = cellValue.style.border = '1px solid black';
+      cellKey.style.padding = cellValue.style.padding = '5px';
+      cellKey.className = cellValue.className = 'code-block';
+
+      let celval = multiFormatCell(data[key]);
+      if (Array.isArray(celval)) {
+        if (celval.length === 1) {
+          
+          cellKey.textContent = `${capitalizeFirstLetter(key)}:`;
+          cellValue.textContent = celval[0];
+        } else {
+          
+          celval.forEach((item, index) => {
+            if (index > 0) {
+              
+              const additionalRow = table.insertRow();
+              const additionalCellKey = additionalRow.insertCell();
+              const additionalCellValue = additionalRow.insertCell();
+
+              additionalCellKey.textContent = `${capitalizeFirstLetter(key)}_${index}:`;
+              additionalCellValue.textContent = item;
+
+              additionalCellKey.style.border = additionalCellValue.style.border = '1px solid black';
+              additionalCellKey.style.padding = additionalCellValue.style.padding = '5px';
+              additionalCellKey.className = additionalCellValue.className = 'code-block';
+
+            } else {
+              
+              cellKey.textContent = `${capitalizeFirstLetter(key)}_0:`;
+              cellValue.textContent = item;
+            }
+          });
+        }
+      } else {
+        cellKey.textContent = `${capitalizeFirstLetter(key)}:`;
+        cellValue.textContent = celval.toString();
+      }
+    }
+  }
+
+  return table.outerHTML; 
 }
 
 const startDashboardChartInterval = () => {

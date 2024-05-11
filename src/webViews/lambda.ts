@@ -60,10 +60,10 @@ export async function setLambdaHtml(
               <i class="fa-solid fa-arrows-rotate iii" id="refresh-button" title="refresh"></i>
           </div>
           <select id="interval" title="Auto Refresh" style="width: 49px; height: 19px; margin-left: 7px;">
-              <option value="0" >stop</option>
+              <option value="0" selected>0</option>
               <option value="5">5 s</option>
               <option value="30">30 s</option>
-              <option value="60" selected>1 m</option>
+              <option value="60">1 m</option>
               <option value="180">3 m</option>
               <option value="300">5 m</option>
           </select>

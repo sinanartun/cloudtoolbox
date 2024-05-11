@@ -116,7 +116,7 @@ export class WebViewProvider {
   public updateWebview(service: string, data: any) {
     const panel = this.panels.get(service);
     if (panel) {
-      console.log('update:',data );
+      // console.log('update:',data );
       panel.webview.postMessage({ command: 'updateData', data: data });
     } else {
     }
@@ -129,9 +129,9 @@ export class WebViewProvider {
           const data = await explorer.getChartData();
           panel.webview.postMessage({ command: 'updateData', data });
         }else if (message.command ==='drillDown') {
-          console.log('drillDown',message);
+          // console.log('drillDown',message);
           const data = await explorer.drillDown(message.args);
-          console.log('drillDownData',data);
+          // console.log('drillDownData',data);
           panel.webview.postMessage({ command: 'drillDown', data });
         }
       },

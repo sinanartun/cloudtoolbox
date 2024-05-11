@@ -110,3 +110,11 @@ table.dataTable td.dt-control:before {
     border-bottom: 0px solid transparent;
     border-right: 5px solid transparent;
   }
+
+  .code-block {
+    font-family: 'Consolas', 'Fira Code', monospace !important;
+  }
+
+  .ctb-fl{
+    float: left;
+  }

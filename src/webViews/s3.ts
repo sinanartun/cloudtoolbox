@@ -23,6 +23,14 @@ export async function setS3Html(
     const fontAwesomeUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, "dist", "node_modules", "@fortawesome", "fontawesome-free", "css", "all.min.css"));
 
     
+    const dtUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, 'dist', 'node_modules', 'datatables.net', 'js', 'dataTables.min.js'));
+    const dtdtUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, 'dist', 'node_modules', 'datatables.net-dt', 'js', 'dataTables.dataTables.min.js'));
+    const dtdtCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, 'dist', 'node_modules', 'datatables.net-dt', 'css', 'dataTables.dataTables.min.css'));
+    const jqueryUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, 'dist', 'node_modules', 'jquery', 'dist', 'jquery.min.js'));
+
+
+
+
     const runJsPath = vscode.Uri.joinPath(baseUri, "dist", "webViews", "charts", "s3.js");
     const runJsData = await vscode.workspace.fs.readFile(runJsPath);
     const runJs = runJsData.toString();
@@ -43,14 +51,19 @@ export async function setS3Html(
         <link rel="stylesheet" type="text/css" href="${datagridCssUri}">
         <link rel="stylesheet" type="text/css" href="${dashboardsCssUri}">
         <link rel="stylesheet" type="text/css" href="${fontAwesomeUri}">
-        <link rel="stylesheet" type="text/css" href="${customCssUri}">
         <link rel="stylesheet" type="text/css" href="${highchartsCustomCssUri}">
+        <link rel="stylesheet" type="text/css" href="${dtdtCssUri}">
+        <link rel="stylesheet" type="text/css" href="${customCssUri}">
         <script src="${highchartsUri}"></script>
         <script src="${datagridUri}"></script>
         <script src="${accessibilityUri}"></script>
         <script src="${dashboardsUri}"></script>
         <script src="${layoutUri}"></script>
         <script src="${draggablepointsjsUri}"></script>
+
+        <script src="${jqueryUri}"></script>
+        <script src="${dtUri}"></script>
+        <script src="${dtdtUri}"></script>
         <script>const vscode = acquireVsCodeApi();</script>
     </head>
     <body>
@@ -73,6 +86,9 @@ export async function setS3Html(
       </div>
     </div>
     <div id="container"></div>
+    <div id="dtWrapper">
+      <table id="dt" class="display" style="width:100%"></table>
+    </div>
     <script>${runJs}</script>
     <script>
       window.addEventListener('load', init);
@@ -81,7 +97,7 @@ export async function setS3Html(
     </body>
     </html>`;
   } catch (error) {
-    console.error("Failed to set EC2 HTML content:", error);
-    vscode.window.showErrorMessage("An error occurred while setting up the EC2 dashboard.");
+    console.error("Failed to set S3 HTML content:", error);
+    vscode.window.showErrorMessage("An error occurred while setting up the S3 dashboard.");
   }
 }

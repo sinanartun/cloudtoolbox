@@ -55,6 +55,8 @@ export async function setVpcHtml(context: vscode.ExtensionContext, webview: vsco
         
         <script src="${jqueryUri}"></script>
         <script src="${dtUri}"></script>
+        <script src="${dtdtUri}"></script>
+        
 
         <script>const vscode = acquireVsCodeApi();</script>
     </head>

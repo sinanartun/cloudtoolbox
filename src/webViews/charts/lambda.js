@@ -1,14 +1,14 @@
 let dashboardChart = null;
 let mapChart = null;
 let dashboardType = 'dashboard';
-
+let dt = null;
 
 let lObj = {
-  intervalValue : 60,
+  intervalValue : 0,
   timerInterval : null,
   updateOnFly : false,
 };
-
+const t0 = 'Region';
 const t1 = 'Functions';
 const t2 = 'Applications';
 const t3 = 'Layers';
@@ -30,19 +30,10 @@ async function initializeDashboardChart() {
       dataPool: {
         connectors: [
           {
-            id: 'Region',
+            id: t0,
             type: 'JSON',
             options: {
-              columnNames: ['Region', t1, t2, t3],
-              firstRowAsNames: false,
-              data,
-            },
-          },
-          {
-            id: 'datagridConnector',
-            type: 'JSON',
-            options: {
-              columnNames: ['Region', t1, t2, t3, t4],
+              columnNames: [t0, t1, t2, t3],
               firstRowAsNames: false,
               data,
             },
@@ -93,11 +84,11 @@ async function initializeDashboardChart() {
             dataGridColumns: true,
           },
           connector: {
-            id: 'Region',
+            id: t0,
             columnAssignment: [
               {
                 seriesId: 'v1',
-                data: ['Region', t1],
+                data: [t0, t1],
               },
             ],
           },
@@ -114,6 +105,10 @@ async function initializeDashboardChart() {
               title: {
                 text: '',
               },
+              width: '80%',
+              showLastLabel: false,
+              tickAmount: 5,
+              tickInterval:1
             },
             credits: {
               enabled: false,
@@ -128,19 +123,31 @@ async function initializeDashboardChart() {
                 dataLabels: {
                   enabled: true, // Enables data labels for all series
                 },
+                events: {
+                  click: function (event) {
+                    console.log(event.point.name);
+                    const region = event.point.name;
+                    const type = 'function';
+                    const args = {
+                      region,
+                      type,
+                    };
+
+                    drillDown(args);
+                  },
+                },
               },
               bar: {
-                // Applies specific options for bar chart type
                 pointPadding: 0.2,
                 borderWidth: 0,
                 dataLabels: {
                   enabled: true,
-                  align: 'right', // Positions the label to the right of the bar, which is actually "above" for a horizontal bar
-                  verticalAlign: 'middle', // Aligns vertically to the top of the bar
-                  inside: true, // Places the label inside the bar
-                  horizontalAlign: 'middle', // Aligns the data label horizontally
-                  crop: false, // Allows the data label to overflow the bar
-                  overflow: 'none', // Allows the data label to overflow the bar
+                  align: 'left',
+                  verticalAlign: 'middle',
+                  inside: false,
+                  horizontalAlign: 'middle',
+                  crop: false,
+                  overflow: 'none',
                   formatter: function () {
                     return this.y === 0 ? '' : this.y;
                   },
@@ -184,11 +191,11 @@ async function initializeDashboardChart() {
             extremes: true,
           },
           connector: {
-            id: 'Region',
+            id: t0,
             columnAssignment: [
               {
                 seriesId: 'v2',
-                data: ['Region', t2],
+                data: [t0, t2],
               },
             ],
           },
@@ -204,6 +211,10 @@ async function initializeDashboardChart() {
               title: {
                 text: '',
               },
+              width: '80%',
+              showLastLabel: false,
+              tickAmount: 5,
+              tickInterval:1
             },
             credits: {
               enabled: false,
@@ -214,20 +225,35 @@ async function initializeDashboardChart() {
             },
             plotOptions: {
               series: {
+                dataLabels: {
+                  enabled: true,
+                },
                 colorByPoint: true,
+                events: {
+                  click: function (event) {
+                    console.log(event.point.name);
+                    const region = event.point.name;
+                    const type = 'function';
+                    const args = {
+                      region,
+                      type,
+                    };
+
+                    drillDown(args);
+                  },
+                },
               },
               bar: {
-                // Applies specific options for bar chart type
                 pointPadding: 0.2,
                 borderWidth: 0,
                 dataLabels: {
                   enabled: true,
-                  align: 'right', // Positions the label to the right of the bar, which is actually "above" for a horizontal bar
-                  verticalAlign: 'middle', // Aligns vertically to the top of the bar
-                  inside: true, // Places the label inside the bar
-                  horizontalAlign: 'middle', // Aligns the data label horizontally
-                  crop: false, // Allows the data label to overflow the bar
-                  overflow: 'none', // Allows the data label to overflow the bar
+                  align: 'left',
+                  verticalAlign: 'middle',
+                  inside: false,
+                  horizontalAlign: 'middle',
+                  crop: false,
+                  overflow: 'none',
                   formatter: function () {
                     return this.y === 0 ? '' : this.y;
                   },
@@ -264,11 +290,11 @@ async function initializeDashboardChart() {
         {
           renderTo: 'dashboard-col-2',
           connector: {
-            id: 'Region',
+            id: t0,
             columnAssignment: [
               {
                 seriesId: 'v3',
-                data: ['Region', t3],
+                data: [t0, t3],
               },
             ],
           },
@@ -294,6 +320,10 @@ async function initializeDashboardChart() {
               title: {
                 text: '',
               },
+              width: '80%',
+              showLastLabel: false,
+              tickAmount: 5,
+              tickInterval: 1
             },
             credits: {
               enabled: false,
@@ -305,6 +335,22 @@ async function initializeDashboardChart() {
             plotOptions: {
               series: {
                 colorByPoint: true,
+              },
+              bar: {
+                pointPadding: 0.2,
+                borderWidth: 0,
+                dataLabels: {
+                  enabled: true,
+                  align: 'left',
+                  verticalAlign: 'middle',
+                  inside: false,
+                  horizontalAlign: 'middle',
+                  crop: false,
+                  overflow: 'none',
+                  formatter: function () {
+                    return this.y === 0 ? '' : this.y;
+                  },
+                },
               },
             },
             tooltip: {
@@ -325,20 +371,6 @@ async function initializeDashboardChart() {
             accessibility: {
               description: t3,
             },
-          },
-        },
-        {
-          renderTo: 'dashboard-col-3',
-          connector: {
-            id: 'datagridConnector',
-          },
-          type: 'DataGrid',
-          sync: {
-            extremes: true,
-          },
-          dataGridOptions: {
-            editable: false,
-            cellHeight: 15,
           },
         },
       ],
@@ -364,11 +396,9 @@ async function updateDashboardData(newData) {
 
   try {
     const regionConnector = await dashboardChart.dataPool.getConnector('Region');
-    const dataGridConnector = await dashboardChart.dataPool.getConnector('datagridConnector');
     const dashboardComponents = await dashboardChart.mountedComponents;
     if (regionConnector && regionConnector.options) {
       regionConnector.options.data = newData;
-      dataGridConnector.options.data = newData;
       dashboardComponents.forEach((comp, i) => {
         if (
           comp.component &&
@@ -385,15 +415,7 @@ async function updateDashboardData(newData) {
               easing: 'easeInOutQuint', // Easing function for the animation
             },
           });
-        } else if (
-          comp.component &&
-          comp.component.type &&
-          comp.component.type === 'DataGrid' &&
-          comp.component.dataGrid
-        ) {
-          comp.component.dataGrid.dataTable.deleteRows();
-          comp.component.dataGrid.dataTable.setRows(newData);
-        }
+        } 
       });
     } else {
       console.error('connector not found or cannot be updated.');

@@ -85,6 +85,20 @@ private async getS3Data(s3Client: S3Client): Promise<any[]> {
 }
 
 
+public async drillDown(args: {region: string, type: string}): Promise<any> {
+  const regionName = args.region;
+  const credentials = fromIni({ profile: this.selectedProfile });
+  const s3Client = new S3Client({ region: regionName, credentials });
+  if (args.type === 'bucket') {
+    const s3Promise = s3Client.send(new ListBucketsCommand({}));
+    const [buckets] = await Promise.all([s3Promise]);
+    const data = buckets.Buckets?.map(bucket => bucket);
+    return {data, args};
+
+  }
+
+}
+
 
 
 }

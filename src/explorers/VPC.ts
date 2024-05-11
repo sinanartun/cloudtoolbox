@@ -77,8 +77,14 @@ export class VpcExplorer implements RegionObserver{
     }else if (args.type ==='subnet') {
       const subnetsPromise = ec2Client.send(new DescribeSubnetsCommand({}));
     
-      const [subnets] = await Promise.all([subnetsPromise]);
-      const data = subnets.Subnets?.map(subnet => subnet);
+      const [vpc] = await Promise.all([subnetsPromise]);
+      const data = vpc.Subnets?.map(subnet => subnet);
+      return {data, args};
+    }else if (args.type ==='routeTable') {
+      const subnetsPromise = ec2Client.send(new DescribeRouteTablesCommand({}));
+    
+      const [vpc] = await Promise.all([subnetsPromise]);
+      const data = vpc.RouteTables?.map(RouteTables => RouteTables);
       return {data, args};
     }
 

@@ -1,74 +1,20 @@
 let dashboardChart = null;
 let mapChart = null;
 let dashboardType = 'dashboard';
+let dt = null;
 let s3Obj = {
   intervalValue : 0,
   timerInterval : null,
   updateOnFly : false,
 };
-
+const t0 = 'Region';
 const t1 = 'Buckets';
 const t2 = 'Objects';
 const t3 = 'Size';
 
 let data = null;
 
-function isColorLight(color) {
-  let r, g, b;
 
-  // Check if color is in hexadecimal format
-  if (color.indexOf('#') === 0) {
-    // Convert hex to RGB
-    const hex = color.replace('#', '');
-    if (hex.length === 3) {
-      // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-      r = parseInt(hex.charAt(0) + hex.charAt(0), 16);
-      g = parseInt(hex.charAt(1) + hex.charAt(1), 16);
-      b = parseInt(hex.charAt(2) + hex.charAt(2), 16);
-    } else if (hex.length === 6) {
-      r = parseInt(hex.substring(0, 2), 16);
-      g = parseInt(hex.substring(2, 4), 16);
-      b = parseInt(hex.substring(4, 6), 16);
-    }
-  }
-  // Check if color is in 'rgb' or 'rgba' format
-  else if (color.indexOf('rgb') === 0) {
-    // Find numbers in the rgb(a) string, split them, convert to integer
-    const match = color.match(/\d+/g).map(Number);
-    r = match[0];
-    g = match[1];
-    b = match[2];
-    // Ignore alpha channel if present
-  } else {
-    // Unsupported color format, default to light color
-    console.warn('Unsupported color format:', color);
-    return true;
-  }
-
-  // Calculate the luminance of the color
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  
-
-  // Return true if light, false if dark
-  return luminance > 0.5;
-}
-
-function renderBarDataLabels(colors, colorIndex, value) {
-  if (value === 0) {
-    return `<span class="cbt-bar-white">0 Bytes</span>`;
-  }
-
-  let lightColor = false;
-
-  if (colors && colors[colorIndex]) {
-    const color = colors[colorIndex];
-    lightColor = isColorLight(color);
-  }
-
-  const cl = lightColor ? 'ctb-bar-black' : 'cbt-bar-white';
-  const formated = formatBytes(value, 2);
-  return `<span class="${cl}">${formated[0]} ${formated[1]}</span>`;
-}
 
 function formatBytes(bytes, decimals = 2) {
   if (bytes === 0) {
@@ -93,19 +39,10 @@ async function initializeDashboardChart() {
       dataPool: {
         connectors: [
           {
-            id: 'Region',
+            id: t0,
             type: 'JSON',
             options: {
-              columnNames: ['Region', t1, t2],
-              firstRowAsNames: false,
-              data,
-            },
-          },
-          {
-            id: 'datagridConnector',
-            type: 'JSON',
-            options: {
-              columnNames: ['Region', t1, t2],
+              columnNames: [t0, t1, t2],
               firstRowAsNames: false,
               data,
             },
@@ -123,13 +60,7 @@ async function initializeDashboardChart() {
                   }
                 ],
               },
-              {
-                cells: [
-                  {
-                    id: 'dashboard-col-3',
-                  },
-                ],
-              },
+
             ],
           },
         ],
@@ -150,11 +81,11 @@ async function initializeDashboardChart() {
             dataGridColumns: true,
           },
           connector: {
-            id: 'Region',
+            id: t0,
             columnAssignment: [
               {
                 seriesId: 'v1',
-                data: ['Region', t1],
+                data: [t0, t1],
               },
             ],
           },
@@ -171,7 +102,10 @@ async function initializeDashboardChart() {
               title: {
                 text: '',
               },
-              tickInterval: 1,
+              width: '80%',
+              showLastLabel: false,
+              tickAmount: 5,
+              tickInterval:1
             },
             credits: {
               enabled: false,
@@ -185,6 +119,19 @@ async function initializeDashboardChart() {
                 colorByPoint: true,
                 dataLabels: {
                   enabled: true,
+                },
+                events: {
+                  click: function (event) {
+                    console.log(event.point.name);
+                    const region = event.point.name;
+                    const type = 'bucket';
+                    const args = {
+                      region,
+                      type,
+                    };
+
+                    drillDown(args);
+                  },
                 },
               },
               bar: {
@@ -228,25 +175,105 @@ async function initializeDashboardChart() {
             },
           },
         },
-        {
-          renderTo: 'dashboard-col-3',
-          connector: {
-            id: 'datagridConnector',
-          },
-          type: 'DataGrid',
-          sync: {
-            extremes: true,
-          },
-          dataGridOptions: {
-            editable: false,
-            cellHeight: 15,
-          },
-        },
+
       ],
     },
     true,
   );
   requestChartData();
+}
+
+async function renderDrillDown(newData) {
+  console.log('renderDrillDown');
+  console.log(newData);
+  if (!dashboardChart) {
+    console.error('Dashboard is not initialized.');
+    return;
+  }
+
+  if (!Array.isArray(newData.data) || !newData.data.length || typeof newData.data[0] !== 'object') {
+    console.error('Invalid or empty newData provided.');
+    return;
+  }
+
+  stopLoading();
+  let transformedData = '';
+  try {
+    if (newData.args.type === 'bucket') {
+      transformedData = await transformBucketData(newData);
+    }
+
+    
+
+    renderDataTable(transformedData.rows, transformedData.columns);
+  } catch (error) {
+    console.error('Failed to update dashboard data:', error);
+  }
+}
+
+
+async function transformBucketData(bucketList) {
+  // Create the DateTimeFormat object once outside the map loop
+  const dateFormat = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false // Using 24-hour time format
+  });
+
+  // Process each bucket to format its data
+  const dataTableRows = bucketList.data.map((bucket) => {
+    // Use formatToParts for better control and performance
+    const dateParts = dateFormat.formatToParts(new Date(bucket.CreationDate));
+    const parts = dateParts.reduce((acc, part) => {
+      if (part.type !== 'literal') {
+        acc[part.type] = part.value;
+      }
+      return acc;
+    }, {});
+
+    // Manually construct the date string in the desired format
+    const formattedDate = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`;
+
+    return {
+      Region: bucketList.args.region,
+      Name: bucket.Name,
+      CreationDate: formattedDate
+    };
+  });
+
+  // Define the columns for table display
+  const columns = [
+    {
+      className: 'dt-control ctb',
+      orderable: false,
+      data: null,
+      defaultContent: '',
+    },
+    { title: 'Region', data: 'Region', className: 'no-wrap', visible: true },
+    { title: 'Name', data: 'Name', className: 'no-wrap', visible: true },
+    { title: 'CreationDate', data: 'CreationDate', className: 'no-wrap', visible: true }
+  ];
+
+  // Return the structured data for table display
+  return { columns, rows: dataTableRows };
+}
+
+
+function drillDown(args) {
+  if (s3Obj.updateOnFly) {
+    return;
+  } else {
+    startLoading();
+
+    vscode.postMessage({
+      command: 'drillDown',
+      args: args,
+    });
+  }
 }
 
 async function updateDashboardData(newData) {
@@ -259,14 +286,12 @@ async function updateDashboardData(newData) {
 
   try {
     const regionConnector = await dashboardChart.dataPool.getConnector('Region');
-    const dataGridConnector = await dashboardChart.dataPool.getConnector('datagridConnector');
     const dashboardComponents = await dashboardChart.mountedComponents;
 
     if (regionConnector && regionConnector.options) {
       
 
       regionConnector.options.data = newData;
-      dataGridConnector.options.data = newData;
       dashboardComponents.forEach((comp, i) => {
         if (
           comp.component &&
@@ -283,29 +308,146 @@ async function updateDashboardData(newData) {
               easing: 'easeInOutQuint',
             },
           });
-        } else if (
-          comp.component &&
-          comp.component.type &&
-          comp.component.type === 'DataGrid' &&
-          comp.component.dataGrid
-        ) {
-          comp.component.dataGrid.dataTable.deleteRows();
-          comp.component.dataGrid.dataTable.setRows(newData);
         }
       });
     } else {
       console.error('connector not found or cannot be updated.');
     }
+    renderDataTable(newData);
   } catch (error) {
     console.error('Failed to update dashboard data:', error);
   }
 }
 
-function handleIncomingData(message) {
+async function handleIncomingData(message) {
   if (message.command === 'updateData') {
     updateDashboardData(message.data);
+  } else if (message.command === 'drillDown') {
+    
+
+    stopLoading();
+    await renderDrillDown(message.data);
   }
 }
+
+const renderDataTable = (rows = null, iColumns = null) => {
+  if (dt) {
+    dt.clear();
+    dt.destroy();
+  }
+
+  const dtWrapper = document.getElementById('dtWrapper');
+  if (!dtWrapper) {
+    console.error('dtWrapper does not exist on the page.');
+    return;
+  }
+
+  let oldDtTable = document.getElementById('dt');
+  if (oldDtTable) {
+    dtWrapper.removeChild(oldDtTable);
+  }
+
+  const newDtTable = document.createElement('table');
+  newDtTable.id = 'dt';
+  newDtTable.classList.add('display');
+  newDtTable.classList.add('hover');
+  newDtTable.style.width = '100vw';
+
+
+  dtWrapper.appendChild(newDtTable);
+
+  let defColumns = [{ title: t0 },{ title: t1 , type: 'string'}];
+
+  let defRows = [];
+  let order= [[1, 'asc']];
+  if(!iColumns){
+    order = [[0, 'asc']];
+  }
+
+  dt = new DataTable('#dt', {
+    responsive: true,
+    columns: iColumns ?? defColumns,
+    data: rows ?? defRows,
+    scrollY: 'auto',
+    scrollCollapse: true,
+    order
+  });
+
+  dt.on('click', 'td.dt-control', function (e) {
+    let tr = e.target.closest('tr');
+    let row = dt.row(tr);
+
+    if (row.child.isShown()) {
+      row.child.hide();
+    } else {
+      row.child(reFormatRow(row.data())).show();
+    }
+  });
+};
+
+
+function multiFormatCell(val) {
+  if (typeof val === 'string') {
+    return val.split('<br/>');
+  }
+  return [val]; // Ensuring this always returns an array
+}
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+function reFormatRow(data) {
+  const table = document.createElement('table');
+  table.style.borderCollapse = 'collapse';
+
+  for (const key in data) {
+    if (data.hasOwnProperty(key)) {
+      const row = table.insertRow();
+      const cellKey = row.insertCell();
+      const cellValue = row.insertCell();
+
+      cellKey.style.border = cellValue.style.border = '1px solid black';
+      cellKey.style.padding = cellValue.style.padding = '5px';
+      cellKey.className = cellValue.className = 'code-block';
+
+      let celval = multiFormatCell(data[key]);
+      if (Array.isArray(celval)) {
+        if (celval.length === 1) {
+          // Only one value, display without index
+          cellKey.textContent = `${capitalizeFirstLetter(key)}:`;
+          cellValue.textContent = celval[0];
+        } else {
+          // Multiple values, use index in the key
+          celval.forEach((item, index) => {
+            if (index > 0) {
+              // For subsequent items, add new rows
+              const additionalRow = table.insertRow();
+              const additionalCellKey = additionalRow.insertCell();
+              const additionalCellValue = additionalRow.insertCell();
+
+              additionalCellKey.textContent = `${capitalizeFirstLetter(key)}_${index}:`;
+              additionalCellValue.textContent = item;
+
+              additionalCellKey.style.border = additionalCellValue.style.border = '1px solid black';
+              additionalCellKey.style.padding = additionalCellValue.style.padding = '5px';
+              additionalCellKey.className = additionalCellValue.className = 'code-block';
+
+            } else {
+              // First item uses the initially created cells
+              cellKey.textContent = `${capitalizeFirstLetter(key)}_0:`;
+              cellValue.textContent = item;
+            }
+          });
+        }
+      } else {
+        cellKey.textContent = `${capitalizeFirstLetter(key)}:`;
+        cellValue.textContent = celval.toString();
+      }
+    }
+  }
+
+  return table.outerHTML; // Return the HTML content of the table
+}
+
 
 const requestChartData = () => {
   if (s3Obj.updateOnFly) {
@@ -337,6 +479,8 @@ const init = () => {
   });
 
   startDashboardChartInterval();
+  renderDataTable();
+  
 };
 
 const startDashboardChartInterval = () => {
