@@ -221,20 +221,6 @@ async function initializeDashboardChart() {
                 colorByPoint: true,
                 events: {
                   click: function (event) {
-
-
-
-
-            
-                    
-                    if (event.point.dataLabel) {
-                      console.log('event.point.dataLabel===============');
-                      event.point.dataLabel.css({
-                        border: '5px solid red',
-                        padding: '5px',
-                      });
-                      
-                    }
                     
                     const region = event.point.name;
                     const type = 'subnet';

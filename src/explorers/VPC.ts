@@ -88,15 +88,7 @@ export class VpcExplorer implements RegionObserver{
       return {data, args};
     }
 
-    // const vpcsPromise = ec2Client.send(new DescribeVpcsCommand({}));
-    // const subnetsPromise = ec2Client.send(new DescribeSubnetsCommand({}));
-    
-    // const [vpcs, subnets] = await Promise.all([vpcsPromise, subnetsPromise]);
 
-    // return {
-    //   vpcs: vpcs.Vpcs?.map(vpc => ({  vpc})),
-    //   subnets: subnets.Subnets?.map(subnet => ({  subnet })),
-    // };
   }
 
 

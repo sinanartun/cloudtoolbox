@@ -19,7 +19,6 @@ export async function setVpcHtml(context: vscode.ExtensionContext, webview: vsco
     const dtUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, 'dist', 'node_modules', 'datatables.net', 'js', 'dataTables.min.js'));
     const dtdtUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, 'dist', 'node_modules', 'datatables.net-dt', 'js', 'dataTables.dataTables.min.js'));
     const dtdtCssUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, 'dist', 'node_modules', 'datatables.net-dt', 'css', 'dataTables.dataTables.min.css'));
-
     const jqueryUri = webview.asWebviewUri(vscode.Uri.joinPath(baseUri, 'dist', 'node_modules', 'jquery', 'dist', 'jquery.min.js'));
 
     const runJsPath = vscode.Uri.joinPath(baseUri, 'dist', 'webViews', 'charts', 'vpc.js');

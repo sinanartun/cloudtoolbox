@@ -63,6 +63,39 @@ export class LambdaExplorer {
         return data;
     }
 
+
+    public async drillDown(args: {region: string, type: string}): Promise<any> {
+        const regionName = args.region;
+        const credentials = fromIni({ profile: this.selectedProfile });
+        const lambdaClient = new LambdaClient({ region: regionName, credentials });
+        if (args.type === 'function') {
+
+          const [lambda] = await Promise.all([lambdaClient.send(new ListFunctionsCommand({}))]);
+          const data = lambda.Functions?.map(lambda => lambda);
+          console.log(data);
+          return {data, args};
+    
+        }else if (args.type ==='application') {
+            if (noservice[args.region]?.includes('serverlessrepo')) {
+                 return {data:[], args};
+            }
+            const sarClient = new ServerlessApplicationRepositoryClient({ region:args.region, credentials });
+            const [serverlessApp] = await Promise.all([sarClient.send(new ListApplicationsCommand({}))]);
+            const data = serverlessApp.Applications?.map(application => application);
+          
+          return {data, args};
+        }else if (args.type ==='layer') {
+          const [layer] = await Promise.all([lambdaClient.send(new ListLayersCommand({}))]);
+        
+
+          const data = layer.Layers?.map(layer => layer);
+          return {data, args};
+        }
+    
+    
+      }
+    
+
     private async getLambdaFunctionCountAndCodeStorage(lambda: LambdaClient): Promise<{ functionCount: number, codeStorage: number }> {
         try {
             const command = new ListFunctionsCommand({});
