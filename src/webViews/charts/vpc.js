@@ -36,7 +36,7 @@ async function initializeDashboardChart() {
             id: t0,
             type: 'JSON',
             options: {
-              columnNames: ['Region', t1, t2, t3, t4],
+              columnNames: [t0,, t1, t2, t3, t4],
               firstRowAsNames: false,
               data,
             },
@@ -81,11 +81,11 @@ async function initializeDashboardChart() {
             dataGridColumns: true,
           },
           connector: {
-            id: 'Region',
+            id: t0,
             columnAssignment: [
               {
                 seriesId: 'v1',
-                data: ['Region', t1],
+                data: [t0, t1],
               },
             ],
           },
@@ -114,12 +114,15 @@ async function initializeDashboardChart() {
             plotOptions: {
               series: {
                 colorByPoint: true,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeOutBounce'
+                },
                 dataLabels: {
                   enabled: true,
                 },
                 events: {
                   click: function (event) {
-                    console.log(event.point.name);
                     const region = event.point.name;
                     const type = 'vpc';
                     const args = {
@@ -219,6 +222,10 @@ async function initializeDashboardChart() {
             plotOptions: {
               series: {
                 colorByPoint: true,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeOutBounce'
+                },
                 events: {
                   click: function (event) {
                     
@@ -228,12 +235,7 @@ async function initializeDashboardChart() {
                       region,
                       type,
                     };
-
                     drillDown(args);
-                    console.log('event',event);
-                    
-                   
-                  
                   },
                 },
               },
@@ -328,6 +330,10 @@ async function initializeDashboardChart() {
             plotOptions: {
               series: {
                 colorByPoint: true,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeOutBounce'
+                },
                 events: {
                   click: function (event) {
                     const region = event.point.name;
@@ -414,12 +420,7 @@ async function updateDashboardData(newData) {
         if (comp.component.type === 'Highcharts' && comp.component.chart && comp.component.chart.series[0]) {
           
           const datapart = newData.map((data) => [data[0], data[i + 1]]);
-          comp.component.chart.series[0].setData(datapart, {
-            animation: {
-              duration: 1000,
-              easing: 'easeInOutQuint',
-            },
-          });
+          comp.component.chart.series[0].setData(datapart, {});
         }
       }
     });
@@ -505,7 +506,7 @@ async function transformVPCData(vpcList) {
       data: null,
       defaultContent: '',
     },
-    { title: 'Region', data: 'Region', visible: true },
+    { title: 'Region', data: 'Region', visible: true, className: 'ctb-nw'},
     { title: 'Name', data: 'Name', visible: true },
     { title: 'CIDR', data: 'CidrBlock', visible: true },
     { title: 'DhcpOptionsId', data: 'DhcpOptionsId', visible: false },
@@ -563,27 +564,27 @@ async function transformSubnetData(subnetList) {
       data: null,
       defaultContent: '',
     },
-    { title: 'Region', data: 'Region', className: 'no-wrap', visible: true },
-    { title: 'Name', data: 'Name', className: 'no-wrap', visible: true },
-    { title: 'SubnetId', data: 'SubnetId', className: 'no-wrap', visible: true },
-    { title: 'VpcId', data: 'VpcId', className: 'no-wrap', visible: true },
-    { title: 'CidrBlock', data: 'CidrBlock', className: 'no-wrap', visible: true },
-    { title: 'AvailabilityZone', data: 'AvailabilityZone', className: 'no-wrap', visible: true },
-    { title: 'AvailabilityZoneId', data: 'AvailabilityZoneId', className: 'no-wrap', visible: false },
-    { title: 'AvailableIp', sTitle: 'AvailableIpAddressCount', className: 'no-wrap', data: 'AvailableIpAddressCount', visible: true },
-    { title: 'DefaultForAz', data: 'DefaultForAz', className: 'no-wrap', visible: true },
-    { title: 'MapPublicIpOnLaunch', data: 'MapPublicIpOnLaunch', className: 'no-wrap', visible: true },
-    { title: 'MapCustomerOwnedIpOnLaunch', data: 'MapCustomerOwnedIpOnLaunch', className: 'no-wrap', visible: false },
-    { title: 'State', data: 'State', className: 'no-wrap', visible: false },
-    { title: 'OwnerId', data: 'OwnerId', className: 'no-wrap', visible: false },
-    { title: 'AssignIpv6AddressOnCreation', className: 'no-wrap', data: 'AssignIpv6AddressOnCreation', visible: false },
-    { title: 'SubnetArn', data: 'SubnetArn', className: 'no-wrap', visible: false },
-    { title: 'EnableDns64', data: 'EnableDns64', className: 'no-wrap', visible: false },
-    { title: 'Ipv6Native', data: 'Ipv6Native', className: 'no-wrap', visible: false },
-    { title: 'HostnameType', data: 'HostnameType', className: 'no-wrap', visible: false },
-    { title: 'EnableResourceNameDnsARecord', className: 'no-wrap', data: 'EnableResourceNameDnsARecord', visible: false },
-    { title: 'EnableResourceNameDnsAAAARecord', className: 'no-wrap', data: 'EnableResourceNameDnsAAAARecord', visible: false },
-    { title: 'Tags', data: 'Tags', className: 'no-wrap', visible: false },
+    { title: 'Region', data: 'Region', className: 'ctb-nw', visible: true },
+    { title: 'Name', data: 'Name', className: 'ctb-nw', visible: true },
+    { title: 'SubnetId', data: 'SubnetId', className: 'ctb-nw', visible: true },
+    { title: 'VpcId', data: 'VpcId', className: 'ctb-nw', visible: true },
+    { title: 'CidrBlock', data: 'CidrBlock', className: 'ctb-nw', visible: true },
+    { title: 'AvailabilityZone', data: 'AvailabilityZone', className: 'ctb-nw', visible: true },
+    { title: 'AvailabilityZoneId', data: 'AvailabilityZoneId', className: 'ctb-nw', visible: false },
+    { title: 'AvailableIp', sTitle: 'AvailableIpAddressCount', className: 'ctb-nw', data: 'AvailableIpAddressCount', visible: true },
+    { title: 'DefaultForAz', data: 'DefaultForAz', className: 'ctb-nw', visible: true },
+    { title: 'MapPublicIpOnLaunch', data: 'MapPublicIpOnLaunch', className: 'ctb-nw', visible: true },
+    { title: 'MapCustomerOwnedIpOnLaunch', data: 'MapCustomerOwnedIpOnLaunch', className: 'ctb-nw', visible: false },
+    { title: 'State', data: 'State', className: 'ctb-nw', visible: false },
+    { title: 'OwnerId', data: 'OwnerId', className: 'ctb-nw', visible: false },
+    { title: 'AssignIpv6AddressOnCreation', className: 'ctb-nw', data: 'AssignIpv6AddressOnCreation', visible: false },
+    { title: 'SubnetArn', data: 'SubnetArn', className: 'ctb-nw', visible: false },
+    { title: 'EnableDns64', data: 'EnableDns64', className: 'ctb-nw', visible: false },
+    { title: 'Ipv6Native', data: 'Ipv6Native', className: 'ctb-nw', visible: false },
+    { title: 'HostnameType', data: 'HostnameType', className: 'ctb-nw', visible: false },
+    { title: 'EnableResourceNameDnsARecord', className: 'ctb-nw', data: 'EnableResourceNameDnsARecord', visible: false },
+    { title: 'EnableResourceNameDnsAAAARecord', className: 'ctb-nw', data: 'EnableResourceNameDnsAAAARecord', visible: false },
+    { title: 'Tags', data: 'Tags', className: 'ctb-nw', visible: false },
   ];
 
   return { columns, rows: dataTableRows };
@@ -624,14 +625,14 @@ async function transformRouteTableData(routeTableList) {
       data: null,
       defaultContent: '',
     },
-    { title: 'Region', data: 'Region', className: 'no-wrap', visible: false },
-    { title: 'Name', data: 'Name', className: 'no-wrap', visible: true },
-    { title: 'RouteTableId', data: 'RouteTableId', className: 'no-wrap', visible: true },
-    { title: 'VpcId', data: 'VpcId', className: 'no-wrap', visible: true },
-    { title: 'OwnerId', data: 'OwnerId', className: 'no-wrap', visible: false },
-    { title: 'Routes', data: 'Routes', className: 'no-wrap', visible: true },
-    { title: 'Associations', data: 'Associations', className: 'no-wrap', visible: false },
-    { title: 'Tags', data: 'Tags', className: 'no-wrap', visible: false },
+    { title: 'Region', data: 'Region', className: 'ctb-nw', visible: false },
+    { title: 'Name', data: 'Name', className: 'ctb-nw', visible: true },
+    { title: 'RouteTableId', data: 'RouteTableId', className: 'ctb-nw', visible: true },
+    { title: 'VpcId', data: 'VpcId', className: 'ctb-nw', visible: true },
+    { title: 'OwnerId', data: 'OwnerId', className: 'ctb-nw', visible: false },
+    { title: 'Routes', data: 'Routes', className: 'ctb-nw', visible: true },
+    { title: 'Associations', data: 'Associations', className: 'ctb-nw', visible: false },
+    { title: 'Tags', data: 'Tags', className: 'ctb-nw', visible: false },
   ];
 
   return { columns, rows: dataTableRows };
@@ -651,14 +652,14 @@ function drillDown(args) {
 }
 
 async function handleIncomingData(message) {
+  stopLoading();
   if (message.command === 'updateData') {
     updateDashboardData(message.data);
   } else if (message.command === 'drillDown') {
     
-
-    stopLoading();
     await renderDrillDown(message.data);
   }
+  
 }
 
 const requestChartData = () => {

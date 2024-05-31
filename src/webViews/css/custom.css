@@ -118,3 +118,8 @@ table.dataTable td.dt-control:before {
   .ctb-fl{
     float: left;
   }
+
+  .ctb-nw{
+    white-space: nowrap;
+  }
+

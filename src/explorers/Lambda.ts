@@ -57,7 +57,7 @@ export class LambdaExplorer {
             const applications = await this.getServerlessApplicationCount(region);
 
             
-            data.push([region, functionCount, applications, layers, codeStorage]);
+            data.push([region, functionCount,layers, applications, codeStorage]);
         }
 
         return data;
@@ -86,8 +86,6 @@ export class LambdaExplorer {
           return {data, args};
         }else if (args.type ==='layer') {
           const [layer] = await Promise.all([lambdaClient.send(new ListLayersCommand({}))]);
-        
-
           const data = layer.Layers?.map(layer => layer);
           return {data, args};
         }

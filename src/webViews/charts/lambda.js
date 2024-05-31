@@ -4,25 +4,20 @@ let dashboardType = 'dashboard';
 let dt = null;
 
 let lObj = {
-  intervalValue : 0,
-  timerInterval : null,
-  updateOnFly : false,
+  intervalValue: 0,
+  timerInterval: null,
+  updateOnFly: false,
 };
 const t0 = 'Region';
 const t1 = 'Functions';
-const t2 = 'Applications';
-const t3 = 'Layers';
+const t2 = 'Layers';
+const t3 = 'Applications';
 const t4 = 'Code Storage KB';
-
 
 let data = null;
 
 async function initializeDashboardChart() {
-
-  data = [
-    ['us-east-1', 0, 0, 0, 0],
-  ];
- 
+  data = [['us-east-1', 0, 0, 0, 0]];
 
   dashboardChart = await Dashboards.board(
     'container',
@@ -57,7 +52,6 @@ async function initializeDashboardChart() {
                   },
                 ],
               },
-            
             ],
           },
         ],
@@ -102,24 +96,27 @@ async function initializeDashboardChart() {
               width: '80%',
               showLastLabel: false,
               tickAmount: 5,
-              tickInterval:1
+              tickInterval: 1,
             },
             credits: {
               enabled: false,
             },
             chart: {
-              type: 'bar', // Specifies the chart type as bar
+              type: 'bar',
               zoomType: null,
             },
             plotOptions: {
               series: {
                 colorByPoint: true,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeOutBounce',
+                },
                 dataLabels: {
-                  enabled: true, // Enables data labels for all series
+                  enabled: true,
                 },
                 events: {
                   click: function (event) {
-                    console.log(event.point.name);
                     const region = event.point.name;
                     const type = 'function';
                     const args = {
@@ -174,6 +171,15 @@ async function initializeDashboardChart() {
         },
         {
           renderTo: 'dashboard-col-1',
+          connector: {
+            id: t0,
+            columnAssignment: [
+              {
+                seriesId: 'v2',
+                data: [t0, t2],
+              },
+            ],
+          },
           title: {
             text: t2,
             style: {
@@ -183,15 +189,6 @@ async function initializeDashboardChart() {
           },
           sync: {
             extremes: true,
-          },
-          connector: {
-            id: t0,
-            columnAssignment: [
-              {
-                seriesId: 'v2',
-                data: [t0, t2],
-              },
-            ],
           },
           type: 'Highcharts',
           chartOptions: {
@@ -208,7 +205,7 @@ async function initializeDashboardChart() {
               width: '80%',
               showLastLabel: false,
               tickAmount: 5,
-              tickInterval:1
+              tickInterval: 1,
             },
             credits: {
               enabled: false,
@@ -216,17 +213,22 @@ async function initializeDashboardChart() {
             chart: {
               type: 'bar',
               zoomType: null,
+              animation: {
+                duration: 1000,
+                easing: 'easeOutBounce',
+              },
             },
             plotOptions: {
               series: {
-                dataLabels: {
-                  enabled: true,
-                },
                 colorByPoint: true,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeOutBounce',
+                },
                 events: {
                   click: function (event) {
                     const region = event.point.name;
-                    const type = 'application';
+                    const type = 'layer';
                     const args = {
                       region,
                       type,
@@ -271,26 +273,10 @@ async function initializeDashboardChart() {
             accessibility: {
               description: t2,
             },
-            sync: {
-              extremes: true,
-              data: true,
-              dataGrid: true,
-              dataGridColumns: true,
-              updatedData: true,
-            },
           },
         },
         {
           renderTo: 'dashboard-col-2',
-          connector: {
-            id: t0,
-            columnAssignment: [
-              {
-                seriesId: 'v3',
-                data: [t0, t3],
-              },
-            ],
-          },
           title: {
             text: t3,
             style: {
@@ -300,6 +286,15 @@ async function initializeDashboardChart() {
           },
           sync: {
             extremes: true,
+          },
+          connector: {
+            id: t0,
+            columnAssignment: [
+              {
+                seriesId: 'v3',
+                data: [t0, t3],
+              },
+            ],
           },
           type: 'Highcharts',
           chartOptions: {
@@ -316,7 +311,7 @@ async function initializeDashboardChart() {
               width: '80%',
               showLastLabel: false,
               tickAmount: 5,
-              tickInterval: 1
+              tickInterval: 1,
             },
             credits: {
               enabled: false,
@@ -324,21 +319,32 @@ async function initializeDashboardChart() {
             chart: {
               type: 'bar',
               zoomType: null,
+              animation: {
+                duration: 1000,
+                easing: 'easeOutBounce',
+              },
             },
             plotOptions: {
               series: {
+                dataLabels: {
+                  enabled: true,
+                },
                 colorByPoint: true,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeOutBounce',
+                },
                 events: {
-                  click: function (event) {
-                    const region = event.point.name;
-                    const type = 'layer';
-                    const args = {
-                      region,
-                      type,
-                    };
+                  // click: function (event) {
+                  //   const region = event.point.name;
+                  //   const type = 'application';
+                  //   const args = {
+                  //     region,
+                  //     type,
+                  //   };
 
-                    drillDown(args);
-                  },
+                  //   drillDown(args);
+                  // },
                 },
               },
               bar: {
@@ -376,8 +382,16 @@ async function initializeDashboardChart() {
             accessibility: {
               description: t3,
             },
+            sync: {
+              extremes: true,
+              data: true,
+              dataGrid: true,
+              dataGridColumns: true,
+              updatedData: true,
+            },
           },
         },
+
       ],
     },
     true,
@@ -385,14 +399,7 @@ async function initializeDashboardChart() {
   requestChartData();
 }
 
-  
-
-
-
-
 async function updateDashboardData(newData) {
-  
-
   if (!dashboardChart) {
     console.error('Dashboard is not initialized.');
     return;
@@ -410,21 +417,13 @@ async function updateDashboardData(newData) {
       return;
     }
 
-    
     regionConnector.options.data = newData;
 
-    
     dashboardComponents.forEach((comp, i) => {
       if (comp.component) {
         if (comp.component.type === 'Highcharts' && comp.component.chart && comp.component.chart.series[0]) {
-          
           const datapart = newData.map((data) => [data[0], data[i + 1]]);
-          comp.component.chart.series[0].setData(datapart, {
-            animation: {
-              duration: 1000,
-              easing: 'easeInOutQuint',
-            },
-          });
+          comp.component.chart.series[0].setData(datapart, {});
         }
       }
     });
@@ -436,8 +435,6 @@ async function updateDashboardData(newData) {
 }
 
 async function renderDrillDown(newData) {
-  
-
   if (!dashboardChart) {
     console.error('Dashboard is not initialized.');
     return;
@@ -454,13 +451,12 @@ async function renderDrillDown(newData) {
     if (newData.args.type === 'function') {
       console.log(newData);
       transformedData = await transformLambdaData(newData);
-    } else if (newData.args.type === 'application') {
-      transformedData = await transformSubnetData(newData);
     } else if (newData.args.type === 'layer') {
-      transformedData = await transformRouteTableData(newData);
-    }
-
-    
+     
+      transformedData = await transformLayerData(newData);
+    }else if (newData.args.type === 'application') {
+      transformedData = await transformLayerData(newData);
+    } 
 
     renderDataTable(transformedData.rows, transformedData.columns);
   } catch (error) {
@@ -468,12 +464,35 @@ async function renderDrillDown(newData) {
   }
 }
 
-
 async function transformLambdaData(lambdaList) {
-  
+  const dateFormat = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'UTC',
+    hour12: false,
+  });
+
   const dataTableRows = lambdaList.data.map((lambda) => {
-    const Tags = lambda.Tags?.map(tag => `${tag.Key}: ${tag.Value}`).join(', ') || '';
-    
+    const Tags = lambda.Tags?.map((tag) => `${tag.Key}: ${tag.Value}`).join(', ') || '';
+    const dateParts = dateFormat.formatToParts(new Date(lambda.LastModified));
+    const parts = dateParts.reduce((acc, part) => {
+      if (part.type !== 'literal') {
+        acc[part.type] = part.value;
+      }
+      return acc;
+    }, {});
+    const formattedDate = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`;
+
+    const environmentVariables = lambda.Environment?.Variables
+      ? Object.entries(lambda.Environment.Variables)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join('<br/>')
+      : '';
+
     return {
       Region: lambdaList.args.region,
       FunctionName: lambda.FunctionName,
@@ -487,21 +506,27 @@ async function transformLambdaData(lambdaList) {
       TracingConfig: lambda.TracingConfig.Mode,
       SnapStart: `${lambda.SnapStart.OptimizationStatus}, ${lambda.SnapStart.ApplyOn}`,
       RevisionId: lambda.RevisionId,
-      LastModified: lambda.LastModified,
+      LastModified: formattedDate,
       FunctionArn: lambda.FunctionArn,
       Role: lambda.Role,
       CodeSize: `${lambda.CodeSize} bytes`,
       LoggingConfig: `${lambda.LoggingConfig.LogFormat} format in ${lambda.LoggingConfig.LogGroup}`,
-      EnvironmentVariables: Object.entries(lambda.Environment.Variables).map(([key, value]) => `${key}: ${value}`).join('<br/>'),
+      EnvironmentVariables: environmentVariables,
       EphemeralStorage: `${lambda.EphemeralStorage.Size} MB`,
       Architectures: lambda.Architectures.join('<br/>'),
-      Tags: Tags
+      Tags: Tags,
     };
   });
 
   const columns = [
-    { title: 'Region', data: 'Region', visible: true },
-    { title: 'FunctionName', data: 'FunctionName', visible: true },
+    {
+      className: 'dt-control ctb no-wrap',
+      orderable: false,
+      data: null,
+      defaultContent: '',
+    },
+    { title: 'Region', data: 'Region', visible: true, className: 'ctb-nw' },
+    { title: 'FunctionName', data: 'FunctionName', visible: true, className: 'ctb-nw' },
     { title: 'Runtime', data: 'Runtime', visible: true },
     { title: 'Version', data: 'Version', visible: true },
     { title: 'PackageType', data: 'PackageType', visible: true },
@@ -510,22 +535,77 @@ async function transformLambdaData(lambdaList) {
     { title: 'Handler', data: 'Handler', visible: false },
     { title: 'Description', data: 'Description', visible: true },
     { title: 'TracingConfig', data: 'TracingConfig', visible: false },
-    { title: 'SnapStart', data: 'SnapStart', visible: true },
+    { title: 'SnapStart', data: 'SnapStart', visible: false },
     { title: 'RevisionId', data: 'RevisionId', visible: false },
-    { title: 'LastModified', data: 'LastModified', visible: true },
+    { title: 'LastModified', data: 'LastModified', visible: true, className: 'ctb-nw' },
     { title: 'FunctionArn', data: 'FunctionArn', visible: false },
     { title: 'Role', data: 'Role', visible: false },
     { title: 'CodeSize', data: 'CodeSize', visible: true },
     { title: 'LoggingConfig', data: 'LoggingConfig', visible: false },
     { title: 'EnvironmentVariables', data: 'EnvironmentVariables', visible: false },
-    { title: 'EphemeralStorage', data: 'EphemeralStorage', visible: true },
+    { title: 'EphemeralStorage', data: 'EphemeralStorage', visible: false },
     { title: 'Architectures', data: 'Architectures', visible: true },
-    { title: 'Tags', data: 'Tags', visible: true }
+    { title: 'Tags', data: 'Tags', visible: true },
   ];
 
   return { columns, rows: dataTableRows };
 }
 
+
+async function transformLayerData(layerList) {
+  const dateFormat = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    timeZone: 'UTC',
+    hour12: false,
+  });
+
+  const dataTableRows = layerList.data.map((layer) => {
+    const latestVersion = layer.LatestMatchingVersion;
+    const dateParts = dateFormat.formatToParts(new Date(latestVersion.CreatedDate));
+    const parts = dateParts.reduce((acc, part) => {
+      if (part.type !== 'literal') {
+        acc[part.type] = part.value;
+      }
+      return acc;
+    }, {});
+    const formattedDate = `${parts.year}-${parts.month}-${parts.day} ${parts.hour}:${parts.minute}:${parts.second}`;
+
+    return {
+      Region: layerList.args.region,
+      LayerName: layer.LayerName,
+      LayerArn: layer.LayerArn,
+      Version: latestVersion.Version,
+      CreatedDate: formattedDate,
+      CompatibleRuntimes: latestVersion.CompatibleRuntimes.join(', '),
+      CompatibleArchitectures: latestVersion.CompatibleArchitectures.join(', '),
+      LayerVersionArn: latestVersion.LayerVersionArn
+    };
+  });
+
+  const columns = [
+    {
+      className: 'dt-control ctb no-wrap',
+      orderable: false,
+      data: null,
+      defaultContent: '',
+    },
+    { title: 'Region', data: 'Region', visible: true, className: 'ctb-nw' },
+    { title: 'LayerName', data: 'LayerName', visible: true, className: 'ctb-nw' },
+    { title: 'LayerArn', data: 'LayerArn', visible: true },
+    { title: 'Version', data: 'Version', visible: true },
+    { title: 'CreatedDate', data: 'CreatedDate', visible: true, className: 'ctb-nw' },
+    { title: 'CompatibleRuntimes', data: 'CompatibleRuntimes', visible: true },
+    { title: 'CompatibleArchitectures', data: 'CompatibleArchitectures', visible: true },
+    { title: 'LayerVersionArn', data: 'LayerVersionArn', visible: true }
+  ];
+
+  return { columns, rows: dataTableRows };
+}
 
 
 function drillDown(args) {
@@ -545,40 +625,32 @@ async function handleIncomingData(message) {
   if (message.command === 'updateData') {
     updateDashboardData(message.data);
   } else if (message.command === 'drillDown') {
-    
-
     stopLoading();
     await renderDrillDown(message.data);
   }
 }
 
-
-
 const requestChartData = () => {
   if (lObj.updateOnFly) {
     return;
-  }else {
-
+  } else {
     startLoading();
 
     vscode.postMessage({
       command: 'requestData',
     });
   }
-
 };
-
 
 const init = () => {
   initializeDashboardChart();
   document.getElementById('interval').addEventListener('change', function () {
-     lObj.intervalValue = parseInt(this.value, 10);
-     if (lObj.intervalValue < 500) {
+    lObj.intervalValue = parseInt(this.value, 10);
+    if (lObj.intervalValue < 500) {
       stopDashboardChartInterval();
-     }else {
+    } else {
       startDashboardChartInterval();
-      }
-    
+    }
   });
 
   document.getElementById('refresh-button').addEventListener('click', function () {
@@ -589,7 +661,6 @@ const init = () => {
 
   renderDataTable();
 };
-
 
 const renderDataTable = (rows = null, iColumns = null) => {
   if (dt) {
@@ -614,7 +685,6 @@ const renderDataTable = (rows = null, iColumns = null) => {
   newDtTable.classList.add('hover');
   newDtTable.style.width = '100vw';
 
-
   dtWrapper.appendChild(newDtTable);
 
   let defColumns = [{ title: t0 }, { title: t1 }, { title: t2 }, { title: t3 }, { title: t4 }];
@@ -634,10 +704,8 @@ const renderDataTable = (rows = null, iColumns = null) => {
     let row = dt.row(tr);
 
     if (row.child.isShown()) {
-      
       row.child.hide();
     } else {
-      
       row.child(reFormatRow(row.data())).show();
     }
   });
@@ -646,8 +714,35 @@ function multiFormatCell(val) {
   if (typeof val === 'string') {
     return val.split('<br/>');
   }
-  return [val]; // Ensuring this always returns an array
+  return [val];
 }
+
+function formatDate(createdDate) {
+  if (!createdDate) {
+    return '';
+  }
+
+
+  const date = new Date(createdDate);
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  const diffMinutes = Math.ceil(diffTime / (1000 * 60));
+  const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  const formattedDate = date.toISOString().replace('T', ' ').slice(0, 19);
+  let timeAgo = '';
+  if (diffDays > 1) {
+    timeAgo = `${diffDays} days ago`;
+  } else if (diffHours > 1) {
+    timeAgo = `${diffHours} hours ago`;
+  } else if (diffMinutes > 1) {
+    timeAgo = `${diffMinutes} minutes ago`;
+  } else {
+    timeAgo = 'just now';
+  }
+  return `${formattedDate} (${timeAgo})`;
+}
+
 
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
@@ -656,7 +751,10 @@ function capitalizeFirstLetter(string) {
 function reFormatRow(data) {
   const table = document.createElement('table');
   table.style.borderCollapse = 'collapse';
-
+  console.log('reFormatRow');
+  console.log(data);
+  const regionName = data?.Region || 'us-east-1';
+  
   for (const key in data) {
     if (data.hasOwnProperty(key)) {
       const row = table.insertRow();
@@ -670,44 +768,83 @@ function reFormatRow(data) {
       let celval = multiFormatCell(data[key]);
       if (Array.isArray(celval)) {
         if (celval.length === 1) {
-          
-          cellKey.textContent = `${capitalizeFirstLetter(key)}:`;
-          cellValue.textContent = celval[0];
+          if (key === 'Role') {
+            const roleName = celval[0].split('/').pop();
+            const roleLink = `https://us-east-1.console.aws.amazon.com/iam/home?#/roles/details/${roleName}?section=permissions`;
+            cellKey.textContent = `${capitalizeFirstLetter(key)}:`;
+            cellValue.innerHTML = celval[0] + ` <a href="${roleLink}" target="_blank" rel="noopener noreferrer"><i class="fa fa-link"></i></a>`;
+          } else if (key === 'EnvironmentVariables') {
+            if(data?.FunctionName && celval[0]){
+              const functionName = encodeURIComponent(data?.FunctionName) || '';
+              const logGroupLink = `https://${regionName}.console.aws.amazon.com/lambda/home?region=${regionName}#/functions/${functionName}/edit/environment-variables?tab=configure`;
+              cellKey.textContent = `${key}:`;
+              cellValue.innerHTML = `${celval[0]} <a href="${logGroupLink}" target="_blank" rel="noopener noreferrer"><i class="fa fa-link"></i></a>`;
+            }else{
+              cellKey.textContent = `${key}:`;
+              cellValue.textContent = celval[0];
+            }
+            
+
+          }else if (key === 'FunctionName') {
+
+            const functionName = encodeURIComponent(celval[0]);
+            const functionLink = `https://${regionName}.console.aws.amazon.com/lambda/home?#/functions/${functionName}?tab=code`;
+            cellKey.textContent = `${capitalizeFirstLetter(key)}:`;
+            cellValue.innerHTML = celval[0] + ` <a href="${functionLink}" target="_blank" rel="noopener noreferrer"><i class="fa fa-link"></i></a>`;
+          } else if (key === 'LoggingConfig') {
+            
+            const logGroupName = celval[0].split('format in ').pop();
+            const encodedLogGroupName = encodeURIComponent(logGroupName);
+            const logGroupLink = `https://${regionName}.console.aws.amazon.com/cloudwatch/home?region=${regionName}#logsV2:log-groups/log-group/${encodedLogGroupName}`;
+            cellKey.textContent = `${key}:`;
+            cellValue.innerHTML = `${celval[0]} <a href="${logGroupLink}" target="_blank" rel="noopener noreferrer"><i class="fa fa-link"></i></a>`;
+
+          }else if (key === 'LayerName' || key === 'CreatedDate') {
+
+            const layerName = encodeURIComponent(celval[0]);
+            const version = data?.Version || '1';
+            const layerLink = `https://${regionName}.console.aws.amazon.com/lambda/home?region=${regionName}#/layers/${layerName}/versions/${version}?tab=versions`;
+            cellKey.textContent = `${key}:`;
+            cellValue.innerHTML = `${celval[0]} <a href="${layerLink}" target="_blank" rel="noopener noreferrer"><i class="fa fa-link"></i></a>`;
+
+          }else if (key === 'LastModified') {
+
+            cellKey.textContent = `${key}:`;
+            cellValue.textContent = `${formatDate(celval[0])}`;
+
+          } else {
+            cellKey.textContent = `${key}:`;
+            cellValue.textContent = celval[0];
+          }
+
         } else {
-          
           celval.forEach((item, index) => {
             if (index > 0) {
-              
               const additionalRow = table.insertRow();
               const additionalCellKey = additionalRow.insertCell();
               const additionalCellValue = additionalRow.insertCell();
 
-              additionalCellKey.textContent = `${capitalizeFirstLetter(key)}_${index}:`;
+              additionalCellKey.textContent = `${key}_${index}:`;
               additionalCellValue.textContent = item;
 
               additionalCellKey.style.border = additionalCellValue.style.border = '1px solid black';
               additionalCellKey.style.padding = additionalCellValue.style.padding = '5px';
               additionalCellKey.className = additionalCellValue.className = 'code-block';
-
             } else {
-              
-              cellKey.textContent = `${capitalizeFirstLetter(key)}_0:`;
+              cellKey.textContent = `${key}_0:`;
               cellValue.textContent = item;
             }
           });
         }
       } else {
-        cellKey.textContent = `${capitalizeFirstLetter(key)}:`;
+        cellKey.textContent = `${key}:`;
         cellValue.textContent = celval.toString();
       }
     }
   }
 
-  return table.outerHTML; 
+  return table.outerHTML;
 }
-
-
-
 
 const startDashboardChartInterval = () => {
   if (lObj.timerInterval) {
@@ -718,7 +855,6 @@ const startDashboardChartInterval = () => {
       requestChartData();
     }, lObj.intervalValue * 1000);
   }
-
 };
 
 const stopDashboardChartInterval = () => {
@@ -741,16 +877,13 @@ function startLoading() {
   loadingDiv.style.display = 'block';
 
   lObj.timerInterval = setInterval(() => {
-      let timeElapsed = Date.now() - startTime;
-      let minutes = Math.floor(timeElapsed / 60000);
-      let seconds = Math.floor((timeElapsed % 60000) / 1000);
-      let milliseconds = Math.floor((timeElapsed % 1000) / 10);
-      timerSpan.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${milliseconds.toString().padStart(2, '0')}`;
+    let timeElapsed = Date.now() - startTime;
+    let minutes = Math.floor(timeElapsed / 60000);
+    let seconds = Math.floor((timeElapsed % 60000) / 1000);
+    let milliseconds = Math.floor((timeElapsed % 1000) / 10);
+    timerSpan.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${milliseconds.toString().padStart(2, '0')}`;
   }, 10);
 }
-
-
-
 
 function stopLoading() {
   lObj.updateOnFly = false;
@@ -760,16 +893,14 @@ function stopLoading() {
     refreshButton.classList.remove('rotating');
   }
   const loadingDiv = document.getElementById('loading');
-    if (loadingDiv && loadingDiv.style) {
-        loadingDiv.style.display = 'none';
-    }
-    if (lObj.timerInterval) {
-      clearInterval(lObj.timerInterval);
-      lObj.timerInterval = null;
+  if (loadingDiv && loadingDiv.style) {
+    loadingDiv.style.display = 'none';
+  }
+  if (lObj.timerInterval) {
+    clearInterval(lObj.timerInterval);
+    lObj.timerInterval = null;
   }
 }
-
-
 
 const destroyDashboardChart = async () => {
   if (!dashboardChart) {
@@ -779,5 +910,3 @@ const destroyDashboardChart = async () => {
   await dashboardChart.destroy();
   dashboardChart = null;
 };
-
-

@@ -120,6 +120,10 @@ async function initializeDashboardChart() {
             plotOptions: {
               series: {
                 colorByPoint: true,
+                animation: {
+                  duration: 1000,
+                  easing: 'easeOutBounce',
+                },
                 dataLabels: {
                   enabled: true,
                 },
@@ -224,7 +228,8 @@ async function transformBucketData(bucketList) {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
-    hour12: false // Using 24-hour time format
+    timeZone: 'UTC',
+    hour12: false 
   });
 
   // Process each bucket to format its data
@@ -305,12 +310,7 @@ async function updateDashboardData(newData) {
         ) {
           const datapart = newData.map((data) => [data[0], data[i + 1]]);
 
-          comp.component.chart.series[0].setData(datapart, {
-            animation: {
-              duration: 1000,
-              easing: 'easeInOutQuint',
-            },
-          });
+          comp.component.chart.series[0].setData(datapart, {});
         }
       });
     } else {

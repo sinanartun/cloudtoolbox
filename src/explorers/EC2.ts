@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { EC2Client, DescribeInstancesCommand, DescribeInstancesCommandOutput, DescribeAddressesCommand } from "@aws-sdk/client-ec2";
+import { EC2Client, DescribeInstancesCommand, DescribeInstancesCommandOutput, DescribeAddressesCommand, Filter } from "@aws-sdk/client-ec2";
 import { AutoScalingClient, DescribeAutoScalingGroupsCommand } from "@aws-sdk/client-auto-scaling";
 import { RegionProvider, RegionObserver } from "../providers/RegionProvider";
 import { fromIni } from '@aws-sdk/credential-provider-ini';
@@ -54,7 +54,7 @@ public onProfileChanged(newProfile: string): void {
       const [instanceCounts, elasticIpCount, autoScalingGroupCount] = await Promise.all([
         this.getEc2InstanceCount(ec2Client),
         this.getElasticIpCount(ec2Client),
-        this.getAutoScalingGroupCount(region),
+        this.getAutoScalingGroupCount(region, credentials),
       ]);
 
       
@@ -63,6 +63,37 @@ public onProfileChanged(newProfile: string): void {
 
     return chartData;
   }
+
+
+  public async drillDown(args: { region: string, type: string }): Promise<any> {
+    const regionName = args.region;
+    const credentials = fromIni({ profile: this.selectedProfile });
+    const ec2Client = new EC2Client({ region: regionName, credentials });
+    
+    // Define the filters based on the instance state
+    let stateFilter: Filter[] = [];
+    switch (args.type) {
+        case 'stoppedEc2':
+            stateFilter = [{ Name: 'instance-state-name', Values: ['stopped', 'stopping'] }];
+            break;
+        case 'runningEc2':
+            stateFilter = [{ Name: 'instance-state-name', Values: ['running', 'pending'] }];
+            break;
+        case 'allEc2':
+            // No filter for all instances
+            break;
+        default:
+            // Optionally handle unknown types
+            throw new Error('Unknown instance type specified');
+    }
+
+    // Use the state filter in the DescribeInstancesCommand if any filter is specified
+    const commandOptions = stateFilter.length > 0 ? { Filters: stateFilter } : {};
+    const ec2s = await ec2Client.send(new DescribeInstancesCommand(commandOptions));
+    const data = ec2s.Reservations?.map(reservation => reservation);
+
+    return { data, args };
+}
 
   private async getEc2InstanceCount(ec2: EC2Client): Promise<{
     total: number;
@@ -115,9 +146,9 @@ public onProfileChanged(newProfile: string): void {
     }
   }
 
-  private async getAutoScalingGroupCount(region: string): Promise<number> {
+  private async getAutoScalingGroupCount(region: string, credentials: any): Promise<number> {
     try {
-      const autoScaling = new AutoScalingClient({ region });
+      const autoScaling = new AutoScalingClient({ region, credentials });
       const command = new DescribeAutoScalingGroupsCommand({});
       const response = await autoScaling.send(command);
       return response.AutoScalingGroups ? response.AutoScalingGroups.length : 0;

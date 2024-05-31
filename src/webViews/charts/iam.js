@@ -3,7 +3,7 @@ let dashboardChart = null;
 let mapChart = null;
 let dashboardType = 'dashboard';
 let iamObj ={
-  intervalValue : 60,
+  intervalValue : 0,
   timerInterval : null,
   updateOnFly : false,
 };
