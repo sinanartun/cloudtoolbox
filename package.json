@@ -1,7 +1,7 @@
 {
   "name": "awstoolbox",
-  "displayName": "aws toolbox",
-  "description": "Cloud Resource Visualization",
+  "displayName": "AWS Toolbox",
+  "description": "AWS Resource Visualization",
   "version": "1.0.0",
   "publisher": "cloudtoolbox",
   "pricing": "Free",
