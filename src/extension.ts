@@ -4,7 +4,7 @@ import { RegionProvider } from './providers/RegionProvider';
 import { ServiceProvider } from './providers/ServiceProvider';
 import { WebViewProvider } from './providers/WebViewProvider';
 
-const globalStorageKey = 'cloudtoolbox';
+const globalStorageKey = 'awstoolbox';
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
   const profileProvider = await ProfileProvider.getInstance(context);

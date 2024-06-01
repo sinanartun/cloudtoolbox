@@ -18,7 +18,7 @@ export class ServiceProvider implements vscode.TreeDataProvider<vscode.TreeItem>
         // 'SNS',
         'IAM',
         'EventBridge',
-        'CloudWatch',
+        // 'CloudWatch',
 
         
 

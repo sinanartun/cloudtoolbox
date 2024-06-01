@@ -169,10 +169,10 @@ export async function getWelcomeHtml(context: vscode.ExtensionContext, webview: 
         <header>
         <div class="logo"><img src="${logo}" width="128" height="128" alt=""/></div>
         <section class="profileHeader">
-        <h1>Cloud Toolbox</h1>
+        <h1>AWS Toolbox</h1>
           <img src="${cloud}" alt="" width="300" height="276" class="cloud"/>
-            <h3>Real-time Cloud Resource Monitoring</h3>
-        <p>Cloud Toolbox is an innovative Visual Studio Code extension designed to enable developers and cloud engineers to manage and interact with cloud services directly within their editor. It offers a streamlined workflow for cloud resource management, making it an indispensable tool for enhancing cloud operations within VS Code.</p>
+            <h3>Open-Source Real-time AWS Resource Monitoring</h3>
+        <p>AWS Toolbox is an innovative, open-source Visual Studio Code extension designed to enable developers and cloud engineers to manage and interact with AWS services directly within their editor. It offers a streamlined workflow for AWS resource management, making it an indispensable tool for enhancing AWS operations within VS Code.</p>
         </section>
          
         </header>

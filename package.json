@@ -1,8 +1,8 @@
 {
-  "name": "cloudtoolbox",
-  "displayName": "cloudtoolbox",
+  "name": "awstoolbox",
+  "displayName": "aws toolbox",
   "description": "Cloud Resource Visualization",
-  "version": "1.0.27",
+  "version": "1.0.0",
   "publisher": "cloudtoolbox",
   "pricing": "Free",
   "license": "MIT",
@@ -22,10 +22,9 @@
     "Other"
   ],
   "tags": [
-    "cloud",
     "AWS",
-    "Azure",
-    "GCP",
+    "toolbox",
+    "cloud",
     "cloud management",
     "cloud services"
   ],
@@ -36,14 +35,14 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "cloudtoolbox",
-          "title": "Cloud Toolbox",
+          "id": "awstoolbox",
+          "title": "AWS Toolbox",
           "icon": "./dist/images/logo.svg"
         }
       ]
     },
     "views": {
-      "cloudtoolbox": [
+      "awstoolbox": [
         {
           "id": "awsServiceSelector",
           "name": "AWS Service List"
