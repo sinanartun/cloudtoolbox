@@ -1,7 +1,7 @@
 
-# ![ctb](https://i.imgur.com/LscjIlu.png)Cloud Toolbox: Real-time Cloud Resource Monitoring
+# ![aws_toolbox_36](https://i.imgur.com/pwVxlOD.png) AWS Toolbox: Real-time AWS Resource Monitoring
 
-Cloud Toolbox is an innovative Visual Studio Code extension designed to enable developers and cloud engineers to manage and interact with cloud services directly within their editor. It offers a streamlined workflow for cloud resource management, making it an indispensable tool for enhancing cloud operations within VS Code.
+AWS Toolbox is an innovative, open-source Visual Studio Code extension designed to enable developers and cloud engineers to manage and interact with AWS services directly within their editor. It offers a streamlined workflow for AWS resource management, making it an indispensable tool for enhancing AWS operations within VS Code.
 
 
 ![screen shot](https://s3.eu-north-1.amazonaws.com/cloudtoolbox.tech/app/ss-2.png)
@@ -9,7 +9,7 @@ Cloud Toolbox is an innovative Visual Studio Code extension designed to enable d
 ![screen shot](https://s3.eu-north-1.amazonaws.com/cloudtoolbox.tech/app/ss-1.png)
 ## Features
 
-- **Service List Navigation**: Easily navigate and access a wide array of cloud services such as AWS VPC, S3, Lambda, and more.
+- **Service List Navigation**: Easily navigate and access a wide array of AWS services such as AWS VPC, S3, Lambda, and more.
 - **Region-Based Resource Management**: Manage resources effectively by region with a clear and organized interface.
 - **Visual Analytics**: Gain real-time insights with analytics on resource usage like bucket counts, storage, and data size across various regions.
 - **Profile Management**: Switch seamlessly between different AWS profiles for efficient management of multiple accounts.
@@ -93,7 +93,7 @@ Now you can see your profile with default profile name.
 2. Reload VS Code to activate the extension.
 
 ### Usage
-1. Expand the `AWS Service List` in the Side Bar to access available cloud services.
+1. Expand the `AWS Service List` in the Side Bar to access available AWS services.
 2. Select a region from the dropdown to filter resources for that area.
 3. Navigate through different services to manage your resources.
 
@@ -120,7 +120,7 @@ Encounter an issue? Please file it on the [GitHub repository issue tracker](http
 
 ## License
 
-Cloud Toolbox is distributed under the MIT License. See the `LICENSE` file for more details.
+AWS Toolbox is distributed under the MIT License. See the `LICENSE` file for more details.
 
 ## Acknowledgments
 
@@ -128,7 +128,7 @@ Cloud Toolbox is distributed under the MIT License. See the `LICENSE` file for m
 
 ---
 
-© 2024 Cloud Toolbox by [Sinan ARTUN](https://www.linkedin.com/in/sinanartun/). Built with ❤ for the cloud community.
+© 2024 AWS Toolbox by [Sinan ARTUN](https://www.linkedin.com/in/sinanartun/). Built with ❤ for the cloud community.
 
 
 ![linkedin](https://i.imgur.com/S2TY9ge.png)  [![Patreon](https://s3.eu-north-1.amazonaws.com/cloudtoolbox.tech/app/patreon.png)](https://patreon.com/CloudToolbox)
